@@ -1,0 +1,6 @@
+{
+  "name": "Family Health Tracker",
+  "description": "A warm, elder-friendly health notebook for families to track blood pressure, blood sugar, and weight with high-contrast accessibility and voice input.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

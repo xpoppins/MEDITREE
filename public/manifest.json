@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "HealthNest — Family Health",
+  "short_name": "HealthNest",
+  "description": "Bold, elder-friendly health and vitals tracker for the whole family.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0E1B2C",
+  "theme_color": "#0E1B2C",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

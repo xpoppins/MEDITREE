@@ -1,0 +1,279 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-body: 'Atkinson Hyperlegible', system-ui, -apple-system, sans-serif;
+
+    /* Warm Energetic Wellness Palette */
+    --bg-page: #FFF9F0;
+    --card-surface: #FFFFFF;
+    --midnight: #0E1B2C;
+    --midnight-surface: #17263A;
+    --midnight-light: #20334C;
+    
+    --coral: #FF6B4A;
+    --amber: #FFB020;
+    --teal: #12B5A6;
+    --teal-light: #E6F8F6;
+    
+    --text-primary: #0E1B2C;
+    --text-secondary: #4A5B70;
+    --text-muted: #7E90A5;
+
+    /* Status Colors */
+    --status-good: #1FA971;
+    --status-good-bg: #E8F8F1;
+    --status-watch: #E8A317;
+    --status-watch-bg: #FEF7E6;
+    --status-doctor: #E5484D;
+    --status-doctor-bg: #FEECEE;
+
+    /* Font size scaling */
+    --base-font-size: 19px;
+    --heading-font-size: 32px;
+  }
+
+  /* Dark mode */
+  .dark {
+    --bg-page: #08101A;
+    --card-surface: #0E1B2C;
+    --text-primary: #F4F6F9;
+    --text-secondary: #A0B2C6;
+    --text-muted: #6B7E93;
+    background-color: #08101A;
+    color: #F4F6F9;
+  }
+
+  /* Text size adjustments */
+  html.text-size-a {
+    --base-font-size: 19px;
+  }
+  html.text-size-a-plus {
+    --base-font-size: 22px;
+  }
+  html.text-size-a-plus-plus {
+    --base-font-size: 25px;
+  }
+
+  html {
+    font-family: var(--font-body);
+    font-size: var(--base-font-size);
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4, .font-heading {
+    font-family: var(--font-heading);
+    letter-spacing: -0.025em;
+  }
+
+  body {
+    min-height: 100vh;
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    background-color: var(--bg-page);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  *:focus-visible {
+    outline: 3px solid #FF6B4A;
+    outline-offset: 3px;
+  }
+
+  /* Default input styling */
+  input, select, textarea {
+    color: #0E1B2C;
+    background-color: #FFFFFF;
+  }
+}
+
+/* Premium Card Styles */
+.card-wellness, .card-soft {
+  background-color: #FFFFFF;
+  border-radius: 26px;
+  border: 1px solid rgba(14, 27, 44, 0.08);
+  box-shadow: 0 10px 30px -4px rgba(14, 27, 44, 0.05), 0 2px 8px -2px rgba(14, 27, 44, 0.03);
+  color: #0E1B2C;
+}
+
+.card-hero {
+  background: linear-gradient(145deg, #0E1B2C 0%, #172A45 100%);
+  border-radius: 28px;
+  color: #FFFFFF;
+  box-shadow: 0 16px 36px -6px rgba(14, 27, 44, 0.25);
+}
+
+/* Gradient Action Button (Cult.fit style) */
+.btn-action-gradient {
+  min-height: 58px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #FF6B4A 0%, #FF9028 50%, #FFB020 100%);
+  color: #FFFFFF !important;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  box-shadow: 0 8px 24px -2px rgba(255, 107, 74, 0.35);
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease;
+  cursor: pointer;
+}
+
+.btn-action-gradient:active {
+  transform: scale(0.97);
+  box-shadow: 0 4px 12px rgba(255, 107, 74, 0.25);
+}
+
+.btn-teal {
+  min-height: 56px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #12B5A6 0%, #0D9688 100%);
+  color: #FFFFFF !important;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  box-shadow: 0 6px 20px -2px rgba(18, 181, 166, 0.3);
+  cursor: pointer;
+}
+
+.btn-teal:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary-wellness {
+  min-height: 56px;
+  border-radius: 20px;
+  background-color: #FFFFFF;
+  border: 2px solid #0E1B2C;
+  color: #0E1B2C;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.btn-secondary-wellness:active {
+  transform: scale(0.97);
+}
+
+/* Number pad button */
+.numpad-btn {
+  height: 68px;
+  border-radius: 20px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(14, 27, 44, 0.12);
+  color: #0E1B2C;
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(14, 27, 44, 0.04);
+  transition: transform 0.1s ease, background-color 0.1s ease;
+  cursor: pointer;
+}
+
+.numpad-btn:active {
+  transform: scale(0.94);
+  background-color: #E6F8F6;
+}
+
+/* Hide spin buttons */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* ========================================================
+   BULLETPROOF DARK MODE STYLING & HIGH CONTRAST PROTECTION
+   Ensures crystal-clear contrast for text, buttons, and cards
+   ======================================================== */
+
+.dark .card-wellness, 
+.dark .card-soft {
+  background-color: #0E1B2C;
+  color: #F4F6F9;
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.5);
+}
+
+/* Ensure text and headings remain bright in dark mode */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: #F4F6F9;
+}
+
+.dark .text-\[\#0E1B2C\],
+.dark .text-\[\#0C1E33\] {
+  color: #F4F6F9 !important;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #17263A;
+  color: #F4F6F9;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #8E9EAF;
+}
+
+.dark .numpad-btn {
+  background-color: #17263A;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #F4F6F9;
+}
+
+.dark .btn-secondary-wellness {
+  background-color: #17263A;
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #F4F6F9;
+}
+
+/* Secondary outline buttons in dark mode */
+.dark button.border-black\/10,
+.dark button.border-black\/15,
+.dark button.border-black\/20 {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #F4F6F9;
+}
+
+/* Ensure buttons never have matching text and background */
+.dark button:not([class*="bg-"]) {
+  color: inherit;
+}
+
+/* Tooltip and popup visibility */
+.dark .recharts-default-tooltip {
+  background-color: #17263A !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #F4F6F9 !important;
+}
