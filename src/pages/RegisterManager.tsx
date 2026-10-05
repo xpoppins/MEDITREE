@@ -48,6 +48,14 @@ export const RegisterManager: React.FC = () => {
           <span>Back to Welcome</span>
         </button>
 
+        <div className="flex justify-center mb-6">
+          <img
+            src="/logo.svg"
+            alt="MEDITREE"
+            className="w-20 h-20 rounded-2xl shadow-lg"
+          />
+        </div>
+
         <h2 className="text-2xl sm:text-3xl font-black text-[#0E1B2C] dark:text-white font-heading">
           Create a Family
         </h2>

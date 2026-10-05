@@ -23,18 +23,21 @@ export const Welcome: React.FC = () => {
     <div className="min-h-screen bg-[#F4F6F9] dark:bg-[#08101A] flex flex-col justify-between p-6 md:p-8 max-w-md md:max-w-lg mx-auto">
       {/* Brand Hero */}
       <div className="pt-8 md:pt-12 text-center">
-        {/* Bold Cult.fit / boAt style Emblem */}
-        <div className="w-24 h-24 mx-auto rounded-[32px] bg-gradient-to-tr from-[#0E1B2C] via-[#172A45] to-[#20334C] flex items-center justify-center shadow-xl shadow-black/15 mb-6 relative">
-          <div className="absolute inset-0 rounded-[32px] border-2 border-white/10" />
-          <Heart className="w-12 h-12 text-[#FF6B4A] fill-[#FF6B4A] animate-pulse" />
+        {/* MEDITREE Logo */}
+        <div className="w-32 h-32 mx-auto rounded-[32px] shadow-xl shadow-black/15 mb-6 relative overflow-hidden">
+          <img
+            src="/logo.svg"
+            alt="MEDITREE"
+            className="w-full h-full"
+          />
         </div>
 
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E6F8F6] text-[#12B5A6] text-xs font-black uppercase tracking-wider mb-2">
-          <span>HealthNest Wellness</span>
+          <span>MEDITREE Wellness</span>
         </div>
 
         <h1 className="text-3xl md:text-4xl font-black text-[#0E1B2C] dark:text-white font-heading tracking-tight">
-          {language === 'hi' ? 'हेल्थनेस्ट (HealthNest)' : 'HealthNest'}
+          {language === 'hi' ? 'मेडीट्री (MEDITREE)' : 'MEDITREE'}
         </h1>
 
         <p className="text-xl md:text-2xl font-black text-[#0E1B2C] dark:text-white mt-2 leading-tight font-heading">

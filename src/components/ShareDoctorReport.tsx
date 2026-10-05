@@ -52,7 +52,7 @@ Average BP: ${avgSys ? `${avgSys}/${avgDia} mmHg` : 'N/A'}
 Fasting Sugar Avg: ${avgFasting ? `${avgFasting} mg/dL` : 'N/A'}
 Weight: ${latestWeight ? `${latestWeight} kg` : 'N/A'}
 Conditions: ${member.conditions.join(', ') || 'None'}
-Generated via HealthNest.`;
+Generated via MEDITREE.`;
 
     if (navigator.share) {
       try {
@@ -69,16 +69,16 @@ Generated via HealthNest.`;
     }
   };
 
-  return (
+return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/70 backdrop-blur-xs overflow-y-auto">
-      <div className="w-full max-w-lg bg-white rounded-[28px] border-2 border-[#0E1B2C]/20 shadow-2xl p-6 relative my-auto">
+      <div className="w-full max-w-lg bg-white dark:bg-[#0E1B2C] rounded-[28px] border-2 border-[#0E1B2C]/20 dark:border-white/10 shadow-2xl p-6 relative my-auto">
         {/* Actions bar */}
-        <div className="flex items-center justify-between gap-3 mb-6 pb-4 border-b border-black/10">
+        <div className="flex items-center justify-between gap-3 mb-6 pb-4 border-b border-black/10 dark:border-white/10">
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={handlePrint}
-              className="py-2 px-3.5 rounded-xl bg-[#0E1B2C] text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="py-2 px-3.5 rounded-xl bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
               <Printer className="w-4 h-4" />
               <span>Print / PDF</span>
@@ -96,7 +96,7 @@ Generated via HealthNest.`;
           <button
             type="button"
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-[#F4F6F9] flex items-center justify-center text-[#0E1B2C] cursor-pointer"
+            className="w-9 h-9 rounded-full bg-[#F4F6F9] dark:bg-[#17263A] flex items-center justify-center text-[#0E1B2C] dark:text-white cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -107,17 +107,17 @@ Generated via HealthNest.`;
           {/* Header */}
           <div className="flex items-start justify-between gap-3">
             <div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF6B4A] bg-[#FFF0E8] px-2 py-0.5 rounded-md">
-                HealthNest Clinical Summary
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF6B4A] bg-[#FFF0E8] dark:bg-[#FF6B4A]/20 px-2 py-0.5 rounded-md">
+                MEDITREE Clinical Summary
               </span>
-              <h2 className="text-2xl font-black text-[#0E1B2C] font-heading mt-1">
+              <h2 className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
                 {member.name}
               </h2>
-              <p className="text-xs font-bold text-[#7E90A5]">
+              <p className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6]">
                 {member.relation} • {member.gender} • Born {member.dob || '1958'} • Height: {member.heightCm || '168'} cm
               </p>
             </div>
-            <div className="text-right text-[11px] font-bold text-[#7E90A5]">
+            <div className="text-right text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6]">
               <p>Generated: {new Date().toLocaleDateString()}</p>
               <p>Past 30 Days Window</p>
             </div>
@@ -126,61 +126,61 @@ Generated via HealthNest.`;
           {/* 30-Day Vitals Summary Grid */}
           <div className="grid grid-cols-2 gap-3">
             {/* BP Average */}
-            <div className="p-3.5 rounded-2xl bg-[#FFF5F2] border border-[#FF6B4A]/20">
+            <div className="p-3.5 rounded-2xl bg-[#FFF5F2] dark:bg-[#FF6B4A]/10 border border-[#FF6B4A]/20 dark:border-[#FF6B4A]/30">
               <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#FF6B4A]">
                 <Heart className="w-3.5 h-3.5 fill-current" />
                 <span>30-Day BP Average</span>
               </div>
-              <p className="text-2xl font-black text-[#0E1B2C] font-heading mt-1">
+              <p className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
                 {avgSys ? `${avgSys} / ${avgDia}` : 'No data'}
-                <span className="text-xs font-bold text-[#7E90A5] ml-1">mmHg</span>
+                <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-1">mmHg</span>
               </p>
-              <p className="text-[11px] font-bold text-[#7E90A5] mt-0.5">
+              <p className="text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
                 From {bpReadings.length} readings
               </p>
             </div>
 
             {/* Fasting Sugar Average */}
-            <div className="p-3.5 rounded-2xl bg-[#E6F8F6] border border-[#12B5A6]/20">
+            <div className="p-3.5 rounded-2xl bg-[#E6F8F6] dark:bg-[#12B5A6]/10 border border-[#12B5A6]/20 dark:border-[#12B5A6]/30">
               <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#12B5A6]">
                 <Activity className="w-3.5 h-3.5" />
                 <span>Fasting Sugar Avg</span>
               </div>
-              <p className="text-2xl font-black text-[#0E1B2C] font-heading mt-1">
+              <p className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
                 {avgFasting ? `${avgFasting}` : 'No data'}
-                <span className="text-xs font-bold text-[#7E90A5] ml-1">mg/dL</span>
+                <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-1">mg/dL</span>
               </p>
-              <p className="text-[11px] font-bold text-[#7E90A5] mt-0.5">
+              <p className="text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
                 Target: &lt;100 mg/dL
               </p>
             </div>
 
             {/* Post Meal Sugar */}
-            <div className="p-3.5 rounded-2xl bg-[#F0FDF4] border border-[#1FA971]/20">
+            <div className="p-3.5 rounded-2xl bg-[#F0FDF4] dark:bg-[#1FA971]/10 border border-[#1FA971]/20 dark:border-[#1FA971]/30">
               <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#1FA971]">
                 <Activity className="w-3.5 h-3.5" />
                 <span>Post-Meal Avg</span>
               </div>
-              <p className="text-2xl font-black text-[#0E1B2C] font-heading mt-1">
+              <p className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
                 {avgPostMeal ? `${avgPostMeal}` : '---'}
-                <span className="text-xs font-bold text-[#7E90A5] ml-1">mg/dL</span>
+                <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-1">mg/dL</span>
               </p>
-              <p className="text-[11px] font-bold text-[#7E90A5] mt-0.5">
+              <p className="text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
                 Target: &lt;140 mg/dL
               </p>
             </div>
 
             {/* Weight */}
-            <div className="p-3.5 rounded-2xl bg-[#EFF6FF] border border-[#3B82F6]/20">
+            <div className="p-3.5 rounded-2xl bg-[#EFF6FF] dark:bg-[#3B82F6]/10 border border-[#3B82F6]/20 dark:border-[#3B82F6]/30">
               <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#3B82F6]">
                 <Scale className="w-3.5 h-3.5" />
                 <span>Latest Weight</span>
               </div>
-              <p className="text-2xl font-black text-[#0E1B2C] font-heading mt-1">
+              <p className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
                 {latestWeight ? `${latestWeight}` : '---'}
-                <span className="text-xs font-bold text-[#7E90A5] ml-1">kg</span>
+                <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-1">kg</span>
               </p>
-              <p className="text-[11px] font-bold text-[#7E90A5] mt-0.5">
+              <p className="text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
                 BMI: 26.1 (Overweight)
               </p>
             </div>
@@ -188,7 +188,7 @@ Generated via HealthNest.`;
 
           {/* Chronic Conditions */}
           <div>
-            <h4 className="text-xs font-black uppercase tracking-wider text-[#7E90A5] mb-1.5">
+            <h4 className="text-xs font-black uppercase tracking-wider text-[#7E90A5] dark:text-[#A0B2C6] mb-1.5">
               Documented Conditions
             </h4>
             <div className="flex flex-wrap gap-1.5">
@@ -196,43 +196,43 @@ Generated via HealthNest.`;
                 member.conditions.map((c) => (
                   <span
                     key={c}
-                    className="px-2.5 py-1 rounded-lg bg-[#F4F6F9] border border-black/10 text-xs font-black text-[#0E1B2C]"
+                    className="px-2.5 py-1 rounded-lg bg-[#F4F6F9] dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-xs font-black text-[#0E1B2C] dark:text-white"
                   >
                     {c}
                   </span>
                 ))
               ) : (
-                <span className="text-xs text-[#7E90A5]">None recorded</span>
+                <span className="text-xs text-[#7E90A5] dark:text-[#A0B2C6]">None recorded</span>
               )}
             </div>
           </div>
 
           {/* Current Prescriptions & Medications */}
           <div>
-            <h4 className="text-xs font-black uppercase tracking-wider text-[#7E90A5] mb-1.5">
+            <h4 className="text-xs font-black uppercase tracking-wider text-[#7E90A5] dark:text-[#A0B2C6] mb-1.5">
               Current Medications
             </h4>
             <div className="space-y-1.5">
               {medicines.map((m) => (
                 <div
                   key={m.id}
-                  className="p-2.5 rounded-xl bg-[#F9FBFC] border border-black/8 flex items-center justify-between text-xs"
+                  className="p-2.5 rounded-xl bg-[#F9FBFC] dark:bg-[#17263A] border border-black/8 dark:border-white/10 flex items-center justify-between text-xs"
                 >
                   <div>
-                    <span className="font-black text-[#0E1B2C]">{m.name}</span>{' '}
+                    <span className="font-black text-[#0E1B2C] dark:text-white">{m.name}</span>{' '}
                     <span className="font-bold text-[#FF6B4A]">({m.dose})</span>
-                    <p className="text-[10px] text-[#7E90A5]">{m.instructions}</p>
+                    <p className="text-[10px] text-[#7E90A5] dark:text-[#A0B2C6]">{m.instructions}</p>
                   </div>
-                  <span className="font-bold text-[#0E1B2C]">{m.times.join(', ')}</span>
+                  <span className="font-bold text-[#0E1B2C] dark:text-white">{m.times.join(', ')}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Doctor Signature / Note Area */}
-          <div className="pt-3 border-t border-black/10 flex items-center justify-between text-[11px] text-[#7E90A5]">
+          <div className="pt-3 border-t border-black/10 dark:border-white/10 flex items-center justify-between text-[11px] text-[#7E90A5] dark:text-[#A0B2C6]">
             <p>For patient self-tracking. Confirm treatment targets with doctor.</p>
-            <p className="font-bold">Doctor's Sign: __________________</p>
+            <p className="font-bold text-[#0E1B2C] dark:text-white">Doctor's Sign: __________________</p>
           </div>
         </div>
       </div>

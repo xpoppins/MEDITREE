@@ -68,7 +68,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs">
-      <div className="card-wellness p-6 bg-white max-w-md w-full relative animate-in zoom-in-95 duration-200">
+      <div className="card-wellness p-6 bg-white dark:bg-[#0E1B2C] max-w-md w-full relative animate-in zoom-in-95 duration-200">
         {/* Skip button */}
         <button
           type="button"
@@ -99,7 +99,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
           <div className="space-y-4">
             <div>
               <h3 className="text-2xl font-black text-[#0E1B2C] font-heading">
-                {language === 'hi' ? 'आपका नाम और अवतार' : 'Welcome to HealthNest!'}
+                {language === 'hi' ? 'आपका नाम और अवतार' : 'Welcome to MEDITREE!'}
               </h3>
               <p className="text-sm font-semibold text-[#7E90A5] mt-1">
                 {language === 'hi' ? 'कृपया अपनी पहचान चुनें' : "Let's personalize your daily health dashboard"}

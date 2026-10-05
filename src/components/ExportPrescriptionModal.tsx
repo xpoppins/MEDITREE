@@ -94,7 +94,7 @@ export const ExportPrescriptionModal: React.FC<ExportPrescriptionModalProps> = (
 
     text += `----------------------------------------\n`;
     text += `Special Instructions: Take all medications at consistent times. Review with physician every 3-6 months.\n`;
-    text += `Generated digitally via HealthNest Family Health Vault\n`;
+    text += `Generated digitally via MEDITREE Family Health Vault\n`;
     return text;
   };
 
@@ -121,7 +121,7 @@ export const ExportPrescriptionModal: React.FC<ExportPrescriptionModalProps> = (
         <button
           type="button"
           onClick={onClose}
-          className="print:hidden absolute top-4 right-4 w-9 h-9 rounded-full bg-black/5 dark:bg-white/10 text-[#0E1B2C] dark:text-white flex items-center justify-center hover:opacity-80 cursor-pointer"
+          className="print:hidden absolute top-4 right-4 w-8 h-8 rounded-full bg-black/5 dark:bg-black/9 text-[#0E1B2C] dark:text-white flex items-center justify-center hover:opacity-80 cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -159,7 +159,7 @@ export const ExportPrescriptionModal: React.FC<ExportPrescriptionModalProps> = (
               </div>
               <div>
                 <h2 className="text-xl sm:text-2xl font-black text-[#0E1B2C] dark:text-white font-heading tracking-tight">
-                  HealthNest Family Care
+                  MEDITREE Family Care
                 </h2>
                 <p className="text-xs font-bold text-[#12B5A6]">
                   Digital Health Vault • Verified Medication Record

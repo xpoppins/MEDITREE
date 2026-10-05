@@ -59,14 +59,14 @@ export const MedicinesSchedule: React.FC<MedicinesScheduleProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-lg font-black text-[#0E1B2C] dark:text-white font-heading">
+              <h3 className="text-lg font-black text-[#0E1B2C] dark:text-black font-heading">
                 {language === 'hi' ? 'दवाइयों की सूची' : 'Current Prescriptions'}
               </h3>
               <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6]">
                 {medicines.length} {medicines.length === 1 ? 'active' : 'active'}
               </span>
             </div>
-            <p className="text-xs font-bold text-[#7E90A5]">
+            <p className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6]">
               {language === 'hi'
                 ? 'निर्धारित दवाइयां, खुराक, समय और सावधानियां'
                 : 'Prescribed medicines, dosages, schedules & instructions'}

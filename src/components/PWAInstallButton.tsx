@@ -42,21 +42,21 @@ export const PWAInstallButton: React.FC = () => {
 
         {showIOSGuide && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-            <div className="w-full max-w-sm rounded-[26px] bg-[#FFF9F0] border-2 border-[#0F5C5C] p-6 shadow-2xl relative">
+            <div className="w-full max-w-sm rounded-[26px] bg-[#FFF9F0] dark:bg-[#08101A] border-2 border-[#0F5C5C] dark:border-[#12B5A6] p-6 shadow-2xl relative">
               <button
                 type="button"
                 onClick={() => setShowIOSGuide(false)}
-                className="absolute top-4 right-4 p-2 text-[#1F2933]/60 hover:text-[#1F2933] cursor-pointer"
+                className="absolute top-4 right-4 p-2 text-[#1F2933]/60 dark:text-white/60 hover:text-[#1F2933] dark:hover:text-white cursor-pointer"
               >
                 <X className="w-6 h-6" />
               </button>
 
-              <h3 className="text-2xl font-black text-[#0F5C5C] pr-8">
+              <h3 className="text-2xl font-black text-[#0F5C5C] dark:text-[#12B5A6] pr-8">
                 {language === 'hi' ? 'iPhone पर कैसे जोड़ें:' : 'Install on iPhone'}
               </h3>
-              <div className="mt-4 space-y-3 text-base font-semibold text-[#1F2933]">
+              <div className="mt-4 space-y-3 text-base font-semibold text-[#1F2933] dark:text-white">
                 <p className="flex items-start gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#0F5C5C] text-white flex items-center justify-center shrink-0 text-sm font-bold">1</span>
+                  <span className="w-6 h-6 rounded-full bg-[#0F5C5C] dark:bg-[#12B5A6] text-white flex items-center justify-center shrink-0 text-sm font-bold">1</span>
                   <span>
                     {language === 'hi'
                       ? 'नीचे सफ़ारी (Safari) में "Share" बटन दबाएं'
@@ -64,7 +64,7 @@ export const PWAInstallButton: React.FC = () => {
                   </span>
                 </p>
                 <p className="flex items-start gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#0F5C5C] text-white flex items-center justify-center shrink-0 text-sm font-bold">2</span>
+                  <span className="w-6 h-6 rounded-full bg-[#0F5C5C] dark:bg-[#12B5A6] text-white flex items-center justify-center shrink-0 text-sm font-bold">2</span>
                   <span>
                     {language === 'hi'
                       ? '"Add to Home Screen" चुनें'
@@ -76,7 +76,7 @@ export const PWAInstallButton: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowIOSGuide(false)}
-                className="mt-6 w-full min-h-[50px] rounded-[18px] bg-[#0F5C5C] text-white text-base font-bold cursor-pointer"
+                className="mt-6 w-full min-h-[50px] rounded-[18px] bg-[#0F5C5C] dark:bg-[#12B5A6] text-white text-base font-bold cursor-pointer"
               >
                 {language === 'hi' ? 'समझ गए' : 'Got it'}
               </button>

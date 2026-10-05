@@ -352,7 +352,7 @@ export const History: React.FC = () => {
 
                         {r.type === 'bp' && (
                           <div className="flex items-baseline gap-1.5">
-                            <span className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading">
+                            <span className="text-2xl font-black text-[#0E1B2C] dark:text-black font-heading">
                               {r.systolic}/{r.diastolic}
                             </span>
                             <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6]">mmHg</span>

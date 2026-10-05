@@ -76,13 +76,15 @@ export const TopHeader: React.FC = () => {
           onClick={() => navigate('/')}
           className="flex items-center gap-2 sm:gap-2.5 cursor-pointer shrink-0"
         >
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#0E1B2C] dark:bg-white flex items-center justify-center text-white dark:text-[#0E1B2C] shadow-xs">
-            <Heart className="w-5 h-5 text-[#FF6B4A] fill-[#FF6B4A]" />
-          </div>
+          <img
+            src="/logo.svg"
+            alt="MEDITREE"
+            className="w-40 h-60 sm:w-25 sm:h-14 rounded-2xl shadow-xs"
+          />
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-lg sm:text-xl font-black font-heading text-[#0E1B2C] dark:text-white leading-none tracking-tight">
-                HealthNest
+                MEDITREE
               </span>
               <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#FF6B4A] bg-[#FFF0E8] dark:bg-[#FF6B4A]/20 px-1.5 py-0.5 rounded">
                 PRO
@@ -203,10 +205,10 @@ export const TopHeader: React.FC = () => {
               type="button"
               onClick={() => switchDemo(isManager ? 'member' : 'manager')}
               className="px-2 sm:px-2.5 py-1 rounded-xl bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] border border-[#12B5A6]/30 text-[10px] sm:text-xs font-black flex items-center gap-1 cursor-pointer shrink-0 active:scale-95 transition-transform"
-              title={`Currently ${isManager ? 'Rakesh (Manager)' : 'Papa (Member)'}. Tap to switch role.`}
+              title={`Currently ${user.name} (${isManager ? 'Manager' : 'Member'}). Tap to switch role.`}
             >
               <UserCheck className="w-3.5 h-3.5" />
-              <span>{isManager ? 'Papa' : 'Rakesh'}</span>
+              <span>{user.name.split(' ')[0]}</span>
             </button>
           )}
 

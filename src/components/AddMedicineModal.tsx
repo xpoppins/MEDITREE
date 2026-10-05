@@ -251,7 +251,7 @@ export const AddMedicineModal: React.FC<AddMedicineModalProps> = ({
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/5 dark:bg-white/10 text-[#0E1B2C] dark:text-white flex items-center justify-center hover:opacity-80 cursor-pointer"
+          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/5 dark:bg-black/9 text-[#0E1B2C] dark:text-white flex items-center justify-center hover:opacity-80 cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>

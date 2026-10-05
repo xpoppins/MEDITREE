@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "HealthNest — Family Health",
-  "short_name": "HealthNest",
+  "name": "MEDITREE — Family Health",
+  "short_name": "MEDITREE",
   "description": "Bold, elder-friendly health and vitals tracker for the whole family.",
   "start_url": "/",
   "scope": "/",
@@ -11,7 +11,7 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/icon.svg",
+      "src": "/logo.svg",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml",
       "purpose": "any"

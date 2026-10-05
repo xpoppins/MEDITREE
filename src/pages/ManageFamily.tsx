@@ -78,8 +78,8 @@ export const ManageFamily: React.FC = () => {
     if (!family?.inviteCode) return;
     const text =
       language === 'hi'
-        ? `हमारे परिवार के हेल्थनेस्ट (HealthNest) से जुड़ें! इनवाइट कोड है: ${family.inviteCode}`
-        : `Join our family on HealthNest! Use family invite code: ${family.inviteCode}`;
+        ? `हमारे परिवार के हेल्थनेस्ट (MEDITREE) से जुड़ें! इनवाइट कोड है: ${family.inviteCode}`
+        : `Join our family on MEDITREE! Use family invite code: ${family.inviteCode}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
   };
 

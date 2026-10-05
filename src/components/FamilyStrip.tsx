@@ -86,7 +86,7 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
             <Users className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-black text-[#0E1B2C] dark:text-white font-heading">
+            <h3 className="text-base sm:text-lg font-black text-[#0E1B2C] dark:text-black font-heading">
               {language === 'hi' ? 'परिवार स्वास्थ्य व दवा प्रबंधन' : 'Family Health & Medicine Hub'}
             </h3>
             <p className="text-[11px] font-bold text-[#7E90A5]">

@@ -59,6 +59,14 @@ export const Login: React.FC = () => {
           <span>{language === 'hi' ? 'पीछे' : 'Back to Welcome'}</span>
         </button>
 
+        <div className="flex justify-center mb-6">
+          <img
+            src="/logo.svg"
+            alt="MEDITREE"
+            className="w-20 h-20 rounded-2xl shadow-lg"
+          />
+        </div>
+
         <h2 className="text-2xl sm:text-3xl font-black text-[#0E1B2C] dark:text-white font-heading">
           {language === 'hi' ? 'लॉग इन करें' : 'Welcome Back'}
         </h2>
@@ -202,7 +210,7 @@ export const Login: React.FC = () => {
         </div>
 
         <div className="mt-6 pt-4 border-t border-black/8 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs font-bold text-[#7E90A5]">
-          <span>New to HealthNest?</span>
+          <span>New to MEDITREE?</span>
           <button
             type="button"
             onClick={() => navigate('/register')}

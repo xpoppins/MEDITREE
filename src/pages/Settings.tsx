@@ -57,7 +57,7 @@ export const Settings: React.FC = () => {
           <h2 className="text-3xl font-black text-[#0F5C5C]">
             {language === 'hi' ? 'सेटिंग्स व इनसाइट्स' : 'Insights & Settings'}
           </h2>
-          <p className="text-base text-[#1F2933]/70 font-semibold mt-0.5">
+          <p className="text-base text-[#1F2933]/120 font-semibold mt-0.5">
             {language === 'hi' ? 'अक्षर का आकार, भाषा और स्वास्थ्य सारांश' : 'Text size, language, and weekly summary'}
           </p>
         </div>

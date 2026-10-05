@@ -460,7 +460,7 @@ export const MemberProfile: React.FC = () => {
         <div className="card-wellness p-5 bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10">
           <h4 className="text-base font-black text-[#0E1B2C] dark:text-white font-heading mb-1">Install on Android / iPhone</h4>
           <p className="text-xs text-[#7E90A5] dark:text-[#A0B2C6] mb-3">
-            Add HealthNest icon to your home screen for rapid 1-tap elder access.
+            Add MEDITREE icon to your home screen for rapid 1-tap elder access.
           </p>
           <PWAInstallButton />
         </div>
@@ -473,7 +473,7 @@ export const MemberProfile: React.FC = () => {
             className="w-full min-h-[54px] rounded-2xl bg-[#FEECEE] hover:bg-[#FCD7DA] text-[#E5484D] font-heading font-black text-sm flex items-center justify-center gap-2 cursor-pointer active:scale-98"
           >
             <LogOut className="w-4 h-4" />
-            <span>Log out of HealthNest</span>
+            <span>Log out of MEDITREE</span>
           </button>
         </div>
 

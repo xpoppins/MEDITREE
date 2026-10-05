@@ -167,24 +167,8 @@ export async function registerManager(
     hasLogin: true,
   };
 
-  // Add initial baseline reading for this new family
-  const starterReading: Reading = {
-    id: `r_${Date.now()}`,
-    memberId: newMemberId,
-    familyId: newFamilyId,
-    type: 'bp',
-    systolic: 120,
-    diastolic: 80,
-    pulse: 72,
-    status: 'green',
-    statusText: 'Optimal Blood Pressure',
-    note: 'Initial baseline reading recorded on setup',
-    takenAt: new Date().toISOString(),
-    addedByUid: newUserId,
-  };
-
   // Save new family to collection
-  const families = get<Family[]>(KEYS.FAMILIES, [INITIAL_FAMILY]);
+  const families = get<Family[]>(KEYS.FAMILIES, []);
   set(KEYS.FAMILIES, [...families, newFamily]);
   set(KEYS.FAMILY, newFamily);
 
@@ -192,12 +176,8 @@ export async function registerManager(
   set(KEYS.USERS, [...users, newUser]);
 
   // Save new member
-  const members = get<Member[]>(KEYS.MEMBERS, INITIAL_MEMBERS);
+  const members = get<Member[]>(KEYS.MEMBERS, []);
   set(KEYS.MEMBERS, [...members, newMember]);
-
-  // Save starter reading
-  const readings = get<Reading[]>(KEYS.READINGS, []);
-  set(KEYS.READINGS, [starterReading, ...readings]);
 
   // Set active session
   const token = `jwt_mock_${newUserId}`;
@@ -289,20 +269,20 @@ export async function updateProfile(updates: Partial<User>): Promise<User> {
 }
 
 export async function switchDemoUser(role: UserRole): Promise<User> {
-  const users = get<User[]>(KEYS.USERS, INITIAL_USERS);
-  // Default to Sharma family demo users
+  const users = get<User[]>(KEYS.USERS, []);
+  const currentUser = getCurrentUser();
+  const currentFamilyId = currentUser?.familyId;
+
+  // Find a user with the target role within the SAME family
+  const familyUsers = users.filter((u) => u.familyId === currentFamilyId);
   const target =
     role === 'manager'
-      ? users.find((u) => u.role === 'manager' && u.familyId === 'f1') ||
-        users.find((u) => u.role === 'manager') ||
-        users[0]
-      : users.find((u) => u.role === 'member' && u.familyId === 'f1') ||
-        users.find((u) => u.role === 'member') ||
-        users[1];
+      ? familyUsers.find((u) => u.role === 'manager') || currentUser || users[0]
+      : familyUsers.find((u) => u.role === 'member') || familyUsers[0] || currentUser || users[0];
 
-  const families = get<Family[]>(KEYS.FAMILIES, [INITIAL_FAMILY]);
-  const family = families.find((f) => f.id === target.familyId) || INITIAL_FAMILY;
-  set(KEYS.FAMILY, family);
+  const families = get<Family[]>(KEYS.FAMILIES, []);
+  const family = families.find((f) => f.id === target.familyId);
+  if (family) set(KEYS.FAMILY, family);
 
   localStorage.setItem(KEYS.CURRENT_UID, target.id);
   localStorage.setItem(KEYS.TOKEN, `jwt_demo_${target.id}`);
@@ -315,8 +295,8 @@ export async function getFamily(familyId?: string): Promise<Family> {
   await delay(40);
   const user = getCurrentUser();
   const targetId = familyId || user?.familyId;
-  const families = get<Family[]>(KEYS.FAMILIES, [INITIAL_FAMILY]);
-  return families.find((f) => f.id === targetId) || families[0] || INITIAL_FAMILY;
+  const families = get<Family[]>(KEYS.FAMILIES, []);
+  return families.find((f) => f.id === targetId) || families[0];
 }
 
 export async function regenerateInviteCode(): Promise<Family> {
