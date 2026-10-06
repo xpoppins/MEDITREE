@@ -1,20 +1,33 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# MediTree
 
-# Run and deploy your AI Studio app
+> Every family is a tree. Keep it healthy.
 
-This contains everything you need to run your app locally.
+MediTree is a family health tracking platform. One family manager and the
+family members note down **blood pressure, blood sugar, weight and BMI**,
+get simple green / amber / red feedback, and see trends over time.
 
-View your app in AI Studio: https://ai.studio/apps/02e4d3ea-296d-4ded-ad3d-76fe4b887913
+## Projects
 
-## Run Locally
+| Folder | What it is |
+|---|---|
+| `landing/` | Marketing website (React, GSAP, Lenis) |
+| `client/` | Health tracking web app (React) |
+| `server/` | REST API (Node, Express, MongoDB Atlas) |
+| `docs/` | Prompts, guides and notes |
 
-**Prerequisites:**  Node.js
+## Tech stack
 
+React, Vite, Node.js, Express, MongoDB Atlas, JWT, GSAP, Lenis
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Roles
+
+- **Family Manager:** creates the family, manages and edits everyone's data
+- **Member:** joins with an invite code and manages their own data
+
+## Status
+
+In development.
+
+## Disclaimer
+
+MediTree is for tracking only and is not medical advice. Always consult your doctor.
