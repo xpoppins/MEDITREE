@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 
@@ -26,6 +27,13 @@ app.use('/api/family', require('./routes/familyRoutes'));
 app.use('/api/readings', require('./routes/readingRoutes'));
 app.use('/api/medicines', require('./routes/medicineRoutes'));
 app.use('/api/appointments', require('./routes/appointmentRoutes'));
+
+// Serve frontend static files
+const distPath = path.join(__dirname, '..', 'dist');
+app.use(express.static(distPath));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
 
 app.use(errorHandler);
 
