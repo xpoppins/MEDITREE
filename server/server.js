@@ -1,0 +1,33 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const connectDB = require('./config/db');
+const errorHandler = require('./middleware/errorHandler');
+
+const app = express();
+connectDB();
+
+app.use(helmet());
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:3000',
+  'http://localhost:5173',
+].filter(Boolean);
+
+app.use(cors({ origin: allowedOrigins }));
+app.use(express.json());
+app.use('/api', rateLimit({ windowMs: 15 * 60 * 1000, max: 300 }));
+
+app.get('/api/health', (req, res) => res.json({ ok: true }));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/family', require('./routes/familyRoutes'));
+app.use('/api/readings', require('./routes/readingRoutes'));
+app.use('/api/medicines', require('./routes/medicineRoutes'));
+app.use('/api/appointments', require('./routes/appointmentRoutes'));
+
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

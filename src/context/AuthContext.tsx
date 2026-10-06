@@ -28,12 +28,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loadData = async () => {
     try {
-      const me = await api.getMe();
+      const res = await api.getMe();
+      const me = res.user || res;
       setUser(me);
       if (me) {
         const [fam, mems] = await Promise.all([
-          api.getFamily(me.familyId),
-          api.getMembers(me.familyId),
+          api.getFamily(),
+          api.getMembers(),
         ]);
         setFamily(fam);
         setMembers(mems);
@@ -55,11 +56,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password?: string) => {
     setLoading(true);
     try {
-      const res = await api.login(email, password);
+      const res = await api.login(email, password || '');
+      api.setToken(res.token);
       setUser(res.user);
       const [fam, mems] = await Promise.all([
-        api.getFamily(res.user.familyId),
-        api.getMembers(res.user.familyId),
+        api.getFamily(),
+        api.getMembers(),
       ]);
       setFamily(fam);
       setMembers(mems);
@@ -72,9 +74,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     try {
       const res = await api.registerManager(name, email, password, familyName);
+      api.setToken(res.token);
       setUser(res.user);
       setFamily(res.family);
-      const mems = await api.getMembers(res.family.id);
+      const mems = await api.getMembers();
       setMembers(mems);
     } finally {
       setLoading(false);
@@ -85,9 +88,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     try {
       const res = await api.joinFamily(name, email, password, inviteCode);
+      api.setToken(res.token);
       setUser(res.user);
-      setFamily(res.family);
-      const mems = await api.getMembers(res.family.id);
+      const fam = await api.getFamily();
+      setFamily(fam);
+      const mems = await api.getMembers();
       setMembers(mems);
     } finally {
       setLoading(false);
@@ -102,27 +107,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const refreshMembers = async () => {
-    if (user?.familyId) {
-      const mems = await api.getMembers(user.familyId);
-      setMembers(mems);
-    }
+    const mems = await api.getMembers();
+    setMembers(mems);
   };
 
   const refreshFamily = async () => {
-    if (user?.familyId) {
-      const fam = await api.getFamily(user.familyId);
-      setFamily(fam);
-    }
+    const fam = await api.getFamily();
+    setFamily(fam);
   };
 
   const switchDemo = async (role: UserRole) => {
     setLoading(true);
     try {
-      const switchedUser = await api.switchDemoUser(role);
+      const res = await api.switchDemoUser(role);
+      const switchedUser = res.user || res;
       setUser(switchedUser);
       const [fam, mems] = await Promise.all([
-        api.getFamily(switchedUser.familyId),
-        api.getMembers(switchedUser.familyId),
+        api.getFamily(),
+        api.getMembers(),
       ]);
       setFamily(fam);
       setMembers(mems);

@@ -148,7 +148,7 @@ export const ManageFamily: React.FC = () => {
   const handleResetPassword = async () => {
     if (!memberToResetPass) return;
     try {
-      await api.resetMemberPassword(memberToResetPass.id, newPassword);
+      await api.resetPassword(memberToResetPass.id, newPassword);
       setActionSuccessMsg(`Password reset successfully for ${memberToResetPass.name}`);
       setMemberToResetPass(null);
       setTimeout(() => setActionSuccessMsg(''), 3000);
