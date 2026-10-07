@@ -67,6 +67,20 @@ export async function openRazorpayCheckout(
     description: '6 months premium for your family',
     prefill: { name: user.name, email: user.email },
     theme: { color: '#0F5C5C' },
+    config: {
+      display: {
+        blocks: {
+          upi: {
+            name: 'Pay with UPI',
+            instruments: [{ method: 'upi' }],
+          },
+        },
+        sequence: ['block.upi'],
+        preferences: {
+          show_default_blocks: true,
+        },
+      },
+    },
     handler: onSuccess,
   });
   rzp.open();
