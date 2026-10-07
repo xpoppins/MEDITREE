@@ -55,7 +55,9 @@ export const Home: React.FC = () => {
     isPremium: boolean;
     premiumUntil: string | null;
     price: { amount: number; offer: boolean; regular: number };
-  }>({ isPremium: false, premiumUntil: null, price: { amount: 1100, offer: true, regular: 9900 } });
+    lastPayment: { amount: number; paymentId: string; paidAt: string; orderId: string } | null;
+    memberSince: string | null;
+  }>({ isPremium: false, premiumUntil: null, price: { amount: 1100, offer: true, regular: 9900 }, lastPayment: null, memberSince: null });
   const [paying, setPaying] = useState(false);
 
   // Medicine & Prescription Modals
@@ -87,6 +89,7 @@ export const Home: React.FC = () => {
             razorpay_signature: resp.razorpay_signature,
           });
           getPaymentStatus().then(setPremiumStatus).catch(() => {});
+          window.dispatchEvent(new Event('payment-success'));
         }
       );
     } catch (err) {
@@ -258,19 +261,21 @@ export const Home: React.FC = () => {
 
         {/* 2-COLUMN RESPONSIVE GRID ON TABLET / DESKTOP */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Left Sidebar (lg:col-span-2): Pro Membership Box */}
-          <div className="lg:col-span-2">
+          {/* Left Sidebar (lg:col-span-3): Pro Membership Box */}
+          <div className="lg:col-span-3">
             <ProSidebar
               isPremium={premiumStatus.isPremium}
               premiumUntil={premiumStatus.premiumUntil}
               price={premiumStatus.price}
               onPay={handlePay}
               paying={paying}
+              lastPayment={premiumStatus.lastPayment}
+              memberSince={premiumStatus.memberSince}
             />
           </div>
 
-          {/* Main Column (lg:col-span-6): Health Score Ring & Vital Cards & Add Button */}
-          <div className="lg:col-span-6 space-y-5">
+          {/* Main Column (lg:col-span-5): Health Score Ring & Vital Cards & Add Button */}
+          <div className="lg:col-span-5 space-y-5">
             {/* LARGE HEALTH SCORE RING (0-100) */}
             <ScoreRing scoreDetails={scoreDetails} />
 

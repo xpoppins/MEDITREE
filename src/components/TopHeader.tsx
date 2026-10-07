@@ -49,6 +49,14 @@ export const TopHeader: React.FC = () => {
     getPaymentStatus().then((s) => setIsPremium(s.isPremium)).catch(() => {});
   }, []);
 
+  useEffect(() => {
+    const handlePaymentSuccess = () => {
+      getPaymentStatus().then((s) => setIsPremium(s.isPremium)).catch(() => {});
+    };
+    window.addEventListener('payment-success', handlePaymentSuccess);
+    return () => window.removeEventListener('payment-success', handlePaymentSuccess);
+  }, []);
+
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'hi' : 'en');
   };

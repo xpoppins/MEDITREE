@@ -67,6 +67,7 @@ export const Settings: React.FC = () => {
             razorpay_signature: resp.razorpay_signature,
           });
           getPaymentStatus().then(setPremiumStatus).catch(() => {});
+          window.dispatchEvent(new Event('payment-success'));
         }
       );
     } catch (err) {

@@ -34,12 +34,22 @@ exports.status = async (req, res, next) => {
   try {
     const family = await Family.findById(req.user.familyId);
     const used = await Reading.countDocuments({ familyId: req.user.familyId });
+    const lastPayment = await Payment.findOne({ familyId: req.user.familyId, status: 'paid' })
+      .sort({ paidAt: -1 })
+      .select('amount paymentId paidAt orderId');
     res.json({
       isPremium: !!(family.premiumUntil && family.premiumUntil > new Date()),
       premiumUntil: family.premiumUntil,
       used,
       freeLimit: FREE_READINGS,
       price: currentPrice(),
+      lastPayment: lastPayment ? {
+        amount: lastPayment.amount,
+        paymentId: lastPayment.paymentId,
+        paidAt: lastPayment.paidAt,
+        orderId: lastPayment.orderId,
+      } : null,
+      memberSince: family.createdAt,
     });
   } catch (err) { next(err); }
 };
