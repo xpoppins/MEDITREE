@@ -17,7 +17,7 @@ import { TopHeader } from '../components/TopHeader';
 import { useAuth } from '../context/AuthContext';
 import { TextSize, usePreferences } from '../context/PreferencesContext';
 import { Reading } from '../types';
-import { getPaymentStatus, createOrder, verifyPayment } from '../services/payments';
+import { getPaymentStatus, createOrder, verifyPayment, openRazorpayCheckout } from '../services/payments';
 
 export const Settings: React.FC = () => {
   const navigate = useNavigate();
@@ -57,25 +57,18 @@ export const Settings: React.FC = () => {
     setPaying(true);
     try {
       const order = await createOrder();
-      const rzp = new (window as any).Razorpay({
-        key: order.keyId,
-        amount: order.amount,
-        currency: order.currency,
-        order_id: order.orderId,
-        name: 'MediTree',
-        description: '6 months premium for your family',
-        prefill: { name: user?.name || '', email: user?.email || '' },
-        theme: { color: '#0F5C5C' },
-        handler: async (resp: any) => {
+      await openRazorpayCheckout(
+        { orderId: order.orderId, amount: order.amount, currency: order.currency, keyId: order.keyId },
+        { name: user?.name || '', email: user?.email || '' },
+        async (resp) => {
           await verifyPayment({
             razorpay_order_id: resp.razorpay_order_id,
             razorpay_payment_id: resp.razorpay_payment_id,
             razorpay_signature: resp.razorpay_signature,
           });
           getPaymentStatus().then(setPremiumStatus).catch(() => {});
-        },
-      });
-      rzp.open();
+        }
+      );
     } catch (err) {
       console.error('Payment failed', err);
     } finally {

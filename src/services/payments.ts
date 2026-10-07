@@ -31,3 +31,43 @@ export async function verifyPayment(data: {
 }) {
   return apiFetch('/payments/verify', { method: 'POST', body: JSON.stringify(data) });
 }
+
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
+
+function loadRazorpayScript(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (window.Razorpay) {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load Razorpay'));
+    document.body.appendChild(script);
+  });
+}
+
+export async function openRazorpayCheckout(
+  order: { orderId: string; amount: number; currency: string; keyId: string },
+  user: { name: string; email: string },
+  onSuccess: (resp: any) => void
+) {
+  await loadRazorpayScript();
+  const rzp = new window.Razorpay({
+    key: order.keyId,
+    amount: order.amount,
+    currency: order.currency,
+    order_id: order.orderId,
+    name: 'MediTree',
+    description: '6 months premium for your family',
+    prefill: { name: user.name, email: user.email },
+    theme: { color: '#0F5C5C' },
+    handler: onSuccess,
+  });
+  rzp.open();
+}

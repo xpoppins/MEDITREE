@@ -29,7 +29,7 @@ import { VitalCard } from '../components/VitalCard';
 import { useAuth } from '../context/AuthContext';
 import { usePreferences } from '../context/PreferencesContext';
 import * as api from '../services/apiClient';
-import { getPaymentStatus, createOrder, verifyPayment } from '../services/payments';
+import { getPaymentStatus, createOrder, verifyPayment, openRazorpayCheckout } from '../services/payments';
 import { HealthScoreDetails, HealthStatus, Member, Medicine, Reading } from '../types';
 import { bmiInfo, calculateHealthScore } from '../utils/healthRules';
 
@@ -77,25 +77,18 @@ export const Home: React.FC = () => {
     setPaying(true);
     try {
       const order = await createOrder();
-      const rzp = new (window as any).Razorpay({
-        key: order.keyId,
-        amount: order.amount,
-        currency: order.currency,
-        order_id: order.orderId,
-        name: 'MediTree',
-        description: '6 months premium for your family',
-        prefill: { name: user?.name || '', email: user?.email || '' },
-        theme: { color: '#0F5C5C' },
-        handler: async (resp: any) => {
+      await openRazorpayCheckout(
+        { orderId: order.orderId, amount: order.amount, currency: order.currency, keyId: order.keyId },
+        { name: user?.name || '', email: user?.email || '' },
+        async (resp) => {
           await verifyPayment({
             razorpay_order_id: resp.razorpay_order_id,
             razorpay_payment_id: resp.razorpay_payment_id,
             razorpay_signature: resp.razorpay_signature,
           });
           getPaymentStatus().then(setPremiumStatus).catch(() => {});
-        },
-      });
-      rzp.open();
+        }
+      );
     } catch (err) {
       console.error('Payment failed', err);
     } finally {
@@ -276,8 +269,8 @@ export const Home: React.FC = () => {
             />
           </div>
 
-          {/* Main Column (lg:col-span-7): Health Score Ring & Vital Cards & Add Button */}
-          <div className="lg:col-span-7 space-y-5">
+          {/* Main Column (lg:col-span-6): Health Score Ring & Vital Cards & Add Button */}
+          <div className="lg:col-span-6 space-y-5">
             {/* LARGE HEALTH SCORE RING (0-100) */}
             <ScoreRing scoreDetails={scoreDetails} />
 
