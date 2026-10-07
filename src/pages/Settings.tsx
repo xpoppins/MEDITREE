@@ -17,7 +17,7 @@ import { TopHeader } from '../components/TopHeader';
 import { useAuth } from '../context/AuthContext';
 import { TextSize, usePreferences } from '../context/PreferencesContext';
 import { Reading } from '../types';
-import { getPaymentStatus } from '../services/payments';
+import { getPaymentStatus, createOrder, verifyPayment } from '../services/payments';
 
 export const Settings: React.FC = () => {
   const navigate = useNavigate();
@@ -35,6 +35,7 @@ export const Settings: React.FC = () => {
     premiumUntil: string | null;
     price: { amount: number; offer: boolean; regular: number };
   }>({ isPremium: false, premiumUntil: null, price: { amount: 1100, offer: true, regular: 9900 } });
+  const [paying, setPaying] = useState(false);
 
   useEffect(() => {
     const loadAiSummary = async () => {
@@ -51,6 +52,36 @@ export const Settings: React.FC = () => {
     loadAiSummary();
     getPaymentStatus().then(setPremiumStatus).catch(() => {});
   }, [user]);
+
+  const handlePay = async () => {
+    setPaying(true);
+    try {
+      const order = await createOrder();
+      const rzp = new (window as any).Razorpay({
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        order_id: order.orderId,
+        name: 'MediTree',
+        description: '6 months premium for your family',
+        prefill: { name: user?.name || '', email: user?.email || '' },
+        theme: { color: '#0F5C5C' },
+        handler: async (resp: any) => {
+          await verifyPayment({
+            razorpay_order_id: resp.razorpay_order_id,
+            razorpay_payment_id: resp.razorpay_payment_id,
+            razorpay_signature: resp.razorpay_signature,
+          });
+          getPaymentStatus().then(setPremiumStatus).catch(() => {});
+        },
+      });
+      rzp.open();
+    } catch (err) {
+      console.error('Payment failed', err);
+    } finally {
+      setPaying(false);
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -222,6 +253,21 @@ export const Settings: React.FC = () => {
                 </span>
               </div>
             </div>
+          )}
+          {!premiumStatus.isPremium && isManager && (
+            <button
+              type="button"
+              onClick={handlePay}
+              disabled={paying}
+              className="w-full min-h-[48px] rounded-xl bg-gradient-to-r from-[#FF6B4A] to-[#FF9028] text-white font-black flex items-center justify-center gap-2 shadow-lg shadow-[#FF6B4A]/25 active:scale-98 transition-transform disabled:opacity-50 mt-3"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>
+                {paying
+                  ? language === 'hi' ? 'प्रोसेसिंग...' : 'Processing...'
+                  : `${language === 'hi' ? 'UPI से भुगतान करें' : 'Pay with UPI'} - ₹${(premiumStatus.price.amount / 100).toFixed(0)}`}
+              </span>
+            </button>
           )}
         </div>
 

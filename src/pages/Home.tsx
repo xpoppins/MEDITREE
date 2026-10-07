@@ -19,6 +19,7 @@ import { HomeVitalsGraph } from '../components/HomeVitalsGraph';
 import { MedicineSearchDirectory } from '../components/MedicineSearchDirectory';
 import { MedicinesSchedule } from '../components/MedicinesSchedule';
 import { OnboardingModal } from '../components/OnboardingModal';
+import { ProSidebar } from '../components/ProSidebar';
 import { ScoreRing } from '../components/ScoreRing';
 import { ShareDoctorReport } from '../components/ShareDoctorReport';
 import { StreakCard } from '../components/StreakCard';
@@ -28,6 +29,7 @@ import { VitalCard } from '../components/VitalCard';
 import { useAuth } from '../context/AuthContext';
 import { usePreferences } from '../context/PreferencesContext';
 import * as api from '../services/apiClient';
+import { getPaymentStatus, createOrder, verifyPayment } from '../services/payments';
 import { HealthScoreDetails, HealthStatus, Member, Medicine, Reading } from '../types';
 import { bmiInfo, calculateHealthScore } from '../utils/healthRules';
 
@@ -48,6 +50,14 @@ export const Home: React.FC = () => {
   const [showDoctorReport, setShowDoctorReport] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
+  // Premium status
+  const [premiumStatus, setPremiumStatus] = useState<{
+    isPremium: boolean;
+    premiumUntil: string | null;
+    price: { amount: number; offer: boolean; regular: number };
+  }>({ isPremium: false, premiumUntil: null, price: { amount: 1100, offer: true, regular: 9900 } });
+  const [paying, setPaying] = useState(false);
+
   // Medicine & Prescription Modals
   const [showAddMedModal, setShowAddMedModal] = useState(false);
   const [medModalMemberId, setMedModalMemberId] = useState<string>(activeMemberId);
@@ -60,7 +70,38 @@ export const Home: React.FC = () => {
       setShowOnboarding(true);
       localStorage.setItem('hn_onboarding_shown', 'true');
     }
+    getPaymentStatus().then(setPremiumStatus).catch(() => {});
   }, [user]);
+
+  const handlePay = async () => {
+    setPaying(true);
+    try {
+      const order = await createOrder();
+      const rzp = new (window as any).Razorpay({
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        order_id: order.orderId,
+        name: 'MediTree',
+        description: '6 months premium for your family',
+        prefill: { name: user?.name || '', email: user?.email || '' },
+        theme: { color: '#0F5C5C' },
+        handler: async (resp: any) => {
+          await verifyPayment({
+            razorpay_order_id: resp.razorpay_order_id,
+            razorpay_payment_id: resp.razorpay_payment_id,
+            razorpay_signature: resp.razorpay_signature,
+          });
+          getPaymentStatus().then(setPremiumStatus).catch(() => {});
+        },
+      });
+      rzp.open();
+    } catch (err) {
+      console.error('Payment failed', err);
+    } finally {
+      setPaying(false);
+    }
+  };
 
   const loadData = async () => {
     setLoading(true);
@@ -224,6 +265,17 @@ export const Home: React.FC = () => {
 
         {/* 2-COLUMN RESPONSIVE GRID ON TABLET / DESKTOP */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Sidebar (lg:col-span-2): Pro Membership Box */}
+          <div className="lg:col-span-2">
+            <ProSidebar
+              isPremium={premiumStatus.isPremium}
+              premiumUntil={premiumStatus.premiumUntil}
+              price={premiumStatus.price}
+              onPay={handlePay}
+              paying={paying}
+            />
+          </div>
+
           {/* Main Column (lg:col-span-7): Health Score Ring & Vital Cards & Add Button */}
           <div className="lg:col-span-7 space-y-5">
             {/* LARGE HEALTH SCORE RING (0-100) */}
