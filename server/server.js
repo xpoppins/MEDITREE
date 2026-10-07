@@ -9,8 +9,8 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 connectDB();
-
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
+//app.use(helmet());
 const allowedOrigins = [
   process.env.CLIENT_URL,
   'http://localhost:3000',
@@ -27,6 +27,9 @@ app.use('/api/family', require('./routes/familyRoutes'));
 app.use('/api/readings', require('./routes/readingRoutes'));
 app.use('/api/medicines', require('./routes/medicineRoutes'));
 app.use('/api/appointments', require('./routes/appointmentRoutes'));
+
+// Unknown /api routes return JSON, not the website
+app.use('/api', (req, res) => res.status(404).json({ message: 'API route not found' }));
 
 // Serve frontend static files
 const distPath = path.join(__dirname, '..', 'dist');
