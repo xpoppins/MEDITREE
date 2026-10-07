@@ -18,6 +18,10 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 app.use(cors({ origin: allowedOrigins }));
+
+// Webhook must be before express.json()
+app.post('/api/payments/webhook', express.raw({ type: 'application/json' }), require('./controllers/paymentController').webhook);
+
 app.use(express.json());
 app.use('/api', rateLimit({ windowMs: 15 * 60 * 1000, max: 300 }));
 
@@ -27,6 +31,7 @@ app.use('/api/family', require('./routes/familyRoutes'));
 app.use('/api/readings', require('./routes/readingRoutes'));
 app.use('/api/medicines', require('./routes/medicineRoutes'));
 app.use('/api/appointments', require('./routes/appointmentRoutes'));
+app.use('/api/payments', require('./routes/paymentRoutes'));
 
 // Unknown /api routes return JSON, not the website
 app.use('/api', (req, res) => res.status(404).json({ message: 'API route not found' }));

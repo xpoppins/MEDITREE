@@ -5,6 +5,7 @@ const familySchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     inviteCode: { type: String, required: true, unique: true },
     managerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    premiumUntil: { type: Date, default: null },
   },
   { timestamps: true }
 );

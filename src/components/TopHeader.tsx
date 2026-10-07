@@ -20,6 +20,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { usePreferences } from '../context/PreferencesContext';
 import * as api from '../services/apiClient';
+import { getPaymentStatus } from '../services/payments';
 import { FamilyAlert } from '../types';
 import { EmergencyButton } from './EmergencyButton';
 
@@ -29,6 +30,7 @@ export const TopHeader: React.FC = () => {
   const { textSize, setTextSize, language, setLanguage } = usePreferences();
   const [alerts, setAlerts] = useState<FamilyAlert[]>([]);
   const [showAlertModal, setShowAlertModal] = useState(false);
+  const [isPremium, setIsPremium] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       return (
@@ -44,6 +46,7 @@ export const TopHeader: React.FC = () => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     }
+    getPaymentStatus().then((s) => setIsPremium(s.isPremium)).catch(() => {});
   }, []);
 
   const toggleLanguage = () => {
@@ -86,9 +89,11 @@ export const TopHeader: React.FC = () => {
               <span className="text-lg sm:text-xl font-black font-heading text-[#0E1B2C] dark:text-white leading-none tracking-tight">
                 MEDITREE
               </span>
-              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#FF6B4A] bg-[#FFF0E8] dark:bg-[#FF6B4A]/20 px-1.5 py-0.5 rounded">
-                PRO
-              </span>
+              {isPremium && (
+                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#FF6B4A] bg-[#FFF0E8] dark:bg-[#FF6B4A]/20 px-1.5 py-0.5 rounded">
+                  PRO
+                </span>
+              )}
             </div>
             {user && (
               <p className="text-[10px] sm:text-[11px] font-bold text-[#7E90A5] truncate max-w-[110px] sm:max-w-[140px] mt-0.5">

@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import * as api from '../api/client';
 import { BigButton } from '../components/BigButton';
 import { NumberPad } from '../components/NumberPad';
+import { PaywallSheet } from '../components/PaywallSheet';
 import { TopHeader } from '../components/TopHeader';
 import { VoiceInput } from '../components/VoiceInput';
 import { useAuth } from '../context/AuthContext';
@@ -22,6 +23,7 @@ import { usePreferences } from '../context/PreferencesContext';
 import { Member, ReadingType, SugarContext } from '../types';
 import { validateInputRange } from '../utils/healthRules';
 import { ParsedSpeechData } from '../utils/speechParser';
+import { createOrder, verifyPayment } from '../services/payments';
 
 export const AddReading: React.FC = () => {
   const navigate = useNavigate();
@@ -60,6 +62,15 @@ export const AddReading: React.FC = () => {
   const [warningConfirmed, setWarningConfirmed] = useState(false);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState('');
+
+  // Paywall
+  const [paywall, setPaywall] = useState<{
+    isOpen: boolean;
+    price: { amount: number; offer: boolean; regular: number };
+    used: number;
+    freeLimit: number;
+  }>({ isOpen: false, price: { amount: 0, offer: false, regular: 0 }, used: 0, freeLimit: 5 });
+  const [paying, setPaying] = useState(false);
 
   const currentMember = members.find((m) => m.id === selectedMemberId);
 
@@ -144,6 +155,37 @@ export const AddReading: React.FC = () => {
     if (data.weightKg) setWeightKg(data.weightKg.toString());
   };
 
+  const handlePay = async () => {
+    setPaying(true);
+    try {
+      const order = await createOrder();
+      const rzp = new (window as any).Razorpay({
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        order_id: order.orderId,
+        name: 'MediTree',
+        description: '6 months premium for your family',
+        prefill: { name: user?.name || '', email: user?.email || '' },
+        theme: { color: '#0F5C5C' },
+        handler: async (resp: any) => {
+          await verifyPayment({
+            razorpay_order_id: resp.razorpay_order_id,
+            razorpay_payment_id: resp.razorpay_payment_id,
+            razorpay_signature: resp.razorpay_signature,
+          });
+          setPaywall((p) => ({ ...p, isOpen: false }));
+          handleSave();
+        },
+      });
+      rzp.open();
+    } catch (err) {
+      console.error('Payment failed', err);
+    } finally {
+      setPaying(false);
+    }
+  };
+
   const handleSave = async () => {
     setFormError('');
 
@@ -180,7 +222,11 @@ export const AddReading: React.FC = () => {
         });
         navigate('/result', { state: { reading: created, memberName: currentMember?.name } });
       } catch (err: any) {
-        setFormError(err.message || 'Failed to save reading');
+        if (err.message === 'PAYWALL' || err.message?.includes('Free readings finished')) {
+          setPaywall({ isOpen: true, price: err.price || { amount: 1100, offer: true, regular: 9900 }, used: err.used || 5, freeLimit: 5 });
+        } else {
+          setFormError(err.message || 'Failed to save reading');
+        }
       } finally {
         setSaving(false);
       }
@@ -212,7 +258,11 @@ export const AddReading: React.FC = () => {
         });
         navigate('/result', { state: { reading: created, memberName: currentMember?.name } });
       } catch (err: any) {
-        setFormError(err.message || 'Failed to save reading');
+        if (err.message === 'PAYWALL' || err.message?.includes('Free readings finished')) {
+          setPaywall({ isOpen: true, price: err.price || { amount: 1100, offer: true, regular: 9900 }, used: err.used || 5, freeLimit: 5 });
+        } else {
+          setFormError(err.message || 'Failed to save reading');
+        }
       } finally {
         setSaving(false);
       }
@@ -243,7 +293,11 @@ export const AddReading: React.FC = () => {
         });
         navigate('/result', { state: { reading: created, memberName: currentMember?.name } });
       } catch (err: any) {
-        setFormError(err.message || 'Failed to save reading');
+        if (err.message === 'PAYWALL' || err.message?.includes('Free readings finished')) {
+          setPaywall({ isOpen: true, price: err.price || { amount: 1100, offer: true, regular: 9900 }, used: err.used || 5, freeLimit: 5 });
+        } else {
+          setFormError(err.message || 'Failed to save reading');
+        }
       } finally {
         setSaving(false);
       }
@@ -651,6 +705,18 @@ export const AddReading: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* PAYWALL SHEET */}
+        <PaywallSheet
+          isOpen={paywall.isOpen}
+          onClose={() => setPaywall((p) => ({ ...p, isOpen: false }))}
+          price={paywall.price}
+          used={paywall.used}
+          freeLimit={paywall.freeLimit}
+          isManager={isManager}
+          onPay={handlePay}
+          paying={paying}
+        />
       </main>
     </div>
   );

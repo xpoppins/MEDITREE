@@ -17,6 +17,7 @@ import { TopHeader } from '../components/TopHeader';
 import { useAuth } from '../context/AuthContext';
 import { TextSize, usePreferences } from '../context/PreferencesContext';
 import { Reading } from '../types';
+import { getPaymentStatus } from '../services/payments';
 
 export const Settings: React.FC = () => {
   const navigate = useNavigate();
@@ -27,6 +28,13 @@ export const Settings: React.FC = () => {
   const [summaryLines, setSummaryLines] = useState<string[]>([]);
   const [summaryLinesHi, setSummaryLinesHi] = useState<string[]>([]);
   const [loadingSummary, setLoadingSummary] = useState(false);
+
+  // Premium status
+  const [premiumStatus, setPremiumStatus] = useState<{
+    isPremium: boolean;
+    premiumUntil: string | null;
+    price: { amount: number; offer: boolean; regular: number };
+  }>({ isPremium: false, premiumUntil: null, price: { amount: 1100, offer: true, regular: 9900 } });
 
   useEffect(() => {
     const loadAiSummary = async () => {
@@ -41,6 +49,7 @@ export const Settings: React.FC = () => {
       }
     };
     loadAiSummary();
+    getPaymentStatus().then(setPremiumStatus).catch(() => {});
   }, [user]);
 
   const handleLogout = () => {
@@ -178,7 +187,45 @@ export const Settings: React.FC = () => {
           </div>
         </div>
 
-        {/* 4. PWA INSTALL BUTTON */}
+        {/* 4. PREMIUM STATUS */}
+        <div className="card-soft p-5 bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FF6B4A] to-[#FFB020] flex items-center justify-center">
+              <Sparkles className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-black text-[#1F2933] dark:text-white">
+                {premiumStatus.isPremium
+                  ? language === 'hi' ? 'MEDITREE PRO चालू है' : 'MEDITREE PRO Active'
+                  : language === 'hi' ? 'MEDITREE PRO' : 'MEDITREE PRO'}
+              </h3>
+              <p className="text-xs font-bold text-[#7E90A5]">
+                {premiumStatus.isPremium && premiumStatus.premiumUntil
+                  ? `${language === 'hi' ? 'तक सक्रिय' : 'Active until'} ${new Date(premiumStatus.premiumUntil).toLocaleDateString()}`
+                  : language === 'hi' ? 'प्रीमियम सदस्यता' : 'Premium membership'}
+              </p>
+            </div>
+          </div>
+          {!premiumStatus.isPremium && (
+            <div className="p-3 rounded-xl bg-[#FFF0E8] dark:bg-[#FF6B4A]/10 border border-[#FF6B4A]/20">
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-black text-[#0E1B2C] dark:text-white">
+                  ₹{(premiumStatus.price.amount / 100).toFixed(0)}
+                </span>
+                {premiumStatus.price.offer && (
+                  <span className="text-sm font-bold text-[#7E90A5] line-through">
+                    ₹{(premiumStatus.price.regular / 100).toFixed(0)}
+                  </span>
+                )}
+                <span className="text-xs font-bold text-[#7E90A5]">
+                  {language === 'hi' ? '6 महीने' : '6 months'}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 5. PWA INSTALL BUTTON */}
         <div className="card-soft p-5 bg-white">
           <h3 className="text-lg font-black text-[#1F2933] mb-1">
             {language === 'hi' ? 'फ़ोन पर ऐप की तरह चलाएं' : 'Install on Phone (PWA)'}

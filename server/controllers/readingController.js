@@ -3,12 +3,29 @@ const { checkMemberAccess } = require('../utils/access');
 const { bpStatus, sugarStatus } = require('../utils/healthRules');
 const Alert = require('../models/Alert');
 const Member = require('../models/Member');
+const Family = require('../models/Family');
+const { FREE_READINGS, currentPrice } = require('../config/plans');
 
 exports.addReading = async (req, res, next) => {
   try {
     const { memberId, type, takenAt, note } = req.body;
     const access = await checkMemberAccess(req.user, memberId);
     if (!access.ok) return res.status(access.status).json({ message: access.message });
+
+    const family = await Family.findById(req.user.familyId);
+    const isPremium = family.premiumUntil && family.premiumUntil > new Date();
+    if (!isPremium) {
+      const used = await Reading.countDocuments({ familyId: req.user.familyId });
+      if (used >= FREE_READINGS) {
+        return res.status(402).json({
+          code: 'PAYWALL',
+          message: 'Free readings finished',
+          used,
+          freeLimit: FREE_READINGS,
+          price: currentPrice(),
+        });
+      }
+    }
 
     const data = {
       memberId, familyId: req.user.familyId, type, note, takenAt: takenAt || new Date(), addedBy: req.user._id,
