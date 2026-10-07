@@ -261,8 +261,8 @@ export const Home: React.FC = () => {
 
         {/* 2-COLUMN RESPONSIVE GRID ON TABLET / DESKTOP */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Left Sidebar (lg:col-span-3): Pro Membership Box */}
-          <div className="lg:col-span-3">
+          {/* Left Sidebar (lg:col-span-2): Pro Membership Box */}
+          <div className="lg:col-span-2">
             <ProSidebar
               isPremium={premiumStatus.isPremium}
               premiumUntil={premiumStatus.premiumUntil}
@@ -274,8 +274,8 @@ export const Home: React.FC = () => {
             />
           </div>
 
-          {/* Main Column (lg:col-span-5): Health Score Ring & Vital Cards & Add Button */}
-          <div className="lg:col-span-5 space-y-5">
+          {/* Main Column (lg:col-span-6): Health Score Ring & Vital Cards & Add Button */}
+          <div className="lg:col-span-6 space-y-5">
             {/* LARGE HEALTH SCORE RING (0-100) */}
             <ScoreRing scoreDetails={scoreDetails} />
 
@@ -365,8 +365,8 @@ export const Home: React.FC = () => {
             </div>
           </div>
 
-          {/* Secondary Column (lg:col-span-5): Medicines Schedule, Checklist, Streak & Tips */}
-          <div className="lg:col-span-5 space-y-5">
+          {/* Secondary Column (lg:col-span-4): Medicines Schedule, Checklist, Streak & Tips */}
+          <div className="lg:col-span-4 space-y-5">
             {/* FEATURED MEDICINE SCHEDULE CARD */}
             <MedicinesSchedule
               medicines={medicines}
