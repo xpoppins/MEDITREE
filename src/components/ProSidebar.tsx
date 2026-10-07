@@ -111,14 +111,14 @@ export const ProSidebar: React.FC<ProSidebarProps> = ({
               type="button"
               onClick={onPay}
               disabled={paying}
-              className="w-full min-h-[48px] rounded-xl bg-gradient-to-r from-[#FF6B4A] to-[#FF9028] text-white font-black flex items-center justify-center gap-2 shadow-lg shadow-[#FF6B4A]/25 active:scale-98 transition-transform disabled:opacity-50"
+              className="w-full min-h-[48px] rounded-xl bg-gradient-to-r from-[#FF6B4A] to-[#FF9028] text-white font-black flex items-center justify-center gap-1.5 shadow-lg shadow-[#FF6B4A]/25 active:scale-98 transition-transform disabled:opacity-50 text-sm overflow-hidden"
             >
               {paying ? (
-                <Sparkles className="w-4 h-4 animate-spin" />
+                <Sparkles className="w-4 h-4 animate-spin shrink-0" />
               ) : (
-                <Crown className="w-4 h-4" />
+                <Crown className="w-4 h-4 shrink-0" />
               )}
-              <span>
+              <span className="truncate">
                 {paying
                   ? language === 'hi' ? 'प्रोसेसिंग...' : 'Processing...'
                   : `${language === 'hi' ? 'UPI से भुगतान करें' : 'Pay with UPI'} - ${formatPaise(price.amount)}`}

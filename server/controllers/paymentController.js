@@ -66,7 +66,12 @@ exports.createOrder = async (req, res, next) => {
       keyId: process.env.RAZORPAY_KEY_ID,
       offer: price.offer,
     });
-  } catch (err) { next(err); }
+  } catch (err) {
+    console.error('Razorpay create-order error:', err?.statusCode, JSON.stringify(err?.error || err?.message || err));
+    const msg = err?.error?.description || err?.message || 'Could not start the payment';
+    return res.status(err?.statusCode >= 400 && err?.statusCode < 600 ? err.statusCode : 500)
+      .json({ message: msg });
+  }
 };
 
 exports.verify = async (req, res, next) => {
