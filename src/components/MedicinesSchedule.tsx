@@ -53,20 +53,20 @@ export const MedicinesSchedule: React.FC<MedicinesScheduleProps> = ({
     <div className="card-wellness p-5 bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10 shadow-sm space-y-4">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-black/8 dark:border-white/10">
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 min-w-0">
           <div className="w-10 h-10 rounded-2xl bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] flex items-center justify-center shrink-0">
             <Pill className="w-5 h-5" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-lg font-black text-[#0E1B2C] dark:text-black font-heading">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="text-lg font-black text-[#0E1B2C] dark:text-white font-heading">
                 {language === 'hi' ? 'दवाइयों की सूची' : 'Current Prescriptions'}
               </h3>
-              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6]">
+              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] shrink-0">
                 {medicines.length} {medicines.length === 1 ? 'active' : 'active'}
               </span>
             </div>
-            <p className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6]">
+            <p className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] truncate">
               {language === 'hi'
                 ? 'निर्धारित दवाइयां, खुराक, समय और सावधानियां'
                 : 'Prescribed medicines, dosages, schedules & instructions'}
@@ -75,12 +75,12 @@ export const MedicinesSchedule: React.FC<MedicinesScheduleProps> = ({
         </div>
 
         {/* Featured Actions Toolbar */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 ml-auto sm:ml-0">
           {onExportPrescription && (
             <button
               type="button"
               onClick={() => onExportPrescription(memberId)}
-              className="px-3 py-2 rounded-xl bg-[#E6F8F6] hover:bg-[#d5f3f0] dark:bg-[#12B5A6]/20 dark:hover:bg-[#12B5A6]/30 text-[#12B5A6] border border-[#12B5A6]/30 text-xs font-black flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer"
+              className="px-3 py-2 rounded-xl bg-[#E6F8F6] hover:bg-[#d5f3f0] dark:bg-[#12B5A6]/20 dark:hover:bg-[#12B5A6]/30 text-[#12B5A6] border border-[#12B5A6]/30 text-xs font-black flex items-center gap-1.5 active:scale-98 transition-all cursor-pointer shrink-0"
               title="Export official doctor prescription"
             >
               <FileText className="w-3.5 h-3.5" />
@@ -91,7 +91,7 @@ export const MedicinesSchedule: React.FC<MedicinesScheduleProps> = ({
           <button
             type="button"
             onClick={handleAddClick}
-            className="px-3.5 py-2 rounded-xl bg-[#0E1B2C] hover:bg-[#1a2d47] dark:bg-white dark:hover:bg-gray-100 text-white dark:text-[#0E1B2C] text-xs font-black flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-[#0E1B2C] hover:bg-[#1a2d47] dark:bg-white dark:hover:bg-gray-100 text-white dark:text-[#0E1B2C] text-xs font-black flex items-center gap-1.5 shadow-sm active:scale-98 transition-all cursor-pointer shrink-0"
           >
             <Plus className="w-4 h-4 text-[#12B5A6]" />
             <span>{language === 'hi' ? '+ नई दवाई' : '+ Add Medicine'}</span>

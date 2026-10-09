@@ -11,13 +11,19 @@ import {
   Users,
   X,
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { usePreferences } from '../context/PreferencesContext';
 import * as api from '../services/apiClient';
 import { Reading, ReadingType, SugarContext } from '../types';
 import { validateInputRange } from '../utils/healthRules';
 import { ParsedSpeechData, parseHealthSpeech } from '../utils/speechParser';
+import {
+  formatLiveIST,
+  formatStoredToIST,
+  getISTDateTimeLocal,
+  istDateTimeLocalToISO,
+} from '../utils/timeUtils';
 import { VoiceInput } from './VoiceInput';
 
 interface AddSheetProps {
@@ -56,8 +62,21 @@ export const AddSheet: React.FC<AddSheetProps> = ({
   const [weightKg, setWeightKg] = useState('');
   const [pulseOnly, setPulseOnly] = useState('');
 
-  const [takenAt, setTakenAt] = useState(() => new Date().toISOString().slice(0, 16));
+  // Date / Time: Defaults to live Indian Standard Time (IST) ticker
+  const [isCustomTime, setIsCustomTime] = useState(false);
+  const [liveTime, setLiveTime] = useState<Date>(() => new Date());
+  const [takenAt, setTakenAt] = useState(() => getISTDateTimeLocal());
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  useEffect(() => {
+    if (isCustomTime || !isOpen) return;
+    const interval = setInterval(() => {
+      const now = new Date();
+      setLiveTime(now);
+      setTakenAt(getISTDateTimeLocal(now));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isCustomTime, isOpen]);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState('');
   const [warningMsg, setWarningMsg] = useState<string | null>(null);
@@ -167,7 +186,7 @@ export const AddSheet: React.FC<AddSheetProps> = ({
           systolic: s,
           diastolic: d,
           pulse: p,
-          takenAt: new Date(takenAt).toISOString(),
+          takenAt: isCustomTime ? istDateTimeLocalToISO(takenAt) : new Date().toISOString(),
           addedByUid: user?.id,
         });
         onSuccess(created, currentMember?.name || 'Member');
@@ -198,7 +217,7 @@ export const AddSheet: React.FC<AddSheetProps> = ({
           type: 'sugar',
           sugar: s,
           sugarContext,
-          takenAt: new Date(takenAt).toISOString(),
+          takenAt: isCustomTime ? istDateTimeLocalToISO(takenAt) : new Date().toISOString(),
           addedByUid: user?.id,
         });
         onSuccess(created, currentMember?.name || 'Member');
@@ -228,7 +247,7 @@ export const AddSheet: React.FC<AddSheetProps> = ({
           familyId: user?.familyId || 'f1',
           type: 'weight',
           weightKg: w,
-          takenAt: new Date(takenAt).toISOString(),
+          takenAt: isCustomTime ? istDateTimeLocalToISO(takenAt) : new Date().toISOString(),
           addedByUid: user?.id,
         });
         onSuccess(created, currentMember?.name || 'Member');
@@ -251,7 +270,7 @@ export const AddSheet: React.FC<AddSheetProps> = ({
           familyId: user?.familyId || 'f1',
           type: 'pulse',
           pulse: p,
-          takenAt: new Date(takenAt).toISOString(),
+          takenAt: isCustomTime ? istDateTimeLocalToISO(takenAt) : new Date().toISOString(),
           addedByUid: user?.id,
         });
         onSuccess(created, currentMember?.name || 'Member');
@@ -265,7 +284,7 @@ export const AddSheet: React.FC<AddSheetProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="w-full max-w-md md:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-[32px] bg-[#F4F6F9] dark:bg-[#0E1B2C] border-t-2 border-[#12B5A6]/30 p-5 md:p-6 shadow-2xl relative border-x border-black/10 dark:border-white/10">
+      <div className="w-full max-w-md md:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-[32px] bg-[#F4F6F9] dark:bg-[#0E1B2C] border-t-2 border-[#12B5A6]/30 p-5 md:p-6 pb-8 pb-safe shadow-2xl relative border-x border-black/10 dark:border-white/10">
         {/* Drag handle */}
         <div className="w-12 h-1.5 rounded-full bg-black/20 dark:bg-white/20 mx-auto mb-3" />
 
@@ -457,27 +476,67 @@ export const AddSheet: React.FC<AddSheetProps> = ({
           </div>
         )}
 
-        {/* Date / Time */}
-        <div className="flex items-center justify-between px-2 text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] mb-3">
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-[#12B5A6]" />
-            <span>{new Date(takenAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+        {/* Date / Time: Defaults to LIVE IST */}
+        <div className="flex flex-wrap items-center justify-between gap-2 px-2 text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] mb-3">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <Clock className="w-4 h-4 text-[#12B5A6] shrink-0" />
+            <span className="truncate">
+              {isCustomTime
+                ? formatStoredToIST(takenAt, language)
+                : formatLiveIST(liveTime, language, true)}
+            </span>
+            {!isCustomTime && (
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] text-[9px] font-black uppercase tracking-wider shrink-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#12B5A6] animate-pulse" />
+                <span>LIVE IST</span>
+              </span>
+            )}
           </div>
-          <button
-            type="button"
-            onClick={() => setShowDatePicker(!showDatePicker)}
-            className="text-[#12B5A6] underline cursor-pointer"
-          >
-            {showDatePicker ? 'Hide date' : 'Change date/time'}
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {isCustomTime && (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsCustomTime(false);
+                  setShowDatePicker(false);
+                  const now = new Date();
+                  setLiveTime(now);
+                  setTakenAt(getISTDateTimeLocal(now));
+                }}
+                className="text-[#FF6B4A] hover:underline cursor-pointer"
+              >
+                {language === 'hi' ? 'लाइव समय' : 'Reset Live'}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => setShowDatePicker(!showDatePicker)}
+              className="text-[#12B5A6] underline cursor-pointer"
+            >
+              {showDatePicker ? 'Hide date' : 'Change date/time'}
+            </button>
+          </div>
         </div>
 
         {showDatePicker && (
-          <div className="p-3 bg-white dark:bg-[#17263A] rounded-2xl border border-black/10 dark:border-white/10 mb-3">
+          <div className="p-3 bg-white dark:bg-[#17263A] rounded-2xl border border-black/10 dark:border-white/10 mb-3 space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label htmlFor="sheet-time-picker" className="text-[11px] font-bold text-[#0E1B2C] dark:text-white">
+                {language === 'hi' ? 'माप का सही समय (IST):' : 'Select Date & Time (IST):'}
+              </label>
+              <span className="text-[9px] font-bold text-[#7E90A5]">
+                IST (UTC+5:30)
+              </span>
+            </div>
             <input
+              id="sheet-time-picker"
               type="datetime-local"
               value={takenAt}
-              onChange={(e) => setTakenAt(e.target.value)}
+              max={getISTDateTimeLocal()}
+              onChange={(e) => {
+                setTakenAt(e.target.value);
+                setIsCustomTime(true);
+              }}
               className="w-full p-2 rounded-xl border border-black/20 dark:border-white/20 bg-white dark:bg-[#0E1B2C] text-[#0E1B2C] dark:text-white text-sm font-bold"
             />
           </div>

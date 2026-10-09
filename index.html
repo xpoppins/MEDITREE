@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <title>MEDITREE — Premium Family Health Tracker</title>
-    <meta name="description" content="A bold, elder-friendly family health notebook. Track blood pressure, sugar, weight, medicines, and vitals with ease." />
-    <meta property="og:title" content="MEDITREE — Premium Family Health Tracker" />
-    <meta property="og:description" content="A bold, elder-friendly family health notebook. Track blood pressure, sugar, weight, medicines, and vitals with ease." />
+    <title>Family Health Tracker</title>
+    <meta name="description" content="A warm, elder-friendly health notebook for families to track blood pressure, blood sugar, and weight with high-contrast accessibility and voice input." />
+    <meta property="og:title" content="Family Health Tracker" />
+    <meta property="og:description" content="A warm, elder-friendly health notebook for families to track blood pressure, blood sugar, and weight with high-contrast accessibility and voice input." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#0E1B2C" />
@@ -18,6 +18,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet" />
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('fht_theme');
+          var isDark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body class="bg-[#FFF9F0] dark:bg-[#08101A] text-[#0E1B2C] dark:text-white antialiased selection:bg-[#FF6B4A] selection:text-white">
     <div id="root"></div>

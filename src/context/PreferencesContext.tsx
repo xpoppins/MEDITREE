@@ -8,6 +8,8 @@ interface PreferencesContextType {
   setTextSize: (size: TextSize) => void;
   language: Language;
   setLanguage: (lang: Language) => void;
+  isDarkMode: boolean;
+  toggleDarkMode: () => void;
   t: (key: string) => string;
 }
 
@@ -70,6 +72,33 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
     return (localStorage.getItem('fht_language') as Language) || 'en';
   });
 
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('fht_theme');
+      if (saved) return saved === 'dark';
+      return (
+        document.documentElement.classList.contains('dark') ||
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+      );
+    }
+    return false;
+  });
+
+  const toggleDarkMode = () => {
+    setIsDarkMode((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDarkMode) {
+      root.classList.add('dark');
+      localStorage.setItem('fht_theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      localStorage.setItem('fht_theme', 'light');
+    }
+  }, [isDarkMode]);
+
   const setTextSize = (size: TextSize) => {
     setTextSizeState(size);
     localStorage.setItem('fht_text_size', size);
@@ -95,7 +124,17 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
 
   return (
-    <PreferencesContext.Provider value={{ textSize, setTextSize, language, setLanguage, t }}>
+    <PreferencesContext.Provider
+      value={{
+        textSize,
+        setTextSize,
+        language,
+        setLanguage,
+        isDarkMode,
+        toggleDarkMode,
+        t,
+      }}
+    >
       {children}
     </PreferencesContext.Provider>
   );

@@ -179,7 +179,7 @@ export const ManageFamily: React.FC = () => {
 
         {/* ALERTS FEED FOR RED OR AMBER READINGS ACROSS THE FAMILY */}
         {alerts.length > 0 && (
-          <div className="card-wellness p-4.5 bg-[#FFF5F5] border border-[#E5484D]/30 space-y-2.5">
+          <div className="card-wellness p-4.5 bg-[#FFF5F5] dark:bg-[#201014] border border-[#E5484D]/30 space-y-2.5">
             <div className="flex items-center gap-2 text-[#E5484D]">
               <AlertTriangle className="w-5 h-5 animate-bounce" />
               <h3 className="text-base font-black font-heading">Family Health Alerts Feed</h3>
@@ -188,12 +188,12 @@ export const ManageFamily: React.FC = () => {
               {alerts.map((al) => (
                 <div
                   key={al.id}
-                  className="p-3 rounded-xl bg-white border border-[#E5484D]/20 text-xs flex items-start justify-between gap-2"
+                  className="p-3 rounded-xl bg-white dark:bg-[#17263A] border border-[#E5484D]/20 dark:border-white/10 text-xs flex items-start justify-between gap-2"
                 >
                   <div>
-                    <span className="font-black text-[#B0282C]">{al.memberName}:</span>{' '}
-                    <span className="font-semibold text-[#0E1B2C]">{al.message}</span>
-                    <p className="text-[10px] text-[#7E90A5] mt-0.5">
+                    <span className="font-black text-[#B0282C] dark:text-[#FF8A8A]">{al.memberName}:</span>{' '}
+                    <span className="font-semibold text-[#0E1B2C] dark:text-white">{al.message}</span>
+                    <p className="text-[10px] text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
                       {new Date(al.createdAt).toLocaleString()}
                     </p>
                   </div>
@@ -264,13 +264,13 @@ export const ManageFamily: React.FC = () => {
         {/* LIST OF MEMBERS WITH "HAS LOGIN" / "NO LOGIN" BADGE & ACTIONS */}
         <div className="space-y-3">
           <div className="flex items-center justify-between px-1">
-            <h3 className="text-xl font-black text-[#0E1B2C] font-heading">
+            <h3 className="text-xl font-black text-[#0E1B2C] dark:text-white font-heading">
               Members & Dependents
             </h3>
             <button
               type="button"
               onClick={() => setShowAddModal(true)}
-              className="px-3.5 py-1.5 rounded-xl bg-[#0E1B2C] text-white text-xs font-black flex items-center gap-1 cursor-pointer shadow-xs active:scale-95"
+              className="px-3.5 py-1.5 rounded-xl bg-[#0E1B2C] hover:bg-[#1a2d47] dark:bg-white dark:hover:bg-gray-100 text-white dark:text-[#0E1B2C] text-xs font-black flex items-center gap-1 cursor-pointer shadow-xs active:scale-95"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Member</span>
@@ -281,24 +281,24 @@ export const ManageFamily: React.FC = () => {
             {members.map((m) => (
               <div
                 key={m.id}
-                className="card-wellness p-4 bg-white flex flex-col gap-3"
+                className="card-wellness p-4 bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10 flex flex-col gap-3"
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-[#0E1B2C] text-white flex items-center justify-center text-lg font-black shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] flex items-center justify-center text-lg font-black shrink-0">
                       {m.name.charAt(0)}
                     </div>
                     <div>
-                      <h4 className="text-base font-black text-[#0E1B2C]">{m.name}</h4>
-                      <p className="text-xs font-bold text-[#7E90A5]">{m.relation}</p>
+                      <h4 className="text-base font-black text-[#0E1B2C] dark:text-white">{m.name}</h4>
+                      <p className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6]">{m.relation}</p>
                     </div>
                   </div>
 
                   <span
                     className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${
                       m.hasLogin
-                        ? 'bg-[#E8F8F1] text-[#147A50] border-[#1FA971]/30'
-                        : 'bg-[#FEF7E6] text-[#9A6707] border-[#E8A317]/30'
+                        ? 'bg-[#E8F8F1] dark:bg-[#10B981]/20 text-[#147A50] dark:text-[#34D399] border-[#1FA971]/30'
+                        : 'bg-[#FEF7E6] dark:bg-[#F59E0B]/20 text-[#9A6707] dark:text-[#FBBF24] border-[#E8A317]/30'
                     }`}
                   >
                     {m.hasLogin ? 'Has Login' : 'No Phone'}
@@ -333,7 +333,7 @@ export const ManageFamily: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => navigate(`/add-reading?memberId=${m.id}`)}
-                    className="py-2 px-2 rounded-xl bg-[#FFF0E8] text-[#FF6B4A] hover:bg-[#FFE3D4] text-center cursor-pointer"
+                    className="py-2 px-2 rounded-xl bg-[#FFF0E8] dark:bg-[#FF6B4A]/20 text-[#FF6B4A] dark:text-[#FF8A6A] hover:bg-[#FFE3D4] text-center cursor-pointer"
                   >
                     + Add Reading
                   </button>
@@ -341,7 +341,7 @@ export const ManageFamily: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => navigate(`/track?memberId=${m.id}`)}
-                    className="py-2 px-2 rounded-xl bg-[#F4F6F9] text-[#0E1B2C] hover:bg-[#E6F8F6] text-center cursor-pointer"
+                    className="py-2 px-2 rounded-xl bg-[#F4F6F9] dark:bg-[#17263A] text-[#0E1B2C] dark:text-white hover:bg-[#E6F8F6] text-center cursor-pointer"
                   >
                     View History
                   </button>
@@ -353,7 +353,7 @@ export const ManageFamily: React.FC = () => {
                         setMemberToCreateLogin(m);
                         setLoginEmail(`${m.name.toLowerCase().replace(/\s+/g, '')}@family.com`);
                       }}
-                      className="py-2 px-2 rounded-xl bg-[#E6F8F6] text-[#12B5A6] text-center cursor-pointer font-black"
+                      className="py-2 px-2 rounded-xl bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] dark:text-[#5EEAD4] text-center cursor-pointer font-black"
                     >
                       Create Login
                     </button>
@@ -361,7 +361,7 @@ export const ManageFamily: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setMemberToResetPass(m)}
-                      className="py-2 px-2 rounded-xl bg-[#F4F6F9] text-[#0E1B2C] text-center cursor-pointer"
+                      className="py-2 px-2 rounded-xl bg-[#F4F6F9] dark:bg-[#17263A] text-[#0E1B2C] dark:text-white text-center cursor-pointer"
                     >
                       Reset Password
                     </button>
@@ -370,7 +370,7 @@ export const ManageFamily: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setMemberToDelete(m)}
-                    className="py-2 px-2 rounded-xl bg-[#FEECEE] text-[#E5484D] text-center cursor-pointer"
+                    className="py-2 px-2 rounded-xl bg-[#FEECEE] dark:bg-[#E5484D]/20 text-[#E5484D] dark:text-[#FF8A8A] text-center cursor-pointer"
                   >
                     Remove
                   </button>

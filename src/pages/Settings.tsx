@@ -88,25 +88,25 @@ export const Settings: React.FC = () => {
 
       <main className="max-w-4xl lg:max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
         <div>
-          <h2 className="text-3xl font-black text-[#0F5C5C]">
+          <h2 className="text-3xl font-black text-[#0F5C5C] dark:text-[#5EEAD4] font-heading">
             {language === 'hi' ? 'सेटिंग्स व इनसाइट्स' : 'Insights & Settings'}
           </h2>
-          <p className="text-base text-[#1F2933]/120 font-semibold mt-0.5">
+          <p className="text-base text-[#1F2933]/80 dark:text-[#A0B2C6] font-semibold mt-0.5">
             {language === 'hi' ? 'अक्षर का आकार, भाषा और स्वास्थ्य सारांश' : 'Text size, language, and weekly summary'}
           </p>
         </div>
 
         {/* 1. WEEKLY SUMMARY CARD (3 short plain-language lines) */}
-        <div className="card-soft p-5 md:p-6 bg-white border-2 border-[#0F5C5C]/20 shadow-sm">
+        <div className="card-wellness p-5 md:p-6 bg-white dark:bg-[#0E1B2C] border-2 border-[#0F5C5C]/20 dark:border-white/10 shadow-sm">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#E7F3F3] text-[#0F5C5C] flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-[#E7F3F3] dark:bg-[#12B5A6]/20 text-[#0F5C5C] dark:text-[#5EEAD4] flex items-center justify-center">
               <Sparkles className="w-6 h-6 text-[#FF7A59]" />
             </div>
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-[#1F2933]">
+              <h3 className="text-xl md:text-2xl font-black text-[#1F2933] dark:text-white font-heading">
                 {language === 'hi' ? 'साप्ताहिक स्वास्थ्य सारांश' : 'Weekly Summary'}
               </h3>
-              <p className="text-xs font-bold uppercase tracking-wider text-[#0F5C5C]">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#0F5C5C] dark:text-[#5EEAD4]">
                 {user?.name} • 7 Days
               </p>
             </div>
@@ -114,14 +114,14 @@ export const Settings: React.FC = () => {
 
           <div className="space-y-3 mt-4">
             {loadingSummary ? (
-              <p className="text-base font-bold text-[#0F5C5C]">Loading summary...</p>
+              <p className="text-base font-bold text-[#0F5C5C] dark:text-[#5EEAD4]">Loading summary...</p>
             ) : (
               (language === 'hi' ? summaryLinesHi : summaryLines).map((line, idx) => (
-                <div key={idx} className="flex items-start gap-3 p-3 rounded-2xl bg-[#FFFDF9] border border-black/8">
+                <div key={idx} className="flex items-start gap-3 p-3 rounded-2xl bg-[#FFFDF9] dark:bg-[#17263A] border border-black/8 dark:border-white/10">
                   <span className="w-7 h-7 rounded-xl bg-[#0F5C5C] text-white flex items-center justify-center text-sm font-black shrink-0">
                     {idx + 1}
                   </span>
-                  <p className="text-base font-bold text-[#1F2933] leading-snug">
+                  <p className="text-base font-bold text-[#1F2933] dark:text-white leading-snug">
                     {line}
                   </p>
                 </div>
@@ -129,7 +129,7 @@ export const Settings: React.FC = () => {
             )}
           </div>
 
-          <p className="text-xs text-[#1F2933]/60 mt-4 text-center italic">
+          <p className="text-xs text-[#1F2933]/60 dark:text-[#7E90A5] mt-4 text-center italic">
             {language === 'hi'
               ? 'केवल रिकॉर्ड रखने के लिए। यह डॉक्टरी सलाह नहीं है।'
               : 'For tracking only. Not medical advice. Always consult your doctor.'}
@@ -140,16 +140,16 @@ export const Settings: React.FC = () => {
         <FoodChecker />
 
         {/* 3. ACCESSIBILITY TOGGLES (A / A+ / A++ and Hindi / English) */}
-        <div className="card-soft p-5 bg-white space-y-5">
-          <h3 className="text-xl font-black text-[#1F2933]">
+        <div className="card-wellness p-5 bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10 space-y-5">
+          <h3 className="text-xl font-black text-[#1F2933] dark:text-white font-heading">
             {language === 'hi' ? 'दृश्य एवं भाषा सुविधाएं' : 'Accessibility & Language'}
           </h3>
 
           {/* Text Size Toggle: A / A+ / A++ */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Type className="w-5 h-5 text-[#0F5C5C]" />
-              <label className="text-base font-black text-[#1F2933]">
+              <Type className="w-5 h-5 text-[#0F5C5C] dark:text-[#5EEAD4]" />
+              <label className="text-base font-black text-[#1F2933] dark:text-white">
                 {language === 'hi' ? 'अक्षर का आकार (Text Size)' : 'Text Size (A / A+ / A++)'}
               </label>
             </div>
@@ -167,8 +167,8 @@ export const Settings: React.FC = () => {
                   onClick={() => setTextSize(item.id as TextSize)}
                   className={`min-h-[58px] rounded-2xl font-black text-center transition-all cursor-pointer ${
                     textSize === item.id
-                      ? 'bg-[#0F5C5C] text-white shadow-sm ring-4 ring-[#0F5C5C]/15'
-                      : 'bg-[#F2F6F6] text-[#0F5C5C] hover:bg-[#E7F3F3]'
+                      ? 'bg-[#0F5C5C] text-white shadow-sm ring-4 ring-[#0F5C5C]/15 dark:ring-[#5EEAD4]/20'
+                      : 'bg-[#F2F6F6] dark:bg-[#17263A] text-[#0F5C5C] dark:text-[#5EEAD4] hover:bg-[#E7F3F3] dark:hover:bg-[#1E334D]'
                   }`}
                 >
                   <span className="text-xl">{item.id}</span>
@@ -180,8 +180,8 @@ export const Settings: React.FC = () => {
           {/* Language Toggle: English / Hindi */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Globe className="w-5 h-5 text-[#0F5C5C]" />
-              <label className="text-base font-black text-[#1F2933]">
+              <Globe className="w-5 h-5 text-[#0F5C5C] dark:text-[#5EEAD4]" />
+              <label className="text-base font-black text-[#1F2933] dark:text-white">
                 {language === 'hi' ? 'भाषा चुनें (Language)' : 'Language (English / Hindi)'}
               </label>
             </div>
@@ -191,8 +191,8 @@ export const Settings: React.FC = () => {
                 onClick={() => setLanguage('en')}
                 className={`min-h-[56px] rounded-2xl font-black text-lg transition-all cursor-pointer ${
                   language === 'en'
-                    ? 'bg-[#0F5C5C] text-white shadow-sm ring-4 ring-[#0F5C5C]/15'
-                    : 'bg-[#F2F6F6] text-[#0F5C5C] hover:bg-[#E7F3F3]'
+                    ? 'bg-[#0F5C5C] text-white shadow-sm ring-4 ring-[#0F5C5C]/15 dark:ring-[#5EEAD4]/20'
+                    : 'bg-[#F2F6F6] dark:bg-[#17263A] text-[#0F5C5C] dark:text-[#5EEAD4] hover:bg-[#E7F3F3] dark:hover:bg-[#1E334D]'
                 }`}
               >
                 English
@@ -202,8 +202,8 @@ export const Settings: React.FC = () => {
                 onClick={() => setLanguage('hi')}
                 className={`min-h-[56px] rounded-2xl font-black text-lg transition-all cursor-pointer ${
                   language === 'hi'
-                    ? 'bg-[#0F5C5C] text-white shadow-sm ring-4 ring-[#0F5C5C]/15'
-                    : 'bg-[#F2F6F6] text-[#0F5C5C] hover:bg-[#E7F3F3]'
+                    ? 'bg-[#0F5C5C] text-white shadow-sm ring-4 ring-[#0F5C5C]/15 dark:ring-[#5EEAD4]/20'
+                    : 'bg-[#F2F6F6] dark:bg-[#17263A] text-[#0F5C5C] dark:text-[#5EEAD4] hover:bg-[#E7F3F3] dark:hover:bg-[#1E334D]'
                 }`}
               >
                 हिंदी (Hindi)
@@ -213,7 +213,7 @@ export const Settings: React.FC = () => {
         </div>
 
         {/* 4. PREMIUM STATUS */}
-        <div className="card-soft p-5 bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10">
+        <div className="card-wellness p-5 bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FF6B4A] to-[#FFB020] flex items-center justify-center">
               <Sparkles className="w-6 h-6 text-white" />
@@ -224,7 +224,7 @@ export const Settings: React.FC = () => {
                   ? language === 'hi' ? 'MEDITREE PRO चालू है' : 'MEDITREE PRO Active'
                   : language === 'hi' ? 'MEDITREE PRO' : 'MEDITREE PRO'}
               </h3>
-              <p className="text-xs font-bold text-[#7E90A5]">
+              <p className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6]">
                 {premiumStatus.isPremium && premiumStatus.premiumUntil
                   ? `${language === 'hi' ? 'तक सक्रिय' : 'Active until'} ${new Date(premiumStatus.premiumUntil).toLocaleDateString()}`
                   : language === 'hi' ? 'प्रीमियम सदस्यता' : 'Premium membership'}
@@ -266,11 +266,11 @@ export const Settings: React.FC = () => {
         </div>
 
         {/* 5. PWA INSTALL BUTTON */}
-        <div className="card-soft p-5 bg-white">
-          <h3 className="text-lg font-black text-[#1F2933] mb-1">
+        <div className="card-wellness p-5 bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10">
+          <h3 className="text-lg font-black text-[#1F2933] dark:text-white mb-1">
             {language === 'hi' ? 'फ़ोन पर ऐप की तरह चलाएं' : 'Install on Phone (PWA)'}
           </h3>
-          <p className="text-sm font-semibold text-[#1F2933]/70 mb-3">
+          <p className="text-sm font-semibold text-[#1F2933]/70 dark:text-[#A0B2C6] mb-3">
             {language === 'hi'
               ? 'इंटरनेट धीमा होने पर भी तेज़ खुलता है और स्क्रीन पर ऐप आइकन आ जाता है।'
               : 'Add to home screen for instant elder-friendly 1-tap access.'}
@@ -280,19 +280,19 @@ export const Settings: React.FC = () => {
 
         {/* 5. INVITE CODE (Manager View) */}
         {isManager && family?.inviteCode && (
-          <div className="p-4 rounded-2xl bg-[#E7F3F3] border border-[#0F5C5C]/20 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#E7F3F3] dark:bg-[#102A2E] border border-[#0F5C5C]/20 dark:border-[#12B5A6]/30 flex items-center justify-between">
             <div>
-              <p className="text-xs font-bold uppercase text-[#0F5C5C]">
+              <p className="text-xs font-bold uppercase text-[#0F5C5C] dark:text-[#5EEAD4]">
                 {language === 'hi' ? 'परिवार इनवाइट कोड' : 'Family Invite Code'}
               </p>
-              <p className="text-2xl font-black text-[#0F5C5C] tracking-wider">
+              <p className="text-2xl font-black text-[#0F5C5C] dark:text-[#5EEAD4] tracking-wider">
                 {family.inviteCode}
               </p>
             </div>
             <button
               type="button"
               onClick={() => navigate('/family')}
-              className="px-4 py-2 rounded-xl bg-white border border-[#0F5C5C]/30 text-[#0F5C5C] font-bold text-sm cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-white dark:bg-[#17263A] border border-[#0F5C5C]/30 text-[#0F5C5C] dark:text-[#5EEAD4] font-bold text-sm cursor-pointer"
             >
               Share Code
             </button>
@@ -300,11 +300,11 @@ export const Settings: React.FC = () => {
         )}
 
         {/* 6. SWITCH DEMO ROLE */}
-        <div className="p-4 rounded-2xl bg-white border border-[#0F5C5C]/20 flex items-center justify-between">
+        <div className="p-4 rounded-2xl bg-white dark:bg-[#0E1B2C] border border-[#0F5C5C]/20 dark:border-white/10 flex items-center justify-between">
           <div>
-            <p className="text-xs font-bold uppercase text-[#1F2933]/60">Role Test</p>
-            <p className="text-base font-bold text-[#1F2933]">
-              Active as: <span className="text-[#0F5C5C] font-black">{user?.name} ({user?.role})</span>
+            <p className="text-xs font-bold uppercase text-[#1F2933]/60 dark:text-[#7E90A5]">Role Test</p>
+            <p className="text-base font-bold text-[#1F2933] dark:text-white">
+              Active as: <span className="text-[#0F5C5C] dark:text-[#5EEAD4] font-black">{user?.name} ({user?.role})</span>
             </p>
           </div>
           <button

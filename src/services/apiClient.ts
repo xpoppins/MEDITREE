@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 async function apiFetch(path: string, options: RequestInit = {}) {
   const token = localStorage.getItem('hn_jwt_token_v5');

@@ -218,7 +218,7 @@ export const Home: React.FC = () => {
             <button
               type="button"
               onClick={() => handleOpenAddMedForMember(activeMemberId)}
-              className="py-2 px-3 rounded-2xl bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] text-xs font-black flex items-center gap-1.5 shadow-2xs hover:opacity-90 active:scale-95 cursor-pointer shrink-0"
+              className="flex-1 sm:flex-none justify-center py-2 px-3 rounded-2xl bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] text-xs font-black flex items-center gap-1.5 shadow-2xs hover:opacity-90 active:scale-95 cursor-pointer shrink-0"
               title={`Add medicine for ${currentMember?.name}`}
             >
               <Pill className="w-3.5 h-3.5 text-[#12B5A6]" />
@@ -228,7 +228,7 @@ export const Home: React.FC = () => {
             <button
               type="button"
               onClick={() => handleOpenExportRxForMember(activeMemberId)}
-              className="py-2 px-3 rounded-2xl bg-[#E6F8F6] dark:bg-[#12B5A6]/20 border border-[#12B5A6]/30 text-[#12B5A6] text-xs font-black flex items-center gap-1.5 hover:bg-[#D4F4F1] cursor-pointer shrink-0"
+              className="flex-1 sm:flex-none justify-center py-2 px-3 rounded-2xl bg-[#E6F8F6] dark:bg-[#12B5A6]/20 border border-[#12B5A6]/30 text-[#12B5A6] text-xs font-black flex items-center gap-1.5 hover:bg-[#D4F4F1] cursor-pointer shrink-0"
               title={`Export prescription for ${currentMember?.name}`}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -238,7 +238,7 @@ export const Home: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowDoctorReport(true)}
-              className="py-2 px-3 rounded-2xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-xs font-black text-[#0E1B2C] dark:text-white flex items-center gap-1.5 shadow-2xs hover:border-[#12B5A6] cursor-pointer shrink-0"
+              className="w-full sm:w-auto justify-center py-2 px-3 rounded-2xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-xs font-black text-[#0E1B2C] dark:text-white flex items-center gap-1.5 shadow-2xs hover:border-[#12B5A6] cursor-pointer shrink-0"
             >
               <FileText className="w-3.5 h-3.5 text-[#FF6B4A]" />
               <span>Doctor Report</span>
@@ -259,23 +259,10 @@ export const Home: React.FC = () => {
           />
         )}
 
-        {/* 2-COLUMN RESPONSIVE GRID ON TABLET / DESKTOP */}
+        {/* RESPONSIVE GRID: 2 BALANCED COLUMNS ON DESKTOP/LAPTOP, STACKED ON MOBILE */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Left Sidebar (lg:col-span-2): Pro Membership Box */}
-          <div className="lg:col-span-2">
-            <ProSidebar
-              isPremium={premiumStatus.isPremium}
-              premiumUntil={premiumStatus.premiumUntil}
-              price={premiumStatus.price}
-              onPay={handlePay}
-              paying={paying}
-              lastPayment={premiumStatus.lastPayment}
-              memberSince={premiumStatus.memberSince}
-            />
-          </div>
-
-          {/* Main Column (lg:col-span-6): Health Score Ring & Vital Cards & Add Button */}
-          <div className="lg:col-span-6 space-y-5">
+          {/* Main Column (lg:col-span-7 xl:col-span-7): Health Score Ring & Vital Cards & Add Button */}
+          <div className="order-1 lg:col-span-7 xl:col-span-7 space-y-6">
             {/* LARGE HEALTH SCORE RING (0-100) */}
             <ScoreRing scoreDetails={scoreDetails} />
 
@@ -348,15 +335,15 @@ export const Home: React.FC = () => {
             {/* DEDICATED RECENT VITALS TREND GRAPH */}
             <HomeVitalsGraph readings={readings} memberName={currentMember?.name} />
 
-            {/* PROMINENT ADD READING BUTTON (64px high, elder friendly) */}
+            {/* PROMINENT ADD READING BUTTON (Elder friendly, clean mobile responsiveness) */}
             <div className="pt-1">
               <button
                 type="button"
                 onClick={() => setIsAddSheetOpen(true)}
-                className="w-full min-h-[64px] py-4 px-6 rounded-2xl bg-gradient-to-r from-[#FF6B4A] via-[#FF7A59] to-[#FF9028] text-white font-black text-lg md:text-xl flex items-center justify-center gap-3 shadow-lg shadow-[#FF6B4A]/25 active:scale-98 transition-transform cursor-pointer"
+                className="w-full min-h-[58px] sm:min-h-[64px] py-3.5 sm:py-4 px-4 sm:px-6 rounded-2xl bg-gradient-to-r from-[#FF6B4A] via-[#FF7A59] to-[#FF9028] text-white font-black text-base sm:text-lg md:text-xl flex items-center justify-center gap-2 sm:gap-3 shadow-lg shadow-[#FF6B4A]/25 active:scale-98 transition-transform cursor-pointer text-center"
               >
-                <Plus className="w-7 h-7" strokeWidth={3} />
-                <span>
+                <Plus className="w-6 h-6 sm:w-7 sm:h-7 shrink-0" strokeWidth={3} />
+                <span className="truncate sm:whitespace-normal">
                   {language === 'hi'
                     ? `+ ${currentMember?.name?.split(' ')[0] || 'परिवार'} के लिए नया माप दर्ज करें`
                     : `+ Add reading for ${currentMember?.name?.split(' ')[0] || 'Member'}`}
@@ -365,8 +352,8 @@ export const Home: React.FC = () => {
             </div>
           </div>
 
-          {/* Secondary Column (lg:col-span-4): Medicines Schedule, Checklist, Streak & Tips */}
-          <div className="lg:col-span-4 space-y-5">
+          {/* Secondary Column (lg:col-span-5 xl:col-span-5): Medicines Schedule, Checklist, Streak & Tips, ProSidebar */}
+          <div className="order-2 lg:col-span-5 xl:col-span-5 space-y-6">
             {/* FEATURED MEDICINE SCHEDULE CARD */}
             <MedicinesSchedule
               medicines={medicines}
@@ -374,6 +361,17 @@ export const Home: React.FC = () => {
               memberId={activeMemberId}
               onOpenAddMedicine={handleOpenAddMedForMember}
               onExportPrescription={handleOpenExportRxForMember}
+            />
+
+            {/* Pro Membership Box (Now wide & comfortable on laptop, never squished) */}
+            <ProSidebar
+              isPremium={premiumStatus.isPremium}
+              premiumUntil={premiumStatus.premiumUntil}
+              price={premiumStatus.price}
+              onPay={handlePay}
+              paying={paying}
+              lastPayment={premiumStatus.lastPayment}
+              memberSince={premiumStatus.memberSince}
             />
 
             {/* TODAY'S CHECKLIST */}

@@ -36,7 +36,7 @@ export const TodayChecklist: React.FC = () => {
     <div className="card-wellness p-5 bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10 shadow-sm space-y-3">
       <div className="flex items-center justify-between mb-1">
         <div>
-          <h3 className="text-lg sm:text-xl font-black text-[#0E1B2C] dark:text-black font-heading">
+          <h3 className="text-lg sm:text-xl font-black text-[#0E1B2C] dark:text-white font-heading">
             {language === 'hi' ? 'दैनिक स्वास्थ्य चेकलिस्ट' : "Daily Wellness Routine"}
           </h3>
           <p className="text-xs font-bold text-[#7E90A5]">

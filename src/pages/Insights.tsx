@@ -76,39 +76,39 @@ export const Insights: React.FC = () => {
         </div>
 
         {/* 1. WEEKLY SUMMARY CARD (3 simple sentences, with no diagnosis & doctor disclaimer) */}
-        <div className="card-wellness p-5 bg-white border border-[#FF6B4A]/20 shadow-sm relative overflow-hidden">
+        <div className="card-wellness p-5 bg-white dark:bg-[#0E1B2C] border border-[#FF6B4A]/20 dark:border-white/10 shadow-sm relative overflow-hidden">
           <div className="flex items-center justify-between gap-3 mb-3">
             <div className="flex items-center gap-2.5">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#FF6B4A] to-[#FFB020] text-white flex items-center justify-center shadow-xs">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-[#0E1B2C] font-heading">
+                <h3 className="text-lg font-black text-[#0E1B2C] dark:text-white font-heading">
                   {language === 'hi' ? 'साप्ताहिक स्वास्थ्य विश्लेषण' : 'Weekly AI Health Summary'}
                 </h3>
-                <p className="text-[11px] font-bold text-[#7E90A5]">
+                <p className="text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6]">
                   7-Day Trend Analysis • {currentMember?.name}
                 </p>
               </div>
             </div>
 
-            <span className="px-2.5 py-1 rounded-full bg-[#E6F8F6] text-[#12B5A6] text-[10px] font-black uppercase">
+            <span className="px-2.5 py-1 rounded-full bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] text-[10px] font-black uppercase">
               7 Days
             </span>
           </div>
 
           <div className="space-y-2.5 mt-3">
             {loadingSummary ? (
-              <p className="text-xs font-bold text-[#7E90A5] py-2">
+              <p className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] py-2">
                 Analyzing readings and generating gentle guidance...
               </p>
             ) : (
               (language === 'hi' ? summaryLinesHi : summaryLines).map((line, idx) => (
                 <div
                   key={idx}
-                  className="flex items-start gap-2.5 p-3 rounded-2xl bg-[#F9FBFC] border border-black/6 text-xs md:text-sm font-bold text-[#0E1B2C]"
+                  className="flex items-start gap-2.5 p-3 rounded-2xl bg-[#F9FBFC] dark:bg-[#17263A] border border-black/6 dark:border-white/10 text-xs md:text-sm font-bold text-[#0E1B2C] dark:text-white"
                 >
-                  <span className="w-5 h-5 rounded-lg bg-[#0E1B2C] text-white flex items-center justify-center text-[10px] font-black shrink-0 mt-0.5">
+                  <span className="w-5 h-5 rounded-lg bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] flex items-center justify-center text-[10px] font-black shrink-0 mt-0.5">
                     {idx + 1}
                   </span>
                   <p className="leading-snug">{line}</p>
@@ -117,7 +117,7 @@ export const Insights: React.FC = () => {
             )}
           </div>
 
-          <p className="text-[10px] text-[#7E90A5] mt-3 italic text-center">
+          <p className="text-[10px] text-[#7E90A5] dark:text-[#A0B2C6] mt-3 italic text-center">
             * For tracking and awareness only. Not medical advice. Always consult your doctor.
           </p>
         </div>

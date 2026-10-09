@@ -445,11 +445,11 @@ export const MedicineSearchDirectory: React.FC<MedicineSearchDirectoryProps> = (
 
             {/* Quick Action: Add to Family Member */}
             {onAddMedicineToMember && members.length > 0 && (
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto shrink-0 mt-2 sm:mt-0">
                 <select
                   value={selectedMemberId}
                   onChange={(e) => setSelectedMemberId(e.target.value)}
-                  className="h-9 px-2 rounded-xl bg-white dark:bg-[#17263A] border border-black/15 dark:border-white/15 text-xs font-bold text-[#0E1B2C] dark:text-white"
+                  className="h-9 px-2.5 rounded-xl bg-white dark:bg-[#17263A] border border-black/15 dark:border-white/15 text-xs font-bold text-[#0E1B2C] dark:text-white w-full sm:w-auto min-w-0"
                 >
                   {members.map((m) => (
                     <option key={m.id} value={m.id}>
@@ -465,7 +465,7 @@ export const MedicineSearchDirectory: React.FC<MedicineSearchDirectoryProps> = (
                     setAddedSuccess(true);
                     setTimeout(() => setAddedSuccess(false), 3000);
                   }}
-                  className="h-9 px-3.5 rounded-xl bg-gradient-to-r from-[#12B5A6] to-[#0D9688] text-white font-black text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer shrink-0"
+                  className="h-9 px-3.5 rounded-xl bg-gradient-to-r from-[#12B5A6] to-[#0D9688] text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-sm active:scale-98 transition-all cursor-pointer w-full sm:w-auto shrink-0"
                 >
                   {addedSuccess ? (
                     <>
@@ -474,7 +474,7 @@ export const MedicineSearchDirectory: React.FC<MedicineSearchDirectoryProps> = (
                     </>
                   ) : (
                     <>
-                      <Plus className="w-3.5 h-3.5" />
+                      <Plus className="w-3.5 h-3.5 shrink-0" />
                       <span>+ Prescribe</span>
                     </>
                   )}

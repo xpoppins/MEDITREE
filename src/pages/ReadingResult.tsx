@@ -55,7 +55,7 @@ export const ReadingResult: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] pb-24">
+    <div className="min-h-screen bg-[#FFF9F0] dark:bg-[#08101A] pb-24 pb-safe transition-colors">
       <TopHeader />
 
       <main className="max-w-md md:max-w-lg mx-auto p-4 md:p-6 space-y-6">

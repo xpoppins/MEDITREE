@@ -52,7 +52,7 @@ export const NumberPad: React.FC<NumberPadProps> = ({
             key={num}
             type="button"
             onClick={() => handlePress(num.toString())}
-            className="h-[68px] md:h-[72px] rounded-[20px] bg-white border border-[#0F5C5C]/20 shadow-sm text-3xl font-black text-[#1F2933] flex items-center justify-center transition-transform active:scale-95 active:bg-[#E7F3F3] focus-visible:outline-4 focus-visible:outline-[#0F5C5C] cursor-pointer"
+            className="h-[68px] md:h-[72px] rounded-[20px] bg-white dark:bg-[#17263A] border border-[#0F5C5C]/20 dark:border-white/10 shadow-sm text-3xl font-black text-[#1F2933] dark:text-white flex items-center justify-center transition-transform active:scale-95 active:bg-[#E7F3F3] dark:active:bg-[#12B5A6]/20 focus-visible:outline-4 focus-visible:outline-[#0F5C5C] cursor-pointer"
             aria-label={`Digit ${num}`}
           >
             {num}
@@ -64,7 +64,7 @@ export const NumberPad: React.FC<NumberPadProps> = ({
           <button
             type="button"
             onClick={() => handlePress('.')}
-            className="h-[68px] md:h-[72px] rounded-[20px] bg-white border border-[#0F5C5C]/20 shadow-sm text-3xl font-black text-[#1F2933] flex items-center justify-center transition-transform active:scale-95 active:bg-[#E7F3F3] focus-visible:outline-4 focus-visible:outline-[#0F5C5C] cursor-pointer"
+            className="h-[68px] md:h-[72px] rounded-[20px] bg-white dark:bg-[#17263A] border border-[#0F5C5C]/20 dark:border-white/10 shadow-sm text-3xl font-black text-[#1F2933] dark:text-white flex items-center justify-center transition-transform active:scale-95 active:bg-[#E7F3F3] dark:active:bg-[#12B5A6]/20 focus-visible:outline-4 focus-visible:outline-[#0F5C5C] cursor-pointer"
             aria-label="Decimal point"
           >
             •
@@ -73,7 +73,7 @@ export const NumberPad: React.FC<NumberPadProps> = ({
           <button
             type="button"
             onClick={handleClear}
-            className="h-[68px] md:h-[72px] rounded-[20px] bg-[#FFF2F0] border border-[#FF7A59]/30 text-base font-bold text-[#D64545] flex items-center justify-center transition-transform active:scale-95 active:bg-[#FEEEEE] focus-visible:outline-4 focus-visible:outline-[#0F5C5C] cursor-pointer"
+            className="h-[68px] md:h-[72px] rounded-[20px] bg-[#FFF2F0] dark:bg-[#D64545]/20 border border-[#FF7A59]/30 dark:border-[#D64545]/30 text-base font-bold text-[#D64545] dark:text-[#FF8080] flex items-center justify-center transition-transform active:scale-95 active:bg-[#FEEEEE] dark:active:bg-[#D64545]/30 focus-visible:outline-4 focus-visible:outline-[#0F5C5C] cursor-pointer"
             aria-label="Clear entry"
           >
             {language === 'hi' ? 'साफ़' : 'Clear'}
@@ -83,7 +83,7 @@ export const NumberPad: React.FC<NumberPadProps> = ({
         <button
           type="button"
           onClick={() => handlePress('0')}
-          className="h-[68px] md:h-[72px] rounded-[20px] bg-white border border-[#0F5C5C]/20 shadow-sm text-3xl font-black text-[#1F2933] flex items-center justify-center transition-transform active:scale-95 active:bg-[#E7F3F3] focus-visible:outline-4 focus-visible:outline-[#0F5C5C] cursor-pointer"
+          className="h-[68px] md:h-[72px] rounded-[20px] bg-white dark:bg-[#17263A] border border-[#0F5C5C]/20 dark:border-white/10 shadow-sm text-3xl font-black text-[#1F2933] dark:text-white flex items-center justify-center transition-transform active:scale-95 active:bg-[#E7F3F3] dark:active:bg-[#12B5A6]/20 focus-visible:outline-4 focus-visible:outline-[#0F5C5C] cursor-pointer"
           aria-label="Digit 0"
         >
           0
@@ -92,10 +92,10 @@ export const NumberPad: React.FC<NumberPadProps> = ({
         <button
           type="button"
           onClick={handleBackspace}
-          className="h-[68px] md:h-[72px] rounded-[20px] bg-[#F4F6F8] border border-[#0F5C5C]/20 shadow-sm text-[#1F2933] flex items-center justify-center transition-transform active:scale-95 active:bg-[#E7F3F3] focus-visible:outline-4 focus-visible:outline-[#0F5C5C] cursor-pointer"
+          className="h-[68px] md:h-[72px] rounded-[20px] bg-[#F4F6F8] dark:bg-[#17263A] border border-[#0F5C5C]/20 dark:border-white/10 shadow-sm text-[#1F2933] dark:text-white flex items-center justify-center transition-transform active:scale-95 active:bg-[#E7F3F3] dark:active:bg-[#12B5A6]/20 focus-visible:outline-4 focus-visible:outline-[#0F5C5C] cursor-pointer"
           aria-label="Backspace delete last digit"
         >
-          <Delete className="w-8 h-8 text-[#0F5C5C]" strokeWidth={2.5} />
+          <Delete className="w-8 h-8 text-[#0F5C5C] dark:text-[#12B5A6]" strokeWidth={2.5} />
         </button>
       </div>
 
