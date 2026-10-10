@@ -184,7 +184,7 @@ export const History: React.FC = () => {
 
         {/* Member Selector (Manager only) */}
         {isManager && (
-          <div className="card-wellness p-3 bg-white">
+          <div className="card-wellness p-3 bg-white dark:bg-[#0E1B2C] border border-black/8 dark:border-white/10">
             <p className="text-[11px] font-black uppercase text-[#7E90A5] mb-2 px-1">
               Select Member:
             </p>
@@ -196,8 +196,8 @@ export const History: React.FC = () => {
                   onClick={() => setSelectedMemberId(m.id)}
                   className={`px-3.5 py-2 rounded-xl font-bold text-xs shrink-0 transition-all cursor-pointer ${
                     selectedMemberId === m.id
-                      ? 'bg-[#0E1B2C] text-white shadow-xs'
-                      : 'bg-[#F4F6F9] text-[#0E1B2C]'
+                      ? 'bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] shadow-xs'
+                      : 'bg-[#F4F6F9] dark:bg-[#17263A] text-[#0E1B2C] dark:text-white'
                   }`}
                 >
                   {m.name} ({m.relation})
@@ -208,14 +208,14 @@ export const History: React.FC = () => {
         )}
 
         {/* 3 TABS FOR BP, SUGAR, WEIGHT */}
-        <div className="grid grid-cols-3 gap-2 p-1.5 bg-white dark:bg-[#0E1B2C] rounded-2xl border border-black/8 shadow-2xs">
+        <div className="grid grid-cols-3 gap-2 p-1.5 bg-white dark:bg-[#0E1B2C] rounded-2xl border border-black/8 dark:border-white/10 shadow-2xs">
           <button
             type="button"
             onClick={() => setActiveTab('bp')}
-            className={`min-h-[48px] rounded-xl flex items-center justify-center gap-1.5 text-sm font-black transition-all cursor-pointer ${
+            className={`min-h-[48px] rounded-xl flex items-center justify-center gap-1.5 text-xs sm:text-sm font-black transition-all cursor-pointer ${
               activeTab === 'bp'
                 ? 'bg-gradient-to-r from-[#FF6B4A] to-[#FF9028] text-white shadow-xs'
-                : 'text-[#7E90A5] hover:text-[#0E1B2C]'
+                : 'text-[#7E90A5] hover:text-[#0E1B2C] dark:hover:text-white'
             }`}
           >
             <Heart className="w-4 h-4 fill-current" />
@@ -225,10 +225,10 @@ export const History: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('sugar')}
-            className={`min-h-[48px] rounded-xl flex items-center justify-center gap-1.5 text-sm font-black transition-all cursor-pointer ${
+            className={`min-h-[48px] rounded-xl flex items-center justify-center gap-1.5 text-xs sm:text-sm font-black transition-all cursor-pointer ${
               activeTab === 'sugar'
                 ? 'bg-gradient-to-r from-[#FF6B4A] to-[#FF9028] text-white shadow-xs'
-                : 'text-[#7E90A5] hover:text-[#0E1B2C]'
+                : 'text-[#7E90A5] hover:text-[#0E1B2C] dark:hover:text-white'
             }`}
           >
             <Activity className="w-4 h-4" />
@@ -238,10 +238,10 @@ export const History: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('weight')}
-            className={`min-h-[48px] rounded-xl flex items-center justify-center gap-1.5 text-sm font-black transition-all cursor-pointer ${
+            className={`min-h-[48px] rounded-xl flex items-center justify-center gap-1.5 text-xs sm:text-sm font-black transition-all cursor-pointer ${
               activeTab === 'weight'
                 ? 'bg-gradient-to-r from-[#FF6B4A] to-[#FF9028] text-white shadow-xs'
-                : 'text-[#7E90A5] hover:text-[#0E1B2C]'
+                : 'text-[#7E90A5] hover:text-[#0E1B2C] dark:hover:text-white'
             }`}
           >
             <Scale className="w-4 h-4" />
@@ -260,8 +260,8 @@ export const History: React.FC = () => {
                 onClick={() => setActiveRange(d)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
                   activeRange === d
-                    ? 'bg-[#0E1B2C] text-white shadow-2xs'
-                    : 'bg-white text-[#7E90A5] border border-black/10'
+                    ? 'bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] shadow-2xs'
+                    : 'bg-white dark:bg-[#17263A] text-[#7E90A5] dark:text-[#A0B2C6] border border-black/10 dark:border-white/10'
                 }`}
               >
                 {d} days
@@ -272,31 +272,31 @@ export const History: React.FC = () => {
 
         {/* AVERAGE / HIGHEST / LOWEST STAT CARDS */}
         {stats && (
-          <div className="grid grid-cols-3 gap-2.5">
-            <div className="card-wellness p-3.5 bg-white text-center">
-              <span className="text-[10px] font-black uppercase text-[#7E90A5]">Average</span>
-              <p className="text-xl font-black text-[#0E1B2C] font-heading mt-0.5">
+          <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+            <div className="card-wellness p-2.5 sm:p-3.5 bg-white dark:bg-[#0E1B2C] border border-black/8 dark:border-white/10 text-center">
+              <span className="text-[10px] font-black uppercase text-[#7E90A5] dark:text-[#A0B2C6]">Average</span>
+              <p className="text-base sm:text-xl font-black text-[#0E1B2C] dark:text-white font-heading mt-0.5 truncate">
                 {stats.avg}
               </p>
-              <span className="text-[10px] font-bold text-[#7E90A5]">{stats.unit}</span>
+              <span className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6]">{stats.unit}</span>
             </div>
 
-            <div className="card-wellness p-3.5 bg-[#FFF5F2] border border-[#FF6B4A]/25 text-center">
-              <span className="text-[10px] font-black uppercase text-[#FF6B4A]">Highest</span>
-              <p className="text-xl font-black text-[#E5484D] font-heading mt-0.5 flex items-center justify-center gap-0.5">
-                <ArrowUp className="w-3.5 h-3.5" />
-                <span>{stats.max}</span>
+            <div className="card-wellness p-2.5 sm:p-3.5 bg-[#FFF5F2] dark:bg-[#E5484D]/15 border border-[#FF6B4A]/25 dark:border-[#FF6B4A]/35 text-center">
+              <span className="text-[10px] font-black uppercase text-[#FF6B4A] dark:text-[#FF8A8A]">Highest</span>
+              <p className="text-base sm:text-xl font-black text-[#E5484D] dark:text-[#FF8A8A] font-heading mt-0.5 flex items-center justify-center gap-0.5 truncate">
+                <ArrowUp className="w-3.5 h-3.5 shrink-0" />
+                <span className="truncate">{stats.max}</span>
               </p>
-              <span className="text-[10px] font-bold text-[#7E90A5]">{stats.unit}</span>
+              <span className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6]">{stats.unit}</span>
             </div>
 
-            <div className="card-wellness p-3.5 bg-[#E6F8F6] border border-[#12B5A6]/25 text-center">
-              <span className="text-[10px] font-black uppercase text-[#12B5A6]">Lowest</span>
-              <p className="text-xl font-black text-[#1FA971] font-heading mt-0.5 flex items-center justify-center gap-0.5">
-                <ArrowDown className="w-3.5 h-3.5" />
-                <span>{stats.min}</span>
+            <div className="card-wellness p-2.5 sm:p-3.5 bg-[#E6F8F6] dark:bg-[#12B5A6]/15 border border-[#12B5A6]/25 dark:border-[#12B5A6]/35 text-center">
+              <span className="text-[10px] font-black uppercase text-[#12B5A6] dark:text-[#52D49C]">Lowest</span>
+              <p className="text-base sm:text-xl font-black text-[#1FA971] dark:text-[#52D49C] font-heading mt-0.5 flex items-center justify-center gap-0.5 truncate">
+                <ArrowDown className="w-3.5 h-3.5 shrink-0" />
+                <span className="truncate">{stats.min}</span>
               </p>
-              <span className="text-[10px] font-bold text-[#7E90A5]">{stats.unit}</span>
+              <span className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6]">{stats.unit}</span>
             </div>
           </div>
         )}
@@ -352,12 +352,12 @@ export const History: React.FC = () => {
 
                         {r.type === 'bp' && (
                           <div className="flex items-baseline gap-1.5">
-                            <span className="text-2xl font-black text-[#0E1B2C] dark:text-black font-heading">
+                            <span className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading">
                               {r.systolic}/{r.diastolic}
                             </span>
                             <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6]">mmHg</span>
                             {r.pulse && (
-                              <span className="text-xs font-bold text-[#E8A317] ml-2">
+                              <span className="text-xs font-bold text-[#E8A317] dark:text-[#FBBF24] ml-2">
                                 {r.pulse} bpm
                               </span>
                             )}

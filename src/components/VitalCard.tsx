@@ -190,7 +190,7 @@ export const VitalCard: React.FC<VitalCardProps> = ({
           onClick();
         }
       }}
-      className={`card-wellness p-4 md:p-5 flex flex-col justify-between transition-all duration-150 text-left relative bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10 shadow-sm ${
+      className={`card-wellness p-3.5 sm:p-4 md:p-5 flex flex-col justify-between transition-all duration-150 text-left relative bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10 shadow-sm ${
         onClick ? 'cursor-pointer hover:border-[#12B5A6]/50 active:scale-[0.98]' : ''
       }`}
     >

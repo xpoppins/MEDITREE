@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
@@ -63,6 +65,8 @@
     color: var(--text-primary);
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   h1, h2, h3, h4, .font-heading {
@@ -76,6 +80,8 @@
     color: var(--text-primary);
     background-color: var(--bg-page);
     transition: background-color 0.2s ease, color 0.2s ease;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   *:focus-visible {
@@ -229,7 +235,16 @@ input[type=number] {
 }
 
 .dark .text-\[\#0E1B2C\],
-.dark .text-\[\#0C1E33\] {
+.dark .text-\[\#0C1E33\],
+.dark .text-\[\#1F2933\] {
+  color: #F4F6F9;
+}
+
+.dark .bg-\[\#F4F6F9\],
+.dark .bg-\[\#F9FBFC\],
+.dark .bg-\[\#F7F9FA\],
+.dark .bg-\[\#FFFDF9\] {
+  background-color: #17263A;
   color: #F4F6F9;
 }
 
@@ -276,4 +291,9 @@ input[type=number] {
   background-color: #17263A !important;
   border-color: rgba(255, 255, 255, 0.2) !important;
   color: #F4F6F9 !important;
+}
+
+/* Safe area padding for mobile bottom nav bars */
+.pb-safe {
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
 }

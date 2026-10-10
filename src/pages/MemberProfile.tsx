@@ -130,19 +130,19 @@ export const MemberProfile: React.FC = () => {
         </div>
 
         {/* 1. PROFILE CARD */}
-        <div className="card-wellness p-5 bg-white">
+        <div className="card-wellness p-5 bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-[#0E1B2C] text-white flex items-center justify-center text-3xl font-black shadow-xs shrink-0">
+            <div className="w-16 h-16 rounded-2xl bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] flex items-center justify-center text-3xl font-black shadow-xs shrink-0">
               {member?.name.charAt(0)}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-2xl font-black text-[#0E1B2C] font-heading">{member?.name}</h3>
-                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-[#E6F8F6] text-[#12B5A6]">
+                <h3 className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading">{member?.name}</h3>
+                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6]">
                   {member?.hasLogin ? 'Login Active' : 'No Phone'}
                 </span>
               </div>
-              <p className="text-xs font-bold text-[#7E90A5]">
+              <p className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6]">
                 {member?.relation} • Born {member?.dob || '1958'} • Height: {member?.heightCm || 168} cm
               </p>
             </div>
@@ -150,21 +150,21 @@ export const MemberProfile: React.FC = () => {
 
           {/* Asian BMI card */}
           {bmiData && (
-            <div className="mt-4 p-3.5 rounded-2xl bg-[#F9FBFC] border border-black/8 flex items-center justify-between">
+            <div className="mt-4 p-3.5 rounded-2xl bg-[#F9FBFC] dark:bg-[#17263A] border border-black/8 dark:border-white/10 flex items-center justify-between">
               <div>
-                <p className="text-[10px] font-black uppercase text-[#7E90A5]">Asian BMI Index</p>
-                <p className="text-2xl font-black text-[#0E1B2C] font-heading">{bmiData.bmi} <span className="text-xs font-bold text-[#7E90A5]">kg/m²</span></p>
+                <p className="text-[10px] font-black uppercase text-[#7E90A5] dark:text-[#A0B2C6]">Asian BMI Index</p>
+                <p className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading">{bmiData.bmi} <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6]">kg/m²</span></p>
               </div>
               <StatusChip status={bmiData.status} label={bmiData.statusWord} />
             </div>
           )}
 
           {/* Conditions */}
-          <div className="mt-4 pt-3 border-t border-black/8">
-            <p className="text-[11px] font-black uppercase text-[#7E90A5] mb-2">Health Conditions</p>
+          <div className="mt-4 pt-3 border-t border-black/8 dark:border-white/10">
+            <p className="text-[11px] font-black uppercase text-[#7E90A5] dark:text-[#A0B2C6] mb-2">Health Conditions</p>
             <div className="flex flex-wrap gap-1.5">
               {member?.conditions?.map((c) => (
-                <span key={c} className="px-3 py-1 rounded-xl bg-[#FFF0E8] text-[#FF6B4A] text-xs font-black">
+                <span key={c} className="px-3 py-1 rounded-xl bg-[#FFF0E8] dark:bg-[#FF6B4A]/20 text-[#FF6B4A] dark:text-[#FF8A6A] text-xs font-black">
                   {c}
                 </span>
               ))}
@@ -173,36 +173,36 @@ export const MemberProfile: React.FC = () => {
         </div>
 
         {/* 2. EMERGENCY CONTACT (With Direct Tel Dialing) */}
-        <div className="card-wellness p-5 bg-white border border-[#E5484D]/30 space-y-3">
+        <div className="card-wellness p-5 bg-white dark:bg-[#0E1B2C] border border-[#E5484D]/30 space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-[#E5484D]">
               <Phone className="w-5 h-5 animate-pulse" />
-              <h3 className="text-lg font-black font-heading">Emergency Contact</h3>
+              <h3 className="text-lg font-black font-heading text-[#0E1B2C] dark:text-white">Emergency Contact</h3>
             </div>
             {ecSaved && <span className="text-xs font-black text-[#1FA971]">Saved!</span>}
           </div>
 
-          <p className="text-xs text-[#7E90A5]">
+          <p className="text-xs text-[#7E90A5] dark:text-[#A0B2C6]">
             This person is called when you or an elder taps the Emergency SOS button.
           </p>
 
           <div className="grid grid-cols-2 gap-2.5">
             <div>
-              <label className="block text-[10px] font-black uppercase text-[#7E90A5] mb-1">Name</label>
+              <label className="block text-[10px] font-black uppercase text-[#7E90A5] dark:text-[#A0B2C6] mb-1">Name</label>
               <input
                 type="text"
                 value={ecName}
                 onChange={(e) => setEcName(e.target.value)}
-                className="w-full h-11 rounded-xl border border-black/15 px-3 text-xs font-bold"
+                className="w-full h-11 rounded-xl border border-black/15 dark:border-white/15 bg-white dark:bg-[#17263A] text-[#0E1B2C] dark:text-white px-3 text-xs font-bold"
               />
             </div>
             <div>
-              <label className="block text-[10px] font-black uppercase text-[#7E90A5] mb-1">Phone</label>
+              <label className="block text-[10px] font-black uppercase text-[#7E90A5] dark:text-[#A0B2C6] mb-1">Phone</label>
               <input
                 type="tel"
                 value={ecPhone}
                 onChange={(e) => setEcPhone(e.target.value)}
-                className="w-full h-11 rounded-xl border border-black/15 px-3 text-xs font-bold font-mono"
+                className="w-full h-11 rounded-xl border border-black/15 dark:border-white/15 bg-white dark:bg-[#17263A] text-[#0E1B2C] dark:text-white px-3 text-xs font-bold font-mono"
               />
             </div>
           </div>
@@ -211,7 +211,7 @@ export const MemberProfile: React.FC = () => {
             <button
               type="button"
               onClick={handleSaveContact}
-              className="py-2.5 px-4 rounded-xl bg-[#0E1B2C] text-white text-xs font-bold cursor-pointer"
+              className="py-2.5 px-4 rounded-xl bg-[#0E1B2C] hover:bg-[#1a2d47] dark:bg-white dark:hover:bg-gray-100 text-white dark:text-[#0E1B2C] text-xs font-bold cursor-pointer"
             >
               Save Contact
             </button>

@@ -80,16 +80,16 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
   return (
     <div className="card-wellness p-4 sm:p-5 bg-white dark:bg-[#0E1B2C] border border-black/10 dark:border-white/10 shadow-sm transition-all">
       {/* Header with Title and "View All Family" link */}
-      <div className="flex items-center justify-between mb-4 px-1">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] flex items-center justify-center">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4 px-1">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-8 h-8 rounded-xl bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] flex items-center justify-center shrink-0">
             <Users className="w-4 h-4" />
           </div>
-          <div>
-            <h3 className="text-base sm:text-lg font-black text-[#0E1B2C] dark:text-black font-heading">
+          <div className="min-w-0">
+            <h3 className="text-base sm:text-lg font-black text-[#0E1B2C] dark:text-white font-heading truncate">
               {language === 'hi' ? 'परिवार स्वास्थ्य व दवा प्रबंधन' : 'Family Health & Medicine Hub'}
             </h3>
-            <p className="text-[11px] font-bold text-[#7E90A5]">
+            <p className="text-[11px] font-bold text-[#7E90A5] truncate">
               {language === 'hi'
                 ? 'प्रत्येक सदस्य के लिए दवा जोड़ें या प्रिस्क्रिप्शन एक्सपोर्ट करें'
                 : 'Featured actions for each family member: add medicine & export prescription'}
@@ -100,7 +100,7 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
         <button
           type="button"
           onClick={() => navigate('/family')}
-          className="text-xs font-black text-[#12B5A6] hover:underline flex items-center gap-1 cursor-pointer bg-[#E6F8F6] dark:bg-[#12B5A6]/20 px-2.5 py-1.5 rounded-xl transition-all"
+          className="text-xs font-black text-[#12B5A6] hover:underline flex items-center gap-1 cursor-pointer bg-[#E6F8F6] dark:bg-[#12B5A6]/20 px-2.5 py-1.5 rounded-xl transition-all shrink-0 ml-auto sm:ml-0"
         >
           <span>{language === 'hi' ? 'पूरा परिवार' : 'Manage All'}</span>
           <ChevronRight className="w-3.5 h-3.5" />
@@ -130,31 +130,31 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
                 className="cursor-pointer group"
                 title={`Click to view ${member.name}'s readings on dashboard`}
               >
-                <div className="flex items-start justify-between gap-2.5 mb-2.5">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-start justify-between gap-2 mb-2.5">
+                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
                     {/* Avatar with Status Dot */}
                     <div className="relative shrink-0">
-                      <div className="w-12 h-12 rounded-2xl bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] flex items-center justify-center text-lg font-black shadow-xs group-hover:scale-105 transition-transform">
+                      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] flex items-center justify-center text-base sm:text-lg font-black shadow-xs group-hover:scale-105 transition-transform">
                         {member.name.charAt(0)}
                       </div>
                       <span
-                        className={`absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-white dark:border-[#142234] ${statusInfo.dot}`}
+                        className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white dark:border-[#142234] ${statusInfo.dot}`}
                         title={`Vitals: ${statusInfo.label}`}
                       />
                     </div>
 
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
                         <h4 className="text-sm font-black text-[#0E1B2C] dark:text-white truncate group-hover:text-[#12B5A6] transition-colors">
                           {member.name}
                         </h4>
                         {isSelected && (
-                          <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-[#12B5A6] text-white">
+                          <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-[#12B5A6] text-white shrink-0">
                             Active
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] font-bold text-[#7E90A5]">
+                      <p className="text-[11px] font-bold text-[#7E90A5] truncate">
                         {member.relation}
                       </p>
                     </div>
@@ -162,7 +162,7 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
 
                   {/* Status Tag */}
                   <span
-                    className={`text-[10px] font-black px-2 py-0.5 rounded-full border shrink-0 ${statusInfo.badge}`}
+                    className={`text-[10px] font-black px-2 py-0.5 rounded-full border shrink-0 whitespace-nowrap self-start ml-1.5 text-center ${statusInfo.badge}`}
                   >
                     {statusInfo.label}
                   </span>
@@ -170,7 +170,7 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
 
                 {/* Health Condition Tags & Med count */}
                 <div className="flex items-center justify-between gap-1 text-[11px] pt-1 pb-2.5 border-t border-black/5 dark:border-white/5">
-                  <div className="flex items-center gap-1 text-[#7E90A5] truncate">
+                  <div className="flex items-center gap-1 text-[#7E90A5] truncate min-w-0">
                     <Heart className="w-3 h-3 text-[#FF6B4A] shrink-0" />
                     <span className="truncate font-semibold">
                       {member.conditions && member.conditions.length > 0
@@ -179,7 +179,7 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
                     </span>
                   </div>
 
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] shrink-0">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] shrink-0 whitespace-nowrap">
                     💊 {medCount} {medCount === 1 ? 'med' : 'meds'}
                   </span>
                 </div>
@@ -193,11 +193,11 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
                     e.stopPropagation();
                     if (onAddMedicine) onAddMedicine(member.id);
                   }}
-                  className="w-full py-2 px-2 rounded-xl bg-[#12B5A6] hover:bg-[#0EA092] text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer"
+                  className="w-full min-h-[36px] py-2 px-2 rounded-xl bg-[#12B5A6] hover:bg-[#0EA092] text-white font-black text-[11px] sm:text-xs flex items-center justify-center gap-1 sm:gap-1.5 shadow-sm active:scale-98 transition-all cursor-pointer min-w-0"
                   title={`Add medicine for ${member.name}`}
                   aria-label={`Add medicine for ${member.name}`}
                 >
-                  <Pill className="w-3.5 h-3.5 text-white" />
+                  <Pill className="w-3.5 h-3.5 text-white shrink-0" />
                   <span className="truncate">+ Add Med</span>
                 </button>
 
@@ -207,11 +207,11 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
                     e.stopPropagation();
                     if (onExportPrescription) onExportPrescription(member.id);
                   }}
-                  className="w-full py-2 px-2 rounded-xl bg-[#E6F8F6] hover:bg-[#D4F4F1] dark:bg-[#1A2E44] dark:hover:bg-[#223B56] border border-[#12B5A6]/40 text-[#0F5C5C] dark:text-[#5EEAD4] font-black text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer"
+                  className="w-full min-h-[36px] py-2 px-2 rounded-xl bg-[#E6F8F6] hover:bg-[#D4F4F1] dark:bg-[#1A2E44] dark:hover:bg-[#223B56] border border-[#12B5A6]/40 text-[#0F5C5C] dark:text-[#5EEAD4] font-black text-[11px] sm:text-xs flex items-center justify-center gap-1 sm:gap-1.5 active:scale-98 transition-all cursor-pointer min-w-0"
                   title={`Export doctor prescription record for ${member.name}`}
                   aria-label={`Export doctor prescription record for ${member.name}`}
                 >
-                  <FileText className="w-3.5 h-3.5 text-[#12B5A6] dark:text-[#5EEAD4]" />
+                  <FileText className="w-3.5 h-3.5 text-[#12B5A6] dark:text-[#5EEAD4] shrink-0" />
                   <span className="truncate">Export Rx</span>
                 </button>
               </div>

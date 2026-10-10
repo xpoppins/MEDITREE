@@ -49,7 +49,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({ onOpenAddSheet }) => {
           className={`flex flex-col items-center justify-center h-full transition-colors cursor-pointer select-none ${
             isHomeActive
               ? 'text-[#FF6B4A] font-black'
-              : 'text-[#7E90A5] hover:text-[#0E1B2C] dark:hover:text-white'
+              : 'text-[#7E90A5] dark:text-[#A0B2C6] hover:text-[#0E1B2C] dark:hover:text-white'
           }`}
         >
           <div
@@ -71,7 +71,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({ onOpenAddSheet }) => {
           className={`flex flex-col items-center justify-center h-full transition-colors cursor-pointer select-none ${
             isTrackActive
               ? 'text-[#FF6B4A] font-black'
-              : 'text-[#7E90A5] hover:text-[#0E1B2C] dark:hover:text-white'
+              : 'text-[#7E90A5] dark:text-[#A0B2C6] hover:text-[#0E1B2C] dark:hover:text-white'
           }`}
         >
           <div
@@ -108,7 +108,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({ onOpenAddSheet }) => {
           className={`flex flex-col items-center justify-center h-full transition-colors cursor-pointer select-none ${
             isFamilyOrMeActive
               ? 'text-[#FF6B4A] font-black'
-              : 'text-[#7E90A5] hover:text-[#0E1B2C] dark:hover:text-white'
+              : 'text-[#7E90A5] dark:text-[#A0B2C6] hover:text-[#0E1B2C] dark:hover:text-white'
           }`}
         >
           <div
@@ -140,7 +140,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({ onOpenAddSheet }) => {
           className={`flex flex-col items-center justify-center h-full transition-colors cursor-pointer select-none ${
             isInsightsActive
               ? 'text-[#FF6B4A] font-black'
-              : 'text-[#7E90A5] hover:text-[#0E1B2C] dark:hover:text-white'
+              : 'text-[#7E90A5] dark:text-[#A0B2C6] hover:text-[#0E1B2C] dark:hover:text-white'
           }`}
         >
           <div

@@ -38,8 +38,8 @@ function AppLayout({ children }: { children: React.ReactNode }) {
   const shouldShowBottomNav = user && !hideBottomNavPaths.includes(location.pathname);
 
   return (
-    <div className="min-h-screen w-full bg-[#FFF9F0] dark:bg-[#08101A] flex flex-col selection:bg-[#0F5C5C] selection:text-white transition-colors">
-      <div className="flex-1 w-full">
+    <div className="min-h-screen w-full bg-[#FFF9F0] dark:bg-[#08101A] flex flex-col selection:bg-[#0F5C5C] selection:text-white transition-colors overflow-x-hidden">
+      <div className={`flex-1 w-full ${shouldShowBottomNav ? 'pb-24 md:pb-0' : ''}`}>
         {children}
       </div>
       {shouldShowBottomNav && <BottomTabs />}
