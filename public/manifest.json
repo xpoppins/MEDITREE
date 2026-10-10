@@ -3,6 +3,7 @@
   "name": "MEDITREE - Family Health Tracker",
   "short_name": "MEDITREE",
   "description": "Bold, elder-friendly health and vitals tracker for the whole family.",
+  "categories": ["health", "medical", "lifestyle"],
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
