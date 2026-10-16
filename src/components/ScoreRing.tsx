@@ -45,7 +45,7 @@ export const ScoreRing: React.FC<ScoreRingProps> = ({ scoreDetails }) => {
   };
 
   return (
-    <div className="card-hero p-6 relative overflow-hidden">
+    <div className="card-hero p-6 relative overflow-hidden border border-white/15 dark:border-white/20 shadow-xl">
       {/* Background ambient lighting */}
       <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-[#FF6B4A]/15 blur-3xl pointer-events-none" />
       <div className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-[#12B5A6]/15 blur-3xl pointer-events-none" />
@@ -65,7 +65,7 @@ export const ScoreRing: React.FC<ScoreRingProps> = ({ scoreDetails }) => {
               cx="80"
               cy="80"
               r={radius}
-              stroke="rgba(255, 255, 255, 0.12)"
+              stroke="rgba(255, 255, 255, 0.15)"
               strokeWidth="12"
               fill="none"
             />
@@ -86,46 +86,56 @@ export const ScoreRing: React.FC<ScoreRingProps> = ({ scoreDetails }) => {
 
           {/* Centered Big Number */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span className="text-5xl font-black tracking-tight text-white font-heading">
-              {animatedScore}
+            <span className="text-5xl font-black tracking-tight text-white font-heading drop-shadow-sm">
+              {scoreDetails.category === 'New Member' ? '—' : animatedScore}
             </span>
             <span className="text-xs uppercase font-extrabold tracking-widest text-[#FFB020] mt-0.5">
-              Score / 100
+              {scoreDetails.category === 'New Member' ? 'No Data' : 'Score / 100'}
             </span>
           </div>
         </div>
 
         {/* Text and Status Info */}
         <div className="flex-1 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold uppercase tracking-wider text-[#FFB020] mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-wider text-[#FFB020] mb-2 shadow-xs">
             <Trophy className="w-3.5 h-3.5" />
             <span>{language === 'hi' ? 'स्वास्थ्य स्कोर' : 'Health Vitality Score'}</span>
           </div>
 
           <h3 className="text-2xl font-black tracking-tight text-white font-heading">
-            {language === 'hi'
-              ? `${scoreDetails.category === 'Excellent' ? 'शानदार' : 'संतुलित'} स्थिति`
-              : `${scoreDetails.category} Control`}
+            {scoreDetails.category === 'New Member'
+              ? (language === 'hi' ? 'निगरानी के लिए तैयार' : 'Ready to Track')
+              : (language === 'hi'
+                ? `${scoreDetails.category === 'Excellent' ? 'शानदार' : 'संतुलित'} स्थिति`
+                : `${scoreDetails.category} Control`)}
           </h3>
 
-          <p className="text-sm font-medium text-white/80 mt-1 leading-snug">
+          <p className="text-sm font-medium text-white/90 mt-1 leading-snug">
             {scoreDetails.explanation}
           </p>
 
           {/* 7-day stats breakdown pills */}
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-4 text-xs font-bold">
-            <span className="px-2.5 py-1 rounded-lg bg-[#1FA971]/20 text-[#34D399] border border-[#1FA971]/30">
-              ✓ {scoreDetails.greenCount} {language === 'hi' ? 'सामान्य' : 'Normal'}
-            </span>
-            {scoreDetails.amberCount > 0 && (
-              <span className="px-2.5 py-1 rounded-lg bg-[#E8A317]/20 text-[#FBBF24] border border-[#E8A317]/30">
-                ⚠ {scoreDetails.amberCount} {language === 'hi' ? 'हल्का बढ़ा' : 'Watch'}
+            {scoreDetails.category === 'New Member' || (scoreDetails.greenCount === 0 && scoreDetails.amberCount === 0 && scoreDetails.redCount === 0) ? (
+              <span className="px-3 py-1 rounded-lg bg-white/10 text-white font-bold border border-white/20">
+                ✨ {language === 'hi' ? 'रीडिंग दर्ज करके स्वास्थ्य स्कोर सक्रिय करें' : 'Log readings to activate vitality breakdown'}
               </span>
-            )}
-            {scoreDetails.redCount > 0 && (
-              <span className="px-2.5 py-1 rounded-lg bg-[#E5484D]/20 text-[#F87171] border border-[#E5484D]/30">
-                ✕ {scoreDetails.redCount} {language === 'hi' ? 'अधिक' : 'High'}
-              </span>
+            ) : (
+              <>
+                <span className="px-2.5 py-1 rounded-lg bg-[#1FA971]/25 text-[#34D399] border border-[#1FA971]/40 shadow-xs">
+                  ✓ {scoreDetails.greenCount} {language === 'hi' ? 'सामान्य' : 'Normal'}
+                </span>
+                {scoreDetails.amberCount > 0 && (
+                  <span className="px-2.5 py-1 rounded-lg bg-[#E8A317]/25 text-[#FBBF24] border border-[#E8A317]/40 shadow-xs">
+                    ⚠ {scoreDetails.amberCount} {language === 'hi' ? 'हल्का बढ़ा' : 'Watch'}
+                  </span>
+                )}
+                {scoreDetails.redCount > 0 && (
+                  <span className="px-2.5 py-1 rounded-lg bg-[#E5484D]/25 text-[#F87171] border border-[#E5484D]/40 shadow-xs">
+                    ✕ {scoreDetails.redCount} {language === 'hi' ? 'अधिक' : 'High'}
+                  </span>
+                )}
+              </>
             )}
           </div>
         </div>

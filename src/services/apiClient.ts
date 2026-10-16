@@ -10,6 +10,9 @@ async function apiFetch(path: string, options: RequestInit = {}) {
 
   const res = await fetch(`${API_URL}${path}`, { ...options, headers });
   if (!res.ok) {
+    if (res.status === 401) {
+      logoutUser();
+    }
     const err = await res.json().catch(() => ({ message: 'Request failed' }));
     throw new Error(err.message || 'Request failed');
   }
@@ -33,7 +36,14 @@ export async function googleLogin(email: string, name: string, googleId: string)
 }
 
 export async function getMe() {
-  return apiFetch('/auth/me');
+  const token = getToken();
+  if (!token) return null;
+  try {
+    return await apiFetch('/auth/me');
+  } catch {
+    logoutUser();
+    return null;
+  }
 }
 
 export async function getFamily() {

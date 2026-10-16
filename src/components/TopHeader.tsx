@@ -19,7 +19,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { usePreferences } from '../context/PreferencesContext';
+import { TextSize, usePreferences } from '../context/PreferencesContext';
 import * as api from '../services/apiClient';
 import { getPaymentStatus } from '../services/payments';
 import { FamilyAlert } from '../types';
@@ -32,6 +32,7 @@ export const TopHeader: React.FC = () => {
   const [alerts, setAlerts] = useState<FamilyAlert[]>([]);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
     api.getAlerts().then(setAlerts);
@@ -57,8 +58,14 @@ export const TopHeader: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-[#FFF9F0] dark:bg-[#08101A] border-b border-black/8 dark:border-white/10 px-3 sm:px-6 py-2.5 sm:py-3 transition-colors shadow-2xs">
-      <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+    <header className="w-full relative z-30 bg-[#FFF9F0] dark:bg-[#08101A] border-b border-black/8 dark:border-white/10 px-3 sm:px-6 py-2.5 sm:py-3 transition-colors shadow-2xs overflow-x-auto overflow-y-hidden scrollbar-none">
+      {/* Toast Feedback Notification */}
+      {toastMessage && (
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 z-50 px-3 py-1 rounded-full bg-[#0E1B2C] text-white dark:bg-white dark:text-[#0E1B2C] text-xs font-black shadow-lg animate-in fade-in slide-in-from-top-1 duration-200 pointer-events-none">
+          {toastMessage}
+        </div>
+      )}
+      <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-4 w-full min-w-max">
         {/* Brand Lockup */}
         <div
           onClick={() => navigate('/')}
@@ -74,11 +81,6 @@ export const TopHeader: React.FC = () => {
               <span className="text-base sm:text-xl font-black font-heading text-[#0E1B2C] dark:text-white leading-none tracking-tight">
                 MEDITREE
               </span>
-              {isPremium && (
-                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#FF6B4A] bg-[#FFF0E8] dark:bg-[#FF6B4A]/20 px-1.5 py-0.5 rounded shrink-0">
-                  PRO
-                </span>
-              )}
             </div>
             {user && (
               <p className="text-[10px] sm:text-[11px] font-bold text-[#7E90A5] truncate max-w-[90px] sm:max-w-[140px] mt-0.5">
@@ -89,7 +91,7 @@ export const TopHeader: React.FC = () => {
         </div>
 
         {/* Desktop Navigation Links (Visible on md and larger screens) */}
-        <nav className="hidden md:flex items-center gap-1 lg:gap-2 font-heading font-bold text-sm">
+        <nav className="hidden md:flex items-center gap-1 lg:gap-2 font-heading font-bold text-sm shrink-0">
           <NavLink
             to="/"
             end
@@ -189,25 +191,28 @@ export const TopHeader: React.FC = () => {
             </button>
           )}
 
-          {/* Quick Demo Switcher (Desktop/Tablet) */}
-          {user && (
-            <button
-              type="button"
-              onClick={() => switchDemo(isManager ? 'member' : 'manager')}
-              className="hidden sm:flex px-2 sm:px-2.5 py-1 rounded-xl bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] border border-[#12B5A6]/30 text-[10px] sm:text-xs font-black items-center gap-1 cursor-pointer shrink-0 active:scale-95 transition-transform"
-              title={`Currently ${user.name} (${isManager ? 'Manager' : 'Member'}). Tap to switch role.`}
-            >
-              <UserCheck className="w-3.5 h-3.5" />
-              <span>{user.name.split(' ')[0]}</span>
-            </button>
-          )}
+
 
           {/* Text Size Cycle */}
           <button
             type="button"
-            onClick={cycleTextSize}
-            className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-[#0E1B2C] dark:text-white flex items-center justify-center font-heading font-black text-[10px] sm:text-xs cursor-pointer shrink-0 active:scale-95"
-            title={`Text size: ${textSize}. Tap to enlarge.`}
+            onClick={() => {
+              let nextSize: TextSize = 'A';
+              if (textSize === 'A') nextSize = 'A+';
+              else if (textSize === 'A+') nextSize = 'A++';
+              else nextSize = 'A';
+              setTextSize(nextSize);
+              const label = nextSize === 'A' ? 'Standard (A)' : nextSize === 'A+' ? 'Large (A+)' : 'Extra Large (A++)';
+              setToastMessage(language === 'hi' ? `अक्षर का आकार: ${label}` : `Text Size: ${label}`);
+              setTimeout(() => setToastMessage(null), 2000);
+            }}
+            className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-[#0E1B2C] dark:text-white flex items-center justify-center font-heading font-black text-[10px] sm:text-xs cursor-pointer shrink-0 active:scale-95 shadow-2xs hover:border-[#12B5A6] transition-colors"
+            title={
+              language === 'hi'
+                ? `अक्षर का आकार: ${textSize}। बड़ा करने के लिए टैप करें (A -> A+ -> A++)।`
+                : `Text Size: ${textSize}. Tap to cycle size (A -> A+ -> A++).`
+            }
+            aria-label="Change Text Size"
           >
             {textSize}
           </button>

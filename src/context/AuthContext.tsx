@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loadData = async () => {
     try {
       const res = await api.getMe();
-      const me = res.user || res;
+      const me = res?.user || res || null;
       setUser(me);
       if (me) {
         const [fam, mems] = await Promise.all([
@@ -43,7 +43,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setMembers([]);
       }
     } catch (e) {
-      console.error('Failed to load initial data', e);
+      console.warn('Session initialization warning:', e);
+      setUser(null);
+      setFamily(null);
+      setMembers([]);
     } finally {
       setLoading(false);
     }

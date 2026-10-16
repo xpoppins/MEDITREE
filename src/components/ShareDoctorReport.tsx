@@ -1,5 +1,5 @@
-import { Activity, Download, Heart, Printer, Scale, Share2, Shield, X } from 'lucide-react';
-import React from 'react';
+import { Activity, Download, Heart, Printer, Scale, Share2, Shield, X, Calendar } from 'lucide-react';
+import React, { useState } from 'react';
 import { usePreferences } from '../context/PreferencesContext';
 import { Member, Medicine, Reading } from '../types';
 
@@ -17,11 +17,19 @@ export const ShareDoctorReport: React.FC<ShareDoctorReportProps> = ({
   onClose,
 }) => {
   const { language } = usePreferences();
+  const [daysRange, setDaysRange] = useState<string>('30');
 
-  // Filter 30-day stats
-  const bpReadings = readings.filter((r) => r.type === 'bp');
-  const sugarReadings = readings.filter((r) => r.type === 'sugar');
-  const weightReadings = readings.filter((r) => r.type === 'weight');
+  // Filter readings by days range
+  const filteredReadings = readings.filter((r) => {
+    if (daysRange === 'all') return true;
+    const daysNum = Number(daysRange);
+    const diffTime = Date.now() - new Date(r.takenAt).getTime();
+    return diffTime <= daysNum * 86400000;
+  });
+
+  const bpReadings = filteredReadings.filter((r) => r.type === 'bp');
+  const sugarReadings = filteredReadings.filter((r) => r.type === 'sugar');
+  const weightReadings = filteredReadings.filter((r) => r.type === 'weight');
 
   const avgSys = bpReadings.length
     ? Math.round(bpReadings.reduce((s, r) => s + (r.systolic || 0), 0) / bpReadings.length)
@@ -30,7 +38,7 @@ export const ShareDoctorReport: React.FC<ShareDoctorReportProps> = ({
     ? Math.round(bpReadings.reduce((s, r) => s + (r.diastolic || 0), 0) / bpReadings.length)
     : null;
 
-  const fastingSugars = sugarReadings.filter((r) => r.sugarContext === 'fasting');
+  const fastingSugars = sugarReadings.filter((r) => r.sugarContext === 'fasting' || !r.sugarContext);
   const avgFasting = fastingSugars.length
     ? Math.round(fastingSugars.reduce((s, r) => s + (r.sugar || 0), 0) / fastingSugars.length)
     : null;
@@ -47,10 +55,12 @@ export const ShareDoctorReport: React.FC<ShareDoctorReportProps> = ({
   };
 
   const handleShare = async () => {
-    const text = `Health Summary for ${member.name} (${member.relation}):
+    const text = `Health Summary for ${member.name} (${member.relation}) [Past ${daysRange === 'all' ? 'All Time' : daysRange + ' Days'}]:
 Average BP: ${avgSys ? `${avgSys}/${avgDia} mmHg` : 'N/A'}
 Fasting Sugar Avg: ${avgFasting ? `${avgFasting} mg/dL` : 'N/A'}
+Post-Meal Sugar Avg: ${avgPostMeal ? `${avgPostMeal} mg/dL` : 'N/A'}
 Weight: ${latestWeight ? `${latestWeight} kg` : 'N/A'}
+Total Readings Logged: ${filteredReadings.length}
 Conditions: ${member.conditions.join(', ') || 'None'}
 Generated via MEDITREE.`;
 
@@ -69,27 +79,27 @@ Generated via MEDITREE.`;
     }
   };
 
-return (
+  return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/70 backdrop-blur-xs overflow-y-auto">
-      <div className="w-full max-w-lg bg-white dark:bg-[#0E1B2C] rounded-[28px] border-2 border-[#0E1B2C]/20 dark:border-white/10 shadow-2xl p-6 relative my-auto">
+      <div className="w-full max-w-2xl bg-white dark:bg-[#0E1B2C] rounded-[28px] border-2 border-[#0E1B2C]/20 dark:border-white/10 shadow-2xl p-5 md:p-7 relative my-auto max-h-[90vh] overflow-y-auto">
         {/* Actions bar */}
-        <div className="flex items-center justify-between gap-3 mb-6 pb-4 border-b border-black/10 dark:border-white/10">
+        <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-black/10 dark:border-white/10">
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={handlePrint}
-              className="py-2 px-3.5 rounded-xl bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="py-2.5 px-4 rounded-xl bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-xs hover:opacity-90 active:scale-95"
             >
               <Printer className="w-4 h-4" />
-              <span>Print / PDF</span>
+              <span>{language === 'hi' ? 'प्रिंट / पीडीएफ' : 'Print / PDF Report'}</span>
             </button>
             <button
               type="button"
               onClick={handleShare}
-              className="py-2 px-3.5 rounded-xl bg-[#12B5A6] text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="py-2.5 px-4 rounded-xl bg-[#12B5A6] text-white text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-xs hover:opacity-90 active:scale-95"
             >
               <Share2 className="w-4 h-4" />
-              <span>Share</span>
+              <span>{language === 'hi' ? 'शेयर करें' : 'Share Summary'}</span>
             </button>
           </div>
 
@@ -100,6 +110,38 @@ return (
           >
             <X className="w-5 h-5" />
           </button>
+        </div>
+
+        {/* TIME RANGE SELECTOR */}
+        <div className="mb-5 p-3 rounded-2xl bg-[#F4F6F9] dark:bg-[#17263A] border border-black/8 dark:border-white/10 flex items-center justify-between gap-2 flex-wrap">
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-[#FF6B4A]" />
+            <span className="text-xs font-black text-[#0E1B2C] dark:text-white">
+              {language === 'hi' ? 'समय अवधि चुनें:' : 'Select Time Range:'}
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {[
+              { id: '7', label: '7 Days' },
+              { id: '15', label: '15 Days' },
+              { id: '30', label: '30 Days' },
+              { id: '90', label: '90 Days' },
+              { id: 'all', label: 'All Time' },
+            ].map((range) => (
+              <button
+                key={range.id}
+                type="button"
+                onClick={() => setDaysRange(range.id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                  daysRange === range.id
+                    ? 'bg-[#FF6B4A] text-white shadow-xs'
+                    : 'bg-white dark:bg-[#0E1B2C] text-[#7E90A5] hover:text-[#0E1B2C] dark:hover:text-white border border-black/10 dark:border-white/10'
+                }`}
+              >
+                {range.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* CLINICAL DOCTOR REPORT BODY */}
@@ -119,24 +161,24 @@ return (
             </div>
             <div className="text-right text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6]">
               <p>Generated: {new Date().toLocaleDateString()}</p>
-              <p>Past 30 Days Window</p>
+              <p className="text-[#FF6B4A] font-black">Window: {daysRange === 'all' ? 'All Time' : `${daysRange} Days`}</p>
             </div>
           </div>
 
-          {/* 30-Day Vitals Summary Grid */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Vitals Averages Summary Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {/* BP Average */}
             <div className="p-3.5 rounded-2xl bg-[#FFF5F2] dark:bg-[#FF6B4A]/10 border border-[#FF6B4A]/20 dark:border-[#FF6B4A]/30">
               <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#FF6B4A]">
                 <Heart className="w-3.5 h-3.5 fill-current" />
-                <span>30-Day BP Average</span>
+                <span>BP Average</span>
               </div>
-              <p className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
-                {avgSys ? `${avgSys} / ${avgDia}` : 'No data'}
-                <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-1">mmHg</span>
+              <p className="text-xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
+                {avgSys ? `${avgSys}/${avgDia}` : 'N/A'}
+                <span className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-0.5">mmHg</span>
               </p>
-              <p className="text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
-                From {bpReadings.length} readings
+              <p className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
+                {bpReadings.length} readings
               </p>
             </div>
 
@@ -144,14 +186,14 @@ return (
             <div className="p-3.5 rounded-2xl bg-[#E6F8F6] dark:bg-[#12B5A6]/10 border border-[#12B5A6]/20 dark:border-[#12B5A6]/30">
               <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#12B5A6]">
                 <Activity className="w-3.5 h-3.5" />
-                <span>Fasting Sugar Avg</span>
+                <span>Fasting Sugar</span>
               </div>
-              <p className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
-                {avgFasting ? `${avgFasting}` : 'No data'}
-                <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-1">mg/dL</span>
+              <p className="text-xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
+                {avgFasting ? `${avgFasting}` : 'N/A'}
+                <span className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-0.5">mg/dL</span>
               </p>
-              <p className="text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
-                Target: &lt;100 mg/dL
+              <p className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
+                Target: &lt;100
               </p>
             </div>
 
@@ -161,12 +203,12 @@ return (
                 <Activity className="w-3.5 h-3.5" />
                 <span>Post-Meal Avg</span>
               </div>
-              <p className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
-                {avgPostMeal ? `${avgPostMeal}` : '---'}
-                <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-1">mg/dL</span>
+              <p className="text-xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
+                {avgPostMeal ? `${avgPostMeal}` : 'N/A'}
+                <span className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-0.5">mg/dL</span>
               </p>
-              <p className="text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
-                Target: &lt;140 mg/dL
+              <p className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
+                Target: &lt;140
               </p>
             </div>
 
@@ -176,13 +218,81 @@ return (
                 <Scale className="w-3.5 h-3.5" />
                 <span>Latest Weight</span>
               </div>
-              <p className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
-                {latestWeight ? `${latestWeight}` : '---'}
-                <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-1">kg</span>
+              <p className="text-xl font-black text-[#0E1B2C] dark:text-white font-heading mt-1">
+                {latestWeight ? `${latestWeight}` : 'N/A'}
+                <span className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] ml-0.5">kg</span>
               </p>
-              <p className="text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
-                BMI: 26.1 (Overweight)
+              <p className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5">
+                Total Logs: {filteredReadings.length}
               </p>
+            </div>
+          </div>
+
+          {/* CHRONOLOGICAL READINGS EXPORT TABLE */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-xs font-black uppercase tracking-wider text-[#0E1B2C] dark:text-white font-heading">
+                {language === 'hi' ? 'सभी रिकॉर्डेड रीडिंग्स (लॉग टेबल)' : 'Complete Chronological Readings Log'}
+              </h4>
+              <span className="text-[11px] font-bold text-[#FF6B4A]">
+                {filteredReadings.length} {language === 'hi' ? 'विज़िट्स/माप' : 'total logs'}
+              </span>
+            </div>
+
+            <div className="rounded-2xl border border-black/10 dark:border-white/10 overflow-hidden text-xs max-h-64 overflow-y-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-[#F4F6F9] dark:bg-[#17263A] text-[#7E90A5] dark:text-[#A0B2C6] font-black text-[11px]">
+                    <th className="p-2.5">Date & Time</th>
+                    <th className="p-2.5">Type</th>
+                    <th className="p-2.5">Reading Values</th>
+                    <th className="p-2.5">Status</th>
+                    <th className="p-2.5">Note</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-black/8 dark:divide-white/8 font-medium">
+                  {filteredReadings.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="text-center py-6 text-[#7E90A5]">
+                        No readings recorded in this time range.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredReadings.map((r) => (
+                      <tr key={r.id} className="hover:bg-black/2 dark:hover:bg-white/5">
+                        <td className="p-2.5 text-[#0E1B2C] dark:text-white font-bold whitespace-nowrap">
+                          {new Date(r.takenAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </td>
+                        <td className="p-2.5 uppercase font-black text-[#FF6B4A]">
+                          {r.type}
+                        </td>
+                        <td className="p-2.5 font-bold text-[#0E1B2C] dark:text-white">
+                          {r.type === 'bp' && `${r.systolic}/${r.diastolic} mmHg (${r.pulse || '--'} bpm)`}
+                          {r.type === 'sugar' && `${r.sugar} mg/dL (${r.sugarContext || 'general'})`}
+                          {r.type === 'weight' && `${r.weightKg} kg`}
+                          {r.type === 'pulse' && `${r.pulse} bpm`}
+                        </td>
+                        <td className="p-2.5">
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                              r.status === 'green'
+                                ? 'bg-[#E6F8F6] text-[#12B5A6]'
+                                : r.status === 'amber'
+                                ? 'bg-[#FFF0E8] text-[#FFB020]'
+                                : 'bg-[#FEECEE] text-[#E5484D]'
+                            }`}
+                          >
+                            {r.statusText || r.status}
+                          </span>
+                        </td>
+                        <td className="p-2.5 text-[#7E90A5] dark:text-[#A0B2C6] italic">
+                          {r.note || '---'}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
 

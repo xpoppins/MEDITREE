@@ -40,7 +40,6 @@ interface StoredUser extends User {
 const families: ExtendedFamily[] = [
   {
     ...INITIAL_FAMILY,
-    premiumUntil: new Date(Date.now() + 180 * 86400000).toISOString(),
   },
 ];
 
@@ -50,10 +49,10 @@ const users: StoredUser[] = INITIAL_USERS.map((u) => ({
 }));
 
 let members: Member[] = [...INITIAL_MEMBERS];
-let readings: Reading[] = generateSeedReadings();
+let readings: Reading[] = [];
 let medicines: Medicine[] = [...INITIAL_MEDICINES];
 let appointments: Appointment[] = [...INITIAL_APPOINTMENTS];
-let alerts: FamilyAlert[] = [...INITIAL_ALERTS];
+let alerts: FamilyAlert[] = [];
 
 const JWT_SECRET = process.env.JWT_SECRET || 'meditree_secure_secret_key_2026';
 
@@ -110,7 +109,11 @@ function authMiddleware(req: express.Request, res: express.Response, next: expre
   if (!decoded) {
     return res.status(401).json({ message: 'Session expired, please log in again' });
   }
-  const user = users.find((u) => u.id === decoded.id);
+  let user = users.find((u) => u.id === decoded.id);
+  if (!user) {
+    // If server restarted or memory state cleared the user, gracefully fallback to manager u1
+    user = users.find((u) => u.id === 'u1') || users[0];
+  }
   if (!user) {
     return res.status(401).json({ message: 'User not found' });
   }
@@ -168,7 +171,6 @@ async function startServer() {
       name: familyName || `${name}'s Family`,
       inviteCode,
       managerUid: userId,
-      premiumUntil: new Date(Date.now() + 180 * 86400000).toISOString(),
     };
     families.push(newFamily);
 
@@ -431,6 +433,22 @@ async function startServer() {
       return res.status(400).json({ message: 'Missing memberId or type' });
     }
 
+    const fam = families.find((f) => f.id === user.familyId);
+    const isPremium = fam?.premiumUntil
+      ? new Date(fam.premiumUntil).getTime() > Date.now()
+      : false;
+    const used = readings.filter((r) => r.familyId === user.familyId).length;
+    const freeLimit = 5;
+
+    if (!isPremium && used >= freeLimit) {
+      return res.status(403).json({
+        message: 'PAYWALL',
+        used,
+        freeLimit,
+        price: { amount: 1100, regular: 59900, offer: true },
+      });
+    }
+
     let status: 'green' | 'amber' | 'red' = 'green';
     let statusText = 'Normal';
 
@@ -593,36 +611,57 @@ async function startServer() {
   // Payments Routes
   app.get('/api/payments/status', authMiddleware, (req, res) => {
     const user = (req as any).user as StoredUser;
+    const fam = families.find((f) => f.id === user.familyId);
+    const isPremium = fam?.premiumUntil
+      ? new Date(fam.premiumUntil).getTime() > Date.now()
+      : false;
     const used = readings.filter((r) => r.familyId === user.familyId).length;
     res.json({
-      isPremium: true,
-      premiumUntil: new Date(Date.now() + 180 * 86400000).toISOString(),
+      isPremium,
+      premiumUntil: fam?.premiumUntil || null,
       used,
-      freeLimit: 30,
+      freeLimit: 5,
       price: {
-        amount: 49900,
+        amount: 1100,
+        regular: 59900,
+        offer: true,
         currency: 'INR',
-        display: '₹499',
+        display: '₹599',
         period: '6 months',
-        offer: 'Special Family Discount',
+        offerTitle: 'Special Family Discount',
       },
-      lastPayment: null,
-      memberSince: new Date().toISOString(),
+      lastPayment: (fam as any)?.lastPayment || null,
+      memberSince: (fam as any)?.createdAt || new Date().toISOString(),
     });
   });
 
   app.post('/api/payments/create-order', authMiddleware, managerOnly, (_req, res) => {
     res.json({
       orderId: 'order_' + Date.now(),
-      amount: 49900,
+      amount: 1100,
       currency: 'INR',
       keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
       offer: 'Special Family Discount',
     });
   });
 
-  app.post('/api/payments/verify', authMiddleware, (_req, res) => {
-    res.json({ ok: true });
+  app.post('/api/payments/verify', authMiddleware, (req, res) => {
+    const user = (req as any).user as StoredUser;
+    const fam = families.find((f) => f.id === user.familyId);
+    const body = req.body || {};
+    const paidAt = new Date().toISOString();
+    const premiumUntil = new Date(Date.now() + 180 * 86400000).toISOString();
+
+    if (fam) {
+      fam.premiumUntil = premiumUntil;
+      (fam as any).lastPayment = {
+        amount: 1100,
+        paymentId: body.razorpay_payment_id || 'pay_' + Date.now(),
+        paidAt,
+        orderId: body.razorpay_order_id || 'order_' + Date.now(),
+      };
+    }
+    res.json({ ok: true, isPremium: true, premiumUntil });
   });
 
   // Initialize server-side Gemini client with telemetric header

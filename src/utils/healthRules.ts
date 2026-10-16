@@ -216,6 +216,18 @@ export function pulseStatus(pulse?: number): StatusResult {
 
 // Health Score: start at 100, subtract points for red and amber readings in the last 7 days, add a small bonus for streaks.
 export function calculateHealthScore(readings: Reading[], streakDays = 5): HealthScoreDetails {
+  if (!readings || readings.length === 0) {
+    return {
+      score: 0,
+      category: 'New Member',
+      explanation: 'No readings recorded yet. Log your first reading to calculate your health vitality score.',
+      streakDays: 0,
+      redCount: 0,
+      amberCount: 0,
+      greenCount: 0,
+    };
+  }
+
   const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
   const recent = readings.filter((r) => new Date(r.takenAt).getTime() >= sevenDaysAgo);
 

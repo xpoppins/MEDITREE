@@ -89,7 +89,7 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
             <h3 className="text-base sm:text-lg font-black text-[#0E1B2C] dark:text-white font-heading truncate">
               {language === 'hi' ? 'परिवार स्वास्थ्य व दवा प्रबंधन' : 'Family Health & Medicine Hub'}
             </h3>
-            <p className="text-[11px] font-bold text-[#7E90A5] truncate">
+            <p className="text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] truncate">
               {language === 'hi'
                 ? 'प्रत्येक सदस्य के लिए दवा जोड़ें या प्रिस्क्रिप्शन एक्सपोर्ट करें'
                 : 'Featured actions for each family member: add medicine & export prescription'}
@@ -100,7 +100,7 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
         <button
           type="button"
           onClick={() => navigate('/family')}
-          className="text-xs font-black text-[#12B5A6] hover:underline flex items-center gap-1 cursor-pointer bg-[#E6F8F6] dark:bg-[#12B5A6]/20 px-2.5 py-1.5 rounded-xl transition-all shrink-0 ml-auto sm:ml-0"
+          className="text-xs font-black text-[#12B5A6] dark:text-[#5EEAD4] hover:underline flex items-center gap-1 cursor-pointer bg-[#E6F8F6] dark:bg-[#12B5A6]/25 px-2.5 py-1.5 rounded-xl transition-all shrink-0 ml-auto sm:ml-0 border border-[#12B5A6]/20"
         >
           <span>{language === 'hi' ? 'पूरा परिवार' : 'Manage All'}</span>
           <ChevronRight className="w-3.5 h-3.5" />
@@ -121,7 +121,7 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
               className={`rounded-2xl p-3.5 transition-all flex flex-col justify-between border relative ${
                 isSelected
                   ? 'bg-[#F2FAF9] dark:bg-[#102336] border-[#12B5A6] ring-2 ring-[#12B5A6]/20 shadow-md'
-                  : 'bg-white dark:bg-[#142234] border-black/8 dark:border-white/8 hover:border-[#12B5A6]/50 shadow-xs'
+                  : 'bg-white dark:bg-[#142234] border-black/8 dark:border-white/10 hover:border-[#12B5A6]/50 shadow-xs'
               }`}
             >
               {/* Member Basic Info Row (Clicking switches active member) */}
@@ -134,7 +134,7 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
                   <div className="flex items-center gap-2.5 min-w-0 flex-1">
                     {/* Avatar with Status Dot */}
                     <div className="relative shrink-0">
-                      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] flex items-center justify-center text-base sm:text-lg font-black shadow-xs group-hover:scale-105 transition-transform">
+                      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#0E1B2C] dark:bg-black text-white border border-transparent dark:border-white/20 flex items-center justify-center text-base sm:text-lg font-black shadow-xs group-hover:scale-105 transition-transform">
                         {member.name.charAt(0)}
                       </div>
                       <span
@@ -154,7 +154,7 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] font-bold text-[#7E90A5] truncate">
+                      <p className="text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6] truncate">
                         {member.relation}
                       </p>
                     </div>
@@ -170,16 +170,16 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
 
                 {/* Health Condition Tags & Med count */}
                 <div className="flex items-center justify-between gap-1 text-[11px] pt-1 pb-2.5 border-t border-black/5 dark:border-white/5">
-                  <div className="flex items-center gap-1 text-[#7E90A5] truncate min-w-0">
+                  <div className="flex items-center gap-1 text-[#7E90A5] dark:text-[#A0B2C6] truncate min-w-0">
                     <Heart className="w-3 h-3 text-[#FF6B4A] shrink-0" />
-                    <span className="truncate font-semibold">
+                    <span className="truncate font-semibold text-[#4A5B70] dark:text-[#CBD5E1]">
                       {member.conditions && member.conditions.length > 0
                         ? member.conditions.slice(0, 2).join(', ')
                         : 'Routine Monitoring'}
                     </span>
                   </div>
 
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] shrink-0 whitespace-nowrap">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] dark:text-[#5EEAD4] border border-[#12B5A6]/30 shrink-0 whitespace-nowrap">
                     💊 {medCount} {medCount === 1 ? 'med' : 'meds'}
                   </span>
                 </div>
@@ -226,14 +226,14 @@ export const FamilyStrip: React.FC<FamilyStripProps> = ({
             onClick={onAddMember}
             className="rounded-2xl p-4 border-2 border-dashed border-[#12B5A6]/40 hover:border-[#12B5A6] hover:bg-[#E6F8F6]/40 dark:hover:bg-[#12B5A6]/10 flex flex-col items-center justify-center text-center gap-2 transition-all cursor-pointer min-h-[140px]"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[#E6F8F6] dark:bg-[#12B5A6]/20 text-[#12B5A6] dark:text-[#5EEAD4] flex items-center justify-center">
               <Plus className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xs font-black text-[#12B5A6] block">
+              <span className="text-xs font-black text-[#12B5A6] dark:text-[#5EEAD4] block">
                 + {language === 'hi' ? 'नया सदस्य जोड़ें' : 'Add Family Member'}
               </span>
-              <span className="text-[10px] font-bold text-[#7E90A5]">
+              <span className="text-[10px] font-bold text-[#7E90A5] dark:text-[#A0B2C6]">
                 {language === 'hi' ? 'माता-पिता या बच्चे' : 'Add parents or dependents'}
               </span>
             </div>

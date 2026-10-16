@@ -112,9 +112,16 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
   useEffect(() => {
     const root = document.documentElement;
     root.classList.remove('text-size-a', 'text-size-a-plus', 'text-size-a-plus-plus');
-    if (textSize === 'A') root.classList.add('text-size-a');
-    if (textSize === 'A+') root.classList.add('text-size-a-plus');
-    if (textSize === 'A++') root.classList.add('text-size-a-plus-plus');
+    if (textSize === 'A') {
+      root.classList.add('text-size-a');
+      root.style.fontSize = '16px';
+    } else if (textSize === 'A+') {
+      root.classList.add('text-size-a-plus');
+      root.style.fontSize = '19px';
+    } else if (textSize === 'A++') {
+      root.classList.add('text-size-a-plus-plus');
+      root.style.fontSize = '22px';
+    }
   }, [textSize]);
 
   const t = (key: string): string => {

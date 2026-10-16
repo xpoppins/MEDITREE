@@ -2,8 +2,9 @@ import {
   Activity,
   ArrowRight,
   CheckCircle2,
+  Clock,
   Heart,
-  Info,
+  Plus,
   Scale,
   TrendingDown,
   TrendingUp,
@@ -33,39 +34,9 @@ export const HomeVitalsGraph: React.FC<HomeVitalsGraphProps> = ({
     .slice(0, 10)
     .reverse();
 
-  // Baseline fallback sample points if user has no readings yet
-  const samplePoints: Record<string, { label: string; fullDate: string; v1: number; v2?: number; statusText: string }[]> = {
-    bp: [
-      { label: '6d ago', fullDate: '6 days ago', v1: 124, v2: 82, statusText: 'Normal Blood Pressure' },
-      { label: '5d ago', fullDate: '5 days ago', v1: 122, v2: 80, statusText: 'Optimal Blood Pressure' },
-      { label: '4d ago', fullDate: '4 days ago', v1: 128, v2: 84, statusText: 'Normal Blood Pressure' },
-      { label: '3d ago', fullDate: '3 days ago', v1: 120, v2: 78, statusText: 'Optimal Blood Pressure' },
-      { label: '2d ago', fullDate: '2 days ago', v1: 126, v2: 82, statusText: 'Normal Blood Pressure' },
-      { label: 'Yesterday', fullDate: 'Yesterday', v1: 122, v2: 80, statusText: 'Optimal Blood Pressure' },
-      { label: 'Today', fullDate: 'Today morning', v1: 120, v2: 80, statusText: 'Optimal Blood Pressure' },
-    ],
-    sugar: [
-      { label: '6d ago', fullDate: '6 days ago', v1: 114, statusText: 'Fasting Sugar Normal' },
-      { label: '5d ago', fullDate: '5 days ago', v1: 108, statusText: 'Fasting Sugar Normal' },
-      { label: '4d ago', fullDate: '4 days ago', v1: 122, statusText: 'Normal Sugar' },
-      { label: '3d ago', fullDate: '3 days ago', v1: 110, statusText: 'Fasting Sugar Normal' },
-      { label: '2d ago', fullDate: '2 days ago', v1: 116, statusText: 'Fasting Sugar Normal' },
-      { label: 'Yesterday', fullDate: 'Yesterday', v1: 106, statusText: 'Optimal Glucose' },
-      { label: 'Today', fullDate: 'Today morning', v1: 108, statusText: 'Optimal Glucose' },
-    ],
-    weight: [
-      { label: '6d ago', fullDate: '6 days ago', v1: 73.2, statusText: 'Stable Weight' },
-      { label: '5d ago', fullDate: '5 days ago', v1: 73.0, statusText: 'Stable Weight' },
-      { label: '4d ago', fullDate: '4 days ago', v1: 72.8, statusText: 'Healthy Trend' },
-      { label: '3d ago', fullDate: '3 days ago', v1: 72.5, statusText: 'Healthy Trend' },
-      { label: '2d ago', fullDate: '2 days ago', v1: 72.4, statusText: 'Healthy Trend' },
-      { label: 'Yesterday', fullDate: 'Yesterday', v1: 72.2, statusText: 'Healthy Trend' },
-      { label: 'Today', fullDate: 'Today morning', v1: 72.0, statusText: 'Target Range' },
-    ],
-  };
-
   const hasRealData = tabReadings.length >= 1;
 
+  // Chart data strictly from real readings — empty when no readings exist
   const chartData = hasRealData
     ? tabReadings.map((r) => {
         const d = new Date(r.takenAt);
@@ -81,10 +52,11 @@ export const HomeVitalsGraph: React.FC<HomeVitalsGraphProps> = ({
               ? (r.sugar || 110)
               : (r.weightKg || 70),
           v2: activeTab === 'bp' ? (r.diastolic || 80) : undefined,
+          status: r.status,
           statusText: r.statusText || 'Normal',
         };
       })
-    : samplePoints[activeTab];
+    : [];
 
   // SVG dimensions
   const width = 600;
@@ -151,11 +123,11 @@ export const HomeVitalsGraph: React.FC<HomeVitalsGraphProps> = ({
   const lineStrV2 = pointsV2.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
 
   const areaStrV1 =
-    pointsV1.length > 0
+    pointsV1.length > 1
       ? `${pointsV1[0].x},${height - paddingBottom} ${lineStrV1} ${pointsV1[pointsV1.length - 1].x},${height - paddingBottom}`
       : '';
 
-  const latest = chartData[chartData.length - 1] || { v1: 120, v2: 80, label: 'Today', statusText: 'Normal' };
+  const latest = chartData.length > 0 ? chartData[chartData.length - 1] : null;
   const hoveredPoint = hoveredIndex !== null && pointsV1[hoveredIndex] ? pointsV1[hoveredIndex] : null;
   const hoveredPointV2 = hoveredIndex !== null && pointsV2[hoveredIndex] ? pointsV2[hoveredIndex] : null;
 
@@ -236,17 +208,34 @@ export const HomeVitalsGraph: React.FC<HomeVitalsGraphProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-xs">
         <div className="flex items-center gap-2.5">
           <span className="text-sm font-black text-[#0E1B2C] dark:text-white font-heading">
-            Latest:{' '}
-            {activeTab === 'bp'
-              ? `${latest.v1} / ${latest.v2} mmHg`
-              : activeTab === 'sugar'
-              ? `${latest.v1} mg/dL`
-              : `${latest.v1} kg`}
+            {language === 'hi' ? 'नवीनतम:' : 'Latest:'}{' '}
+            {latest
+              ? (activeTab === 'bp'
+                ? `${latest.v1} / ${latest.v2} mmHg`
+                : activeTab === 'sugar'
+                ? `${latest.v1} mg/dL`
+                : `${latest.v1} kg`)
+              : '—'}
           </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-[#E8F8F1] dark:bg-[#10B981]/25 text-[#147A50] dark:text-[#34D399] font-bold text-[11px] border border-[#10B981]/30">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Optimal Range</span>
-          </span>
+          {latest ? (
+            <span
+              className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md font-bold text-[11px] border ${
+                latest.status === 'red'
+                  ? 'bg-[#FEECEE] dark:bg-[#EF4444]/20 text-[#B0282C] dark:text-[#F87171] border-[#EF4444]/30'
+                  : latest.status === 'amber' || latest.status === 'yellow'
+                  ? 'bg-[#FEF7E6] dark:bg-[#F59E0B]/20 text-[#9A6707] dark:text-[#FBBF24] border-[#F59E0B]/30'
+                  : 'bg-[#E8F8F1] dark:bg-[#10B981]/25 text-[#147A50] dark:text-[#34D399] border-[#10B981]/30'
+              }`}
+            >
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>{latest.statusText || 'Normal'}</span>
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-[#F4F6F9] dark:bg-[#17263A] text-[#7E90A5] dark:text-[#A0B2C6] font-bold text-[11px] border border-black/5 dark:border-white/10">
+              <Clock className="w-3.5 h-3.5" />
+              <span>{language === 'hi' ? 'रीडिंग प्रतीक्षारत (Blank)' : 'Awaiting First Entry (Blank)'}</span>
+            </span>
+          )}
         </div>
 
         <button
@@ -254,13 +243,13 @@ export const HomeVitalsGraph: React.FC<HomeVitalsGraphProps> = ({
           onClick={() => navigate(`/track?tab=${activeTab}`)}
           className="text-xs font-black text-[#12B5A6] hover:underline flex items-center gap-1 cursor-pointer"
         >
-          <span>Full History Log</span>
+          <span>{language === 'hi' ? 'पूर्ण इतिहास लॉग' : 'Full History Log'}</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
       {/* SVG GRAPH CANVAS CONTAINER */}
-      <div className="relative w-full h-52 sm:h-56 bg-[#F9FBFC] dark:bg-[#132032] rounded-2xl p-3 border border-black/5 dark:border-white/10 select-none">
+      <div className="relative w-full h-52 sm:h-56 bg-[#F9FBFC] dark:bg-[#132032] rounded-2xl p-3 border border-black/5 dark:border-white/10 select-none overflow-hidden">
         {/* Normal Safe Zone Background Indicator */}
         <div
           className="absolute left-10 right-10 bg-[#10B981]/8 dark:bg-[#10B981]/15 border-y border-[#10B981]/30 pointer-events-none rounded-sm transition-all"
@@ -274,8 +263,45 @@ export const HomeVitalsGraph: React.FC<HomeVitalsGraphProps> = ({
           </span>
         </div>
 
+        {/* BLANK GRAPH OVERLAY WHEN NO REAL READINGS EXIST */}
+        {!hasRealData && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 z-10 bg-[#F9FBFC]/70 dark:bg-[#132032]/80 backdrop-blur-[1px]">
+            <div className="w-12 h-12 rounded-2xl bg-white dark:bg-[#1A283A] shadow-sm border border-black/5 dark:border-white/10 flex items-center justify-center mb-2">
+              {activeTab === 'bp' ? (
+                <Heart className="w-6 h-6 text-[#FF6B4A]" />
+              ) : activeTab === 'sugar' ? (
+                <Activity className="w-6 h-6 text-[#12B5A6]" />
+              ) : (
+                <Scale className="w-6 h-6 text-[#3B82F6]" />
+              )}
+            </div>
+            <p className="text-sm font-black text-[#0E1B2C] dark:text-white font-heading">
+              {language === 'hi'
+                ? `${memberName} के लिए कोई ${activeTab === 'bp' ? 'रक्तचाप' : activeTab === 'sugar' ? 'शुगर' : 'वजन'} डेटा नहीं है`
+                : `No ${activeTab === 'bp' ? 'Blood Pressure' : activeTab === 'sugar' ? 'Blood Sugar' : 'Weight'} readings yet for ${memberName}`}
+            </p>
+            <p className="text-xs text-[#7E90A5] dark:text-[#A0B2C6] mt-0.5 max-w-sm">
+              {language === 'hi'
+                ? 'ग्राफ खाली है। पहली वास्तविक रीडिंग दर्ज करते ही रुझान चार्ट यहाँ स्वतः बन जाएगा।'
+                : 'Graph is blank. As soon as you log real measurements, your real vital trend curve will appear here.'}
+            </p>
+            <button
+              type="button"
+              onClick={() => navigate(`/track?tab=${activeTab}`)}
+              className="mt-3 px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FF6B4A] to-[#FF8A3D] text-white text-xs font-black shadow-sm hover:opacity-95 active:scale-95 cursor-pointer flex items-center gap-1.5"
+            >
+              <Plus className="w-3.5 h-3.5" strokeWidth={3} />
+              <span>
+                {language === 'hi'
+                  ? `+ ${activeTab === 'bp' ? 'रक्तचाप' : activeTab === 'sugar' ? 'शुगर' : 'वजन'} दर्ज करें`
+                  : `+ Record ${activeTab === 'bp' ? 'BP' : activeTab === 'sugar' ? 'Sugar' : 'Weight'}`}
+              </span>
+            </button>
+          </div>
+        )}
+
         {/* ACTIVE HOVER TOOLTIP */}
-        {hoveredPoint && (
+        {hasRealData && hoveredPoint && (
           <div
             className="absolute z-20 pointer-events-none -translate-x-1/2 -translate-y-full px-3 py-1.5 rounded-xl bg-[#0E1B2C] dark:bg-[#1C2C40] text-white shadow-xl border border-white/20 text-xs font-bold whitespace-nowrap"
             style={{
@@ -334,11 +360,37 @@ export const HomeVitalsGraph: React.FC<HomeVitalsGraphProps> = ({
             strokeDasharray="4 4"
           />
 
+          {/* Single Reading Helper baseline */}
+          {hasRealData && chartData.length === 1 && pointsV1[0] && (
+            <line
+              x1={paddingX}
+              y1={pointsV1[0].y}
+              x2={width - paddingX}
+              y2={pointsV1[0].y}
+              stroke={activeTab === 'bp' ? '#FF6B4A' : activeTab === 'sugar' ? '#12B5A6' : '#3B82F6'}
+              strokeWidth="1.5"
+              strokeDasharray="3 3"
+              strokeOpacity="0.5"
+            />
+          )}
+          {hasRealData && chartData.length === 1 && activeTab === 'bp' && pointsV2[0] && (
+            <line
+              x1={paddingX}
+              y1={pointsV2[0].y}
+              x2={width - paddingX}
+              y2={pointsV2[0].y}
+              stroke="#12B5A6"
+              strokeWidth="1.5"
+              strokeDasharray="3 3"
+              strokeOpacity="0.5"
+            />
+          )}
+
           {/* Area fill for Primary Metric */}
           {areaStrV1 && <polygon fill="url(#vitals-primary-grad)" points={areaStrV1} />}
 
           {/* Secondary Metric line (Diastolic BP) */}
-          {activeTab === 'bp' && lineStrV2 && (
+          {activeTab === 'bp' && lineStrV2 && chartData.length > 1 && (
             <polyline
               fill="none"
               stroke="#12B5A6"
@@ -350,7 +402,7 @@ export const HomeVitalsGraph: React.FC<HomeVitalsGraphProps> = ({
           )}
 
           {/* Primary Metric line */}
-          {lineStrV1 && (
+          {lineStrV1 && chartData.length > 1 && (
             <polyline
               fill="none"
               stroke={activeTab === 'bp' ? '#FF6B4A' : activeTab === 'sugar' ? '#12B5A6' : '#3B82F6'}

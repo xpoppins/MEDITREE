@@ -34,7 +34,7 @@ export const Settings: React.FC = () => {
     isPremium: boolean;
     premiumUntil: string | null;
     price: { amount: number; offer: boolean; regular: number };
-  }>({ isPremium: false, premiumUntil: null, price: { amount: 1100, offer: true, regular: 9900 } });
+  }>({ isPremium: false, premiumUntil: null, price: { amount: 1100, offer: true, regular: 59900 } });
   const [paying, setPaying] = useState(false);
 
   useEffect(() => {
@@ -272,8 +272,8 @@ export const Settings: React.FC = () => {
           </h3>
           <p className="text-sm font-semibold text-[#1F2933]/70 dark:text-[#A0B2C6] mb-3">
             {language === 'hi'
-              ? 'इंटरनेट धीमा होने पर भी तेज़ खुलता है और स्क्रीन पर ऐप आइकन आ जाता है।'
-              : 'Add to home screen for instant elder-friendly 1-tap access.'}
+              ? 'जल्द ही'
+              : 'Comming Soon.'}
           </p>
           <PWAInstallButton />
         </div>
@@ -299,21 +299,20 @@ export const Settings: React.FC = () => {
           </div>
         )}
 
-        {/* 6. SWITCH DEMO ROLE */}
-        <div className="p-4 rounded-2xl bg-white dark:bg-[#0E1B2C] border border-[#0F5C5C]/20 dark:border-white/10 flex items-center justify-between">
+        {/* Account Information */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0E1B2C] border border-[#0F5C5C]/20 dark:border-white/10 flex items-center justify-between">
           <div>
-            <p className="text-xs font-bold uppercase text-[#1F2933]/60 dark:text-[#7E90A5]">Role Test</p>
-            <p className="text-base font-bold text-[#1F2933] dark:text-white">
-              Active as: <span className="text-[#0F5C5C] dark:text-[#5EEAD4] font-black">{user?.name} ({user?.role})</span>
+            <p className="text-xs font-bold uppercase text-[#1F2933]/60 dark:text-[#7E90A5]">
+              {language === 'hi' ? 'सक्रिय खाता' : 'Signed In As'}
             </p>
+            <p className="text-base font-bold text-[#1F2933] dark:text-white mt-0.5">
+              <span className="text-[#0F5C5C] dark:text-[#5EEAD4] font-black">{user?.name}</span>
+              <span className="text-xs text-[#7E90A5] ml-2 font-semibold">
+                ({isManager ? (language === 'hi' ? 'फैमिली मैनेजर' : 'Family Manager') : (language === 'hi' ? 'फैमिली सदस्य' : 'Family Member')})
+              </span>
+            </p>
+            <p className="text-xs text-[#7E90A5] mt-0.5 font-mono">{user?.email}</p>
           </div>
-          <button
-            type="button"
-            onClick={() => switchDemo(isManager ? 'member' : 'manager')}
-            className="px-4 py-2 rounded-xl bg-[#0F5C5C] text-white font-bold text-sm cursor-pointer"
-          >
-            {isManager ? 'Switch to Papa' : 'Switch to Manager'}
-          </button>
         </div>
 
         {/* 7. LOG OUT */}

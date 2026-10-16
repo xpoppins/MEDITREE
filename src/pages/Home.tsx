@@ -54,10 +54,20 @@ export const Home: React.FC = () => {
   const [premiumStatus, setPremiumStatus] = useState<{
     isPremium: boolean;
     premiumUntil: string | null;
+    used: number;
+    freeLimit: number;
     price: { amount: number; offer: boolean; regular: number };
     lastPayment: { amount: number; paymentId: string; paidAt: string; orderId: string } | null;
     memberSince: string | null;
-  }>({ isPremium: false, premiumUntil: null, price: { amount: 1100, offer: true, regular: 9900 }, lastPayment: null, memberSince: null });
+  }>({
+    isPremium: false,
+    premiumUntil: null,
+    used: 0,
+    freeLimit: 5,
+    price: { amount: 1100, offer: true, regular: 59900 },
+    lastPayment: null,
+    memberSince: null,
+  });
   const [paying, setPaying] = useState(false);
 
   // Medicine & Prescription Modals
@@ -125,8 +135,11 @@ export const Home: React.FC = () => {
   const latestWeight = readings.find((r) => r.type === 'weight');
   const latestPulse = readings.find((r) => r.type === 'pulse' || r.pulse);
 
-  // BMI calculated
-  const bmiData = bmiInfo(latestWeight?.weightKg || 73.5, currentMember?.heightCm || 168);
+  // BMI calculated only when weight & height exist
+  const hasBmiInput = !!(latestWeight?.weightKg && currentMember?.heightCm);
+  const bmiData = hasBmiInput
+    ? bmiInfo(latestWeight!.weightKg!, currentMember!.heightCm!)
+    : null;
 
   // Health Score (0-100)
   const scoreDetails: HealthScoreDetails = calculateHealthScore(readings, 5);
@@ -140,15 +153,15 @@ export const Home: React.FC = () => {
 
   // Friendly time ago
   const formatTimeAgo = (iso?: string) => {
-    if (!iso) return 'No readings yet';
+    if (!iso) return language === 'hi' ? 'कोई रीडिंग नहीं' : 'No readings yet';
     const diffHours = Math.floor((Date.now() - new Date(iso).getTime()) / (1000 * 60 * 60));
-    if (diffHours < 1) return 'Just now';
-    if (diffHours < 24) return `${diffHours} hours ago`;
+    if (diffHours < 1) return language === 'hi' ? 'अभी-अभी' : 'Just now';
+    if (diffHours < 24) return language === 'hi' ? `${diffHours} घंटे पहले` : `${diffHours} hours ago`;
     const days = Math.floor(diffHours / 24);
-    return `${days} days ago`;
+    return language === 'hi' ? `${days} दिन पहले` : `${days} days ago`;
   };
 
-  // Sparklines
+  // Sparklines from real readings only (empty when no real readings)
   const bpSparkline = readings
     .filter((r) => r.type === 'bp' && r.systolic)
     .slice(0, 7)
@@ -159,6 +172,21 @@ export const Home: React.FC = () => {
     .filter((r) => r.type === 'sugar' && r.sugar)
     .slice(0, 7)
     .map((r) => r.sugar!)
+    .reverse();
+
+  const weightSparkline = readings
+    .filter((r) => r.type === 'weight' && r.weightKg)
+    .slice(0, 7)
+    .map((r) => r.weightKg!)
+    .reverse();
+
+  const bmiSparkline = readings
+    .filter((r) => r.type === 'weight' && r.weightKg && currentMember?.heightCm)
+    .slice(0, 7)
+    .map((r) => {
+      const hM = currentMember!.heightCm! / 100;
+      return Number((r.weightKg! / (hM * hM)).toFixed(1));
+    })
     .reverse();
 
   const getGreeting = () => {
@@ -218,7 +246,7 @@ export const Home: React.FC = () => {
             <button
               type="button"
               onClick={() => handleOpenAddMedForMember(activeMemberId)}
-              className="flex-1 sm:flex-none justify-center py-2 px-3 rounded-2xl bg-[#0E1B2C] dark:bg-white text-white dark:text-[#0E1B2C] text-xs font-black flex items-center gap-1.5 shadow-2xs hover:opacity-90 active:scale-95 cursor-pointer shrink-0"
+              className="flex-1 sm:flex-none justify-center py-2 px-3 rounded-2xl bg-[#0E1B2C] dark:bg-black text-white border border-transparent dark:border-white/20 text-xs font-black flex items-center gap-1.5 shadow-2xs hover:opacity-90 active:scale-95 cursor-pointer shrink-0"
               title={`Add medicine for ${currentMember?.name}`}
             >
               <Pill className="w-3.5 h-3.5 text-[#12B5A6]" />
@@ -272,7 +300,7 @@ export const Home: React.FC = () => {
                 <h3 className="text-xl font-black text-[#0E1B2C] dark:text-white font-heading">
                   {language === 'hi' ? 'दैनिक स्वास्थ्य मापदंड' : 'Recent Vitals'}
                 </h3>
-                <span className="text-xs font-bold text-[#7E90A5]">
+                <span className="text-xs font-bold text-[#7E90A5] dark:text-[#A0B2C6]">
                   {currentMember?.name}
                 </span>
               </div>
@@ -283,11 +311,11 @@ export const Home: React.FC = () => {
                   type="bp"
                   title="Blood Pressure"
                   titleHi="रक्तचाप"
-                  value={latestBp ? `${latestBp.systolic}/${latestBp.diastolic}` : '120/80'}
+                  value={latestBp ? `${latestBp.systolic}/${latestBp.diastolic}` : '—'}
                   unit="mmHg"
                   status={latestBp?.status || 'green'}
                   timeAgo={formatTimeAgo(latestBp?.takenAt)}
-                  sparklineData={bpSparkline.length ? bpSparkline : [120, 125, 122, 128, 124, 126, 120]}
+                  sparklineData={bpSparkline}
                   onClick={() => navigate('/track?tab=bp')}
                 />
 
@@ -296,11 +324,11 @@ export const Home: React.FC = () => {
                   type="sugar"
                   title="Blood Sugar"
                   titleHi="ब्लड शुगर"
-                  value={latestSugar ? `${latestSugar.sugar}` : '108'}
+                  value={latestSugar ? `${latestSugar.sugar}` : '—'}
                   unit="mg/dL"
                   status={latestSugar?.status || 'green'}
                   timeAgo={formatTimeAgo(latestSugar?.takenAt)}
-                  sparklineData={sugarSparkline.length ? sugarSparkline : [110, 115, 108, 120, 114, 110, 108]}
+                  sparklineData={sugarSparkline}
                   onClick={() => navigate('/track?tab=sugar')}
                 />
 
@@ -309,24 +337,28 @@ export const Home: React.FC = () => {
                   type="weight"
                   title="Weight"
                   titleHi="वजन"
-                  value={latestWeight ? `${latestWeight.weightKg}` : '72.0'}
+                  value={latestWeight ? `${latestWeight.weightKg}` : '—'}
                   unit="kg"
-                  status="green"
+                  status={latestWeight?.status || 'green'}
                   timeAgo={formatTimeAgo(latestWeight?.takenAt)}
-                  sparklineData={[73.2, 73.0, 72.8, 72.5, 72.4, 72.2, 72.0]}
+                  sparklineData={weightSparkline}
                   onClick={() => navigate('/track?tab=weight')}
                 />
 
                 {/* Asian BMI */}
                 <VitalCard
-                  type="weight"
+                  type="bmi"
                   title="Asian BMI"
                   titleHi="बीएमआई"
-                  value={bmiData ? `${bmiData.bmi}` : '26.0'}
+                  value={bmiData ? `${bmiData.bmi}` : '—'}
                   unit="kg/m²"
-                  status={bmiData?.status || 'amber'}
-                  timeAgo="Height: 168 cm"
-                  sparklineData={[26.3, 26.2, 26.1, 26.1, 26.0, 26.0, 26.0]}
+                  status={bmiData?.status || 'green'}
+                  timeAgo={
+                    currentMember?.heightCm
+                      ? `Height: ${currentMember.heightCm} cm`
+                      : (language === 'hi' ? 'वजन और कद दर्ज करें' : 'Enter weight & height')
+                  }
+                  sparklineData={bmiSparkline}
                   onClick={() => navigate('/me')}
                 />
               </div>
@@ -367,6 +399,8 @@ export const Home: React.FC = () => {
             <ProSidebar
               isPremium={premiumStatus.isPremium}
               premiumUntil={premiumStatus.premiumUntil}
+              used={premiumStatus.used}
+              freeLimit={premiumStatus.freeLimit}
               price={premiumStatus.price}
               onPay={handlePay}
               paying={paying}

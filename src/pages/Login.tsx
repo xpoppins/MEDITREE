@@ -178,36 +178,7 @@ export const Login: React.FC = () => {
           </div>
         </form>
 
-        {/* Demo Fast Fills */}
-        <div className="mt-6 pt-4 border-t border-black/8 dark:border-white/8">
-          <p className="text-[11px] font-black uppercase text-[#7E90A5] mb-2 text-center">
-            Tap a demo account to autofill:
-          </p>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <button
-              type="button"
-              onClick={() => {
-                setEmail('rakesh@sharma.in');
-                setPassword('password123');
-              }}
-              className="p-2.5 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-left cursor-pointer hover:border-[#FF6B4A] transition-all"
-            >
-              <p className="font-black text-[#0E1B2C] dark:text-white">Rakesh (Manager)</p>
-              <p className="text-[10px] text-[#7E90A5]">rakesh@sharma.in</p>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setEmail('papa@sharma.in');
-                setPassword('password123');
-              }}
-              className="p-2.5 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-left cursor-pointer hover:border-[#12B5A6] transition-all"
-            >
-              <p className="font-black text-[#0E1B2C] dark:text-white">Papa (Member)</p>
-              <p className="text-[10px] text-[#7E90A5]">papa@sharma.in</p>
-            </button>
-          </div>
-        </div>
+
 
         <div className="mt-6 pt-4 border-t border-black/8 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs font-bold text-[#7E90A5]">
           <span>New to MEDITREE?</span>

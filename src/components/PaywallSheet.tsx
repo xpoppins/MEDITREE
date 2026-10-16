@@ -101,11 +101,12 @@ export const PaywallSheet: React.FC<PaywallSheetProps> = ({
 
         <div className="space-y-2 mb-6">
           {[
-            language === 'hi' ? 'अलिमिटेड रीडिंग्स - कोई सीमा नहीं' : 'Unlimited readings - no cap',
-            language === 'hi' ? 'पूरे परिवार के लिए प्रीमियम' : 'Premium for whole family',
-            language === 'hi' ? 'प्रायोरिटी सपोर्ट' : 'Priority support',
+            language === 'hi' ? 'अनंत रीडिंग्स - कोई सीमा नहीं' : 'Infinite Vital Readings (No Cap)',
+            language === 'hi' ? 'परिवार के सभी सदस्यों को जोड़ें' : 'Add ALL Family Members & Profiles',
+            language === 'hi' ? 'पूर्ण ट्रैक कंट्रोल व सेफ ज़ोन' : 'Complete Track Control & Safe Bands',
+            language === 'hi' ? 'डॉक्टर प्रिस्क्रिप्शन व रिपोर्ट एक्सपोर्ट' : 'Official Doctor Rx & PDF Export',
           ].map((perk, idx) => (
-            <div key={idx} className="flex items-center gap-2 text-sm font-semibold text-[#0E1B2C] dark:text-white">
+            <div key={idx} className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#0E1B2C] dark:text-white">
               <Check className="w-4 h-4 text-[#12B5A6] shrink-0" />
               <span>{perk}</span>
             </div>

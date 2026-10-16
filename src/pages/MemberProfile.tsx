@@ -51,8 +51,8 @@ export const MemberProfile: React.FC = () => {
   const [appTime, setAppTime] = useState('');
 
   // Emergency contact editing
-  const [ecName, setEcName] = useState(member?.emergencyContact?.name || 'Rakesh Sharma');
-  const [ecPhone, setEcPhone] = useState(member?.emergencyContact?.phone || '+91 98765 43210');
+  const [ecName, setEcName] = useState(member?.emergencyContact?.name || '');
+  const [ecPhone, setEcPhone] = useState(member?.emergencyContact?.phone || '');
   const [ecSaved, setEcSaved] = useState(false);
 
   const loadMeds = () => {
@@ -65,6 +65,10 @@ export const MemberProfile: React.FC = () => {
     if (member) {
       api.getAppointments(member.id).then(setAppointments);
       loadMeds();
+      if (member.emergencyContact) {
+        setEcName(member.emergencyContact.name);
+        setEcPhone(member.emergencyContact.phone);
+      }
     }
   }, [member]);
 

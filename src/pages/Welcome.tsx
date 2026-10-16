@@ -1,23 +1,11 @@
-import { Heart, Sparkles, UserPlus, Users } from 'lucide-react';
+import { UserPlus, Users } from 'lucide-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { usePreferences } from '../context/PreferencesContext';
 
 export const Welcome: React.FC = () => {
   const navigate = useNavigate();
-  const { switchDemo } = useAuth();
   const { language } = usePreferences();
-
-  const handleDemoManager = async () => {
-    await switchDemo('manager');
-    navigate('/');
-  };
-
-  const handleDemoMember = async () => {
-    await switchDemo('member');
-    navigate('/');
-  };
 
   return (
     <div className="min-h-screen bg-[#F4F6F9] dark:bg-[#08101A] flex flex-col justify-between p-6 md:p-8 max-w-md md:max-w-lg mx-auto">
@@ -85,28 +73,13 @@ export const Welcome: React.FC = () => {
         </div>
       </div>
 
-      {/* Fast Demo Testing Area for Evaluator */}
-      <div className="card-wellness p-4 bg-white text-center shadow-xs">
-        <div className="flex items-center justify-center gap-1.5 text-[11px] uppercase tracking-wider font-extrabold text-[#7E90A5] mb-2.5">
-          <Sparkles className="w-3.5 h-3.5 text-[#FF6B4A]" />
-          <span>Instant 1-Tap Demo Mode</span>
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={handleDemoManager}
-            className="py-2.5 px-3 rounded-xl bg-[#0E1B2C] text-white font-black text-xs hover:bg-[#17263A] transition-colors cursor-pointer"
-          >
-            👨‍💼 Manager (Rakesh)
-          </button>
-          <button
-            type="button"
-            onClick={handleDemoMember}
-            className="py-2.5 px-3 rounded-xl bg-[#FFF0E8] text-[#FF6B4A] font-black text-xs hover:bg-[#FFE3D4] transition-colors cursor-pointer"
-          >
-            👴 Elder (Papa)
-          </button>
-        </div>
+      {/* Trust & Privacy Badge */}
+      <div className="pt-2 pb-4 text-center">
+        <p className="text-xs font-bold text-[#7E90A5]">
+          {language === 'hi'
+            ? '१००% सुरक्षित और निजी • पूरे परिवार के स्वास्थ्य की देखभाल'
+            : '100% Private & Encrypted • Built for Family Health Care'}
+        </p>
       </div>
     </div>
   );

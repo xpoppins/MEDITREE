@@ -162,7 +162,7 @@ export interface FoodItem {
 
 export interface HealthScoreDetails {
   score: number;
-  category: 'Excellent' | 'Good' | 'Fair' | 'Needs Attention';
+  category: 'New Member' | 'Excellent' | 'Good' | 'Fair' | 'Needs Attention';
   explanation: string;
   streakDays: number;
   redCount: number;

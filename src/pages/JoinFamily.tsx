@@ -137,7 +137,7 @@ export const JoinFamily: React.FC = () => {
               ))}
             </div>
             <p className="text-[11px] font-bold text-[#7E90A5] mt-1">
-              Default demo code: <span className="text-[#FF6B4A] font-mono font-black">K7P3QX</span>
+              Enter the 6-character invite code provided by your Family Manager.
             </p>
           </div>
 

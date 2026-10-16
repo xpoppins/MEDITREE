@@ -35,10 +35,12 @@ export const VitalCard: React.FC<VitalCardProps> = ({
   unit,
   status,
   timeAgo,
-  sparklineData = [120, 122, 119, 124, 121, 125, 122],
+  sparklineData = [],
   onClick,
 }) => {
   const { language } = usePreferences();
+
+  const isBlankValue = !value || value === '—' || value === '--' || value === '--/--';
 
   // Status Chip config with high dark-mode contrast
   const normalizedStatus = status === 'yellow' ? 'amber' : (status || 'green');
@@ -78,7 +80,16 @@ export const VitalCard: React.FC<VitalCardProps> = ({
     },
   };
 
-  const statusConfig = configs[normalizedStatus] || configs.green;
+  const statusConfig = isBlankValue
+    ? {
+        bg: 'bg-[#F1F4F8] dark:bg-[#1A283A]',
+        text: 'text-[#7E90A5] dark:text-[#94A3B8]',
+        border: 'border-black/10 dark:border-white/10',
+        label: language === 'hi' ? 'प्रतीक्षारत' : 'Awaiting',
+        stroke: '#7E90A5',
+        icon: <Clock className="w-3.5 h-3.5 text-[#7E90A5]" strokeWidth={2.5} />,
+      }
+    : (configs[normalizedStatus] || configs.green);
 
   // Vital icon
   const getIcon = () => {
@@ -97,10 +108,42 @@ export const VitalCard: React.FC<VitalCardProps> = ({
 
   // Dedicated Full-Width High-Contrast Sparkline Graph
   const renderFullSparkline = () => {
-    const data = sparklineData && sparklineData.length >= 2
-      ? sparklineData
-      : [120, 122, 119, 124, 121, 125, 122];
+    const hasData = sparklineData && sparklineData.length > 0;
 
+    if (!hasData) {
+      return (
+        <div className="w-full mt-2.5 mb-1 pt-1.5 border-t border-black/5 dark:border-white/5">
+          <div className="flex items-center justify-between text-[10px] font-bold text-[#7E90A5] mb-1">
+            <span>{language === 'hi' ? 'कोई रुझान नहीं' : 'No Trend Yet'}</span>
+            <span className="text-[#12B5A6] font-extrabold">{language === 'hi' ? 'खाली ग्राफ' : 'Blank'}</span>
+          </div>
+          <div className="relative w-full h-11 flex items-center justify-center">
+            <div className="w-full border-t border-dashed border-black/15 dark:border-white/15" />
+            <span className="absolute px-2.5 py-0.5 rounded-full bg-[#F4F6F9] dark:bg-[#132032] text-[9.5px] font-extrabold text-[#7E90A5] dark:text-[#A0B2C6] border border-black/5 dark:border-white/10">
+              {language === 'hi' ? 'रीडिंग दर्ज करें' : 'Record reading'}
+            </span>
+          </div>
+        </div>
+      );
+    }
+
+    if (sparklineData.length === 1) {
+      const singleVal = sparklineData[0];
+      return (
+        <div className="w-full mt-2.5 mb-1 pt-1.5 border-t border-black/5 dark:border-white/5">
+          <div className="flex items-center justify-between text-[10px] font-bold text-[#7E90A5] mb-1">
+            <span>{language === 'hi' ? '1 रीडिंग' : '1 Reading Logged'}</span>
+            <span className="font-mono text-[#0E1B2C] dark:text-white font-extrabold">{singleVal} {unit}</span>
+          </div>
+          <div className="relative w-full h-11 flex items-center justify-center">
+            <div className="w-full border-t border-dotted border-[#12B5A6]/40" />
+            <div className="absolute w-3.5 h-3.5 rounded-full bg-[#12B5A6] border-2 border-white dark:border-[#0E1B2C] shadow-sm animate-pulse" />
+          </div>
+        </div>
+      );
+    }
+
+    const data = sparklineData;
     const min = Math.min(...data);
     const max = Math.max(...data);
     const range = max - min || 1;
@@ -132,7 +175,7 @@ export const VitalCard: React.FC<VitalCardProps> = ({
             )}
             <span>Recent Trend</span>
           </span>
-          <span className="font-mono">
+          <span className="font-mono font-bold text-[#0E1B2C] dark:text-white">
             {min}–{max} {unit}
           </span>
         </div>
@@ -231,10 +274,10 @@ export const VitalCard: React.FC<VitalCardProps> = ({
       </div>
 
       {/* Footer: Time Ago + Click to view */}
-      <div className="pt-2 border-t border-black/6 dark:border-white/10 flex items-center justify-between gap-2 mt-1 text-[11px] font-bold text-[#7E90A5]">
+      <div className="pt-2 border-t border-black/6 dark:border-white/10 flex items-center justify-between gap-2 mt-1 text-[11px] font-bold text-[#7E90A5] dark:text-[#A0B2C6]">
         <span className="truncate">{timeAgo}</span>
         {onClick && (
-          <span className="flex items-center gap-0.5 text-[#12B5A6] hover:underline shrink-0">
+          <span className="flex items-center gap-0.5 text-[#12B5A6] dark:text-[#5EEAD4] hover:underline shrink-0">
             <span>Chart</span>
             <ArrowRight className="w-3 h-3" />
           </span>
