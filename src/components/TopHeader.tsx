@@ -27,7 +27,7 @@ import { EmergencyButton } from './EmergencyButton';
 
 export const TopHeader: React.FC = () => {
   const navigate = useNavigate();
-  const { user, isManager, switchDemo, logout } = useAuth();
+  const { user, isManager, logout } = useAuth();
   const { textSize, setTextSize, language, setLanguage, isDarkMode, toggleDarkMode } = usePreferences();
   const [alerts, setAlerts] = useState<FamilyAlert[]>([]);
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -51,39 +51,38 @@ export const TopHeader: React.FC = () => {
     setLanguage(language === 'en' ? 'hi' : 'en');
   };
 
-  const cycleTextSize = () => {
-    if (textSize === 'A') setTextSize('A+');
-    else if (textSize === 'A+') setTextSize('A++');
-    else setTextSize('A');
-  };
-
   return (
-    <header className="w-full relative z-30 bg-[#FFF9F0] dark:bg-[#08101A] border-b border-black/8 dark:border-white/10 px-3 sm:px-6 py-2.5 sm:py-3 transition-colors shadow-2xs overflow-x-auto overflow-y-hidden scrollbar-none">
+    <header className="w-full relative z-30 bg-[#FFF9F0] dark:bg-[#08101A] border-b border-black/8 dark:border-white/10 px-4 sm:px-6 py-3.5 sm:py-4 transition-colors shadow-2xs overflow-x-auto overflow-y-hidden scrollbar-none">
       {/* Toast Feedback Notification */}
       {toastMessage && (
         <div className="absolute top-2 left-1/2 -translate-x-1/2 z-50 px-3 py-1 rounded-full bg-[#0E1B2C] text-white dark:bg-white dark:text-[#0E1B2C] text-xs font-black shadow-lg animate-in fade-in slide-in-from-top-1 duration-200 pointer-events-none">
           {toastMessage}
         </div>
       )}
-      <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-4 w-full min-w-max">
+      <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 sm:gap-4 w-full min-w-max">
         {/* Brand Lockup */}
         <div
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 sm:gap-2.5 cursor-pointer shrink-0 min-w-0"
+          className="flex items-center gap-2.5 sm:gap-3 cursor-pointer shrink-0 min-w-0"
         >
           <img
             src="/logo.svg"
             alt="MEDITREE"
-            className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl shadow-xs shrink-0 object-contain"
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl shadow-xs shrink-0 object-contain"
           />
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <span className="text-base sm:text-xl font-black font-heading text-[#0E1B2C] dark:text-white leading-none tracking-tight">
+              <span className="text-lg sm:text-2xl font-black font-heading text-[#0E1B2C] dark:text-white leading-none tracking-tight">
                 MEDITREE
               </span>
+              {isPremium && (
+                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-[#FF6B4A] bg-[#FFF0E8] dark:bg-[#FF6B4A]/20 px-2 py-0.5 rounded shrink-0">
+                  PRO
+                </span>
+              )}
             </div>
             {user && (
-              <p className="text-[10px] sm:text-[11px] font-bold text-[#7E90A5] truncate max-w-[90px] sm:max-w-[140px] mt-0.5">
+              <p className="text-xs sm:text-sm font-bold text-[#7E90A5] truncate max-w-[110px] sm:max-w-[150px] mt-0.5">
                 {user.name.split(' ')[0]} ({isManager ? 'Manager' : 'Member'})
               </p>
             )}
@@ -172,7 +171,7 @@ export const TopHeader: React.FC = () => {
         </nav>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           {/* Emergency SOS Button */}
           <EmergencyButton />
 
@@ -181,17 +180,15 @@ export const TopHeader: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowAlertModal(true)}
-              className="relative w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 flex items-center justify-center text-[#E5484D] cursor-pointer shrink-0"
+              className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 flex items-center justify-center text-[#E5484D] cursor-pointer shrink-0"
               title="View Family Health Alerts"
             >
-              <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-bounce" />
-              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-[#E5484D] text-white text-[8px] sm:text-[9px] font-black flex items-center justify-center shadow-xs">
+              <Bell className="w-4 h-4 sm:w-4.5 sm:h-4.5 animate-bounce" />
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#E5484D] text-white text-[9px] font-black flex items-center justify-center shadow-xs">
                 {alerts.length}
               </span>
             </button>
           )}
-
-
 
           {/* Text Size Cycle */}
           <button
@@ -206,7 +203,7 @@ export const TopHeader: React.FC = () => {
               setToastMessage(language === 'hi' ? `अक्षर का आकार: ${label}` : `Text Size: ${label}`);
               setTimeout(() => setToastMessage(null), 2000);
             }}
-            className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-[#0E1B2C] dark:text-white flex items-center justify-center font-heading font-black text-[10px] sm:text-xs cursor-pointer shrink-0 active:scale-95 shadow-2xs hover:border-[#12B5A6] transition-colors"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-[#0E1B2C] dark:text-white flex items-center justify-center font-heading font-black text-xs sm:text-sm cursor-pointer shrink-0 active:scale-95 shadow-2xs hover:border-[#12B5A6] transition-colors"
             title={
               language === 'hi'
                 ? `अक्षर का आकार: ${textSize}। बड़ा करने के लिए टैप करें (A -> A+ -> A++)।`
@@ -221,7 +218,7 @@ export const TopHeader: React.FC = () => {
           <button
             type="button"
             onClick={toggleLanguage}
-            className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-[#0E1B2C] dark:text-white flex items-center justify-center font-heading font-black text-[10px] sm:text-xs cursor-pointer shrink-0 active:scale-95"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-[#0E1B2C] dark:text-white flex items-center justify-center font-heading font-black text-xs sm:text-sm cursor-pointer shrink-0 active:scale-95"
             title={language === 'en' ? 'हिंदी में बदलें' : 'Switch to English'}
           >
             {language === 'en' ? 'हिं' : 'EN'}
@@ -231,13 +228,13 @@ export const TopHeader: React.FC = () => {
           <button
             type="button"
             onClick={toggleDarkMode}
-            className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-[#0E1B2C] dark:text-white flex items-center justify-center cursor-pointer shrink-0 active:scale-95"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-[#0E1B2C] dark:text-white flex items-center justify-center cursor-pointer shrink-0 active:scale-95"
             title="Toggle theme"
           >
             {isDarkMode ? (
-              <Sun className="w-3.5 h-3.5 text-[#FFB020]" />
+              <Sun className="w-4 h-4 text-[#FFB020]" />
             ) : (
-              <Moon className="w-3.5 h-3.5 text-[#7E90A5]" />
+              <Moon className="w-4 h-4 text-[#7E90A5]" />
             )}
           </button>
 
@@ -249,10 +246,10 @@ export const TopHeader: React.FC = () => {
                 logout();
                 navigate('/welcome');
               }}
-              className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-[#7E90A5] hover:text-[#E5484D] dark:hover:text-[#FF8080] flex items-center justify-center cursor-pointer shrink-0 active:scale-95 transition-colors"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white dark:bg-[#17263A] border border-black/10 dark:border-white/10 text-[#7E90A5] hover:text-[#E5484D] dark:hover:text-[#FF8080] flex items-center justify-center cursor-pointer shrink-0 active:scale-95 transition-colors"
               title="Sign Out / Change Family"
             >
-              <LogOut className="w-3.5 h-3.5" />
+              <LogOut className="w-4 h-4" />
             </button>
           )}
         </div>

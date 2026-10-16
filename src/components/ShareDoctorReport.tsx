@@ -83,7 +83,7 @@ Generated via MEDITREE.`;
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/70 backdrop-blur-xs overflow-y-auto">
       <div className="w-full max-w-2xl bg-white dark:bg-[#0E1B2C] rounded-[28px] border-2 border-[#0E1B2C]/20 dark:border-white/10 shadow-2xl p-5 md:p-7 relative my-auto max-h-[90vh] overflow-y-auto">
         {/* Actions bar */}
-        <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-black/10 dark:border-white/10">
+        <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-black/10 dark:border-white/10 no-print">
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -113,7 +113,7 @@ Generated via MEDITREE.`;
         </div>
 
         {/* TIME RANGE SELECTOR */}
-        <div className="mb-5 p-3 rounded-2xl bg-[#F4F6F9] dark:bg-[#17263A] border border-black/8 dark:border-white/10 flex items-center justify-between gap-2 flex-wrap">
+        <div className="mb-5 p-3 rounded-2xl bg-[#F4F6F9] dark:bg-[#17263A] border border-black/8 dark:border-white/10 flex items-center justify-between gap-2 flex-wrap no-print">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-[#FF6B4A]" />
             <span className="text-xs font-black text-[#0E1B2C] dark:text-white">
