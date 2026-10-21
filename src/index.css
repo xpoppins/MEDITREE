@@ -334,11 +334,22 @@ div#root:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-t
 }
 
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm;
+  }
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
   body * {
-    visibility: hidden !important;
+    visibility: hidden;
   }
   #doctor-printable-area, #doctor-printable-area * {
-    visibility: visible !important;
+    visibility: visible;
   }
   #doctor-printable-area {
     position: absolute !important;
@@ -349,6 +360,7 @@ div#root:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-t
     color: #000000 !important;
     padding: 0 !important;
     margin: 0 !important;
+    overflow: visible !important;
   }
   .no-print {
     display: none !important;
