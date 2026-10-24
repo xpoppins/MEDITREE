@@ -32,6 +32,9 @@ async function activate(orderId, paymentId) {
 
 exports.status = async (req, res, next) => {
   try {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     const family = await Family.findById(req.user.familyId);
     const used = await Reading.countDocuments({ familyId: req.user.familyId });
     const lastPayment = await Payment.findOne({ familyId: req.user.familyId, status: 'paid' })
@@ -56,9 +59,14 @@ exports.status = async (req, res, next) => {
 
 exports.createOrder = async (req, res, next) => {
   try {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     const price = currentPrice();
+    const reqAmount = req.body?.amount && Number(req.body.amount) >= 11100 ? Number(req.body.amount) : null;
+    const finalAmount = reqAmount || (price.amount < 11100 ? 11100 : price.amount);
     const order = await rzp.orders.create({
-      amount: price.amount,
+      amount: finalAmount,
       currency: 'INR',
       receipt: 'rcpt_' + crypto.randomBytes(8).toString('hex'),
       notes: { familyId: String(req.user.familyId), userId: String(req.user._id) },
@@ -67,7 +75,7 @@ exports.createOrder = async (req, res, next) => {
       familyId: req.user.familyId,
       userId: req.user._id,
       orderId: order.id,
-      amount: price.amount,
+      amount: finalAmount,
     });
     res.json({
       orderId: order.id,

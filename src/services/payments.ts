@@ -50,7 +50,10 @@ export async function getPaymentStatus() {
 }
 
 export async function createOrder() {
-  const order = await apiFetch('/payments/create-order', { method: 'POST' });
+  const order = await apiFetch('/payments/create-order', {
+    method: 'POST',
+    body: JSON.stringify({ amount: OFFER_PRICE_PAISE, plan: '6months_pro' }),
+  });
   // Always enforce 11100 paise (₹111) for this offer so Razorpay never charges old ₹11
   if (!order.amount || order.amount === 1100 || order.amount < OFFER_PRICE_PAISE) {
     order.amount = OFFER_PRICE_PAISE;

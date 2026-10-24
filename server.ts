@@ -641,13 +641,14 @@ async function startServer() {
     });
   });
 
-  app.post('/api/payments/create-order', authMiddleware, managerOnly, (_req, res) => {
+  app.post('/api/payments/create-order', authMiddleware, managerOnly, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
+    const amount = (req.body?.amount && Number(req.body.amount) >= 11100) ? Number(req.body.amount) : 11100;
     res.json({
       orderId: 'order_' + Date.now(),
-      amount: 11100,
+      amount,
       currency: 'INR',
       keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
       offer: 'Special Family Discount',
