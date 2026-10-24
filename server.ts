@@ -441,6 +441,9 @@ async function startServer() {
     const freeLimit = 5;
 
     if (!isPremium && used >= freeLimit) {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
       return res.status(403).json({
         message: 'PAYWALL',
         used,
@@ -610,6 +613,9 @@ async function startServer() {
 
   // Payments Routes
   app.get('/api/payments/status', authMiddleware, (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     const user = (req as any).user as StoredUser;
     const fam = families.find((f) => f.id === user.familyId);
     const isPremium = fam?.premiumUntil
@@ -636,6 +642,9 @@ async function startServer() {
   });
 
   app.post('/api/payments/create-order', authMiddleware, managerOnly, (_req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.json({
       orderId: 'order_' + Date.now(),
       amount: 11100,
@@ -646,6 +655,9 @@ async function startServer() {
   });
 
   app.post('/api/payments/verify', authMiddleware, (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     const user = (req as any).user as StoredUser;
     const fam = families.find((f) => f.id === user.familyId);
     const body = req.body || {};

@@ -76,13 +76,24 @@ export const Home: React.FC = () => {
   const [showExportRxModal, setShowExportRxModal] = useState(false);
   const [rxModalMemberId, setRxModalMemberId] = useState<string>(activeMemberId);
 
+  const handleUpdatePaymentStatus = (data: any) => {
+    if (data && data.price) {
+      if (!data.price.amount || data.price.amount === 1100 || data.price.amount < 11100) {
+        data.price.amount = 11100;
+      }
+      data.price.regular = 59900;
+      data.price.offer = true;
+    }
+    setPremiumStatus(data);
+  };
+
   // Check if first onboarding should show
   useEffect(() => {
     if (user && !user.onboardingCompleted && !localStorage.getItem('hn_onboarding_shown')) {
       setShowOnboarding(true);
       localStorage.setItem('hn_onboarding_shown', 'true');
     }
-    getPaymentStatus().then(setPremiumStatus).catch(() => {});
+    getPaymentStatus().then(handleUpdatePaymentStatus).catch(() => {});
   }, [user]);
 
   const handlePay = async () => {
@@ -98,7 +109,7 @@ export const Home: React.FC = () => {
             razorpay_payment_id: resp.razorpay_payment_id,
             razorpay_signature: resp.razorpay_signature,
           });
-          getPaymentStatus().then(setPremiumStatus).catch(() => {});
+          getPaymentStatus().then(handleUpdatePaymentStatus).catch(() => {});
           window.dispatchEvent(new Event('payment-success'));
         }
       );

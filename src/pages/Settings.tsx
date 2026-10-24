@@ -37,6 +37,17 @@ export const Settings: React.FC = () => {
   }>({ isPremium: false, premiumUntil: null, price: { amount: 11100, offer: true, regular: 59900 } });
   const [paying, setPaying] = useState(false);
 
+  const handleUpdatePaymentStatus = (data: any) => {
+    if (data && data.price) {
+      if (!data.price.amount || data.price.amount === 1100 || data.price.amount < 11100) {
+        data.price.amount = 11100;
+      }
+      data.price.regular = 59900;
+      data.price.offer = true;
+    }
+    setPremiumStatus(data);
+  };
+
   useEffect(() => {
     const loadAiSummary = async () => {
       setLoadingSummary(true);
@@ -50,7 +61,7 @@ export const Settings: React.FC = () => {
       }
     };
     loadAiSummary();
-    getPaymentStatus().then(setPremiumStatus).catch(() => {});
+    getPaymentStatus().then(handleUpdatePaymentStatus).catch(() => {});
   }, [user]);
 
   const handlePay = async () => {
@@ -66,7 +77,7 @@ export const Settings: React.FC = () => {
             razorpay_payment_id: resp.razorpay_payment_id,
             razorpay_signature: resp.razorpay_signature,
           });
-          getPaymentStatus().then(setPremiumStatus).catch(() => {});
+          getPaymentStatus().then(handleUpdatePaymentStatus).catch(() => {});
           window.dispatchEvent(new Event('payment-success'));
         }
       );
