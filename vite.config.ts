@@ -8,15 +8,18 @@ export default defineConfig(() => {
   return {
     plugins: [react(), tailwindcss(),
       VitePWA({
-  registerType: 'autoUpdate',
-  manifest: false,                       // you already have public/manifest.json
-  workbox: {
-    navigateFallback: '/index.html',
-    navigateFallbackDenylist: [/^\/api/, /^\/\.well-known/],   // never cache API calls
-    globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
-    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,           // your JS bundle is large
-  },
-}),
+        registerType: 'autoUpdate',
+        manifest: false, // you already have public/manifest.json
+        workbox: {
+          clientsClaim: true,
+          skipWaiting: true,
+          cleanupOutdatedCaches: true,
+          navigateFallback: '/index.html',
+          navigateFallbackDenylist: [/^\/api/, /^\/\.well-known/], // never cache API calls
+          globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+          maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        },
+      }),
     ],
     resolve: {
       alias: {
