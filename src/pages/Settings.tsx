@@ -34,7 +34,7 @@ export const Settings: React.FC = () => {
     isPremium: boolean;
     premiumUntil: string | null;
     price: { amount: number; offer: boolean; regular: number };
-  }>({ isPremium: false, premiumUntil: null, price: { amount: 1100, offer: true, regular: 59900 } });
+  }>({ isPremium: false, premiumUntil: null, price: { amount: 11100, offer: true, regular: 59900 } });
   const [paying, setPaying] = useState(false);
 
   useEffect(() => {
@@ -239,11 +239,11 @@ export const Settings: React.FC = () => {
                 </span>
                 {premiumStatus.price.offer && (
                   <span className="text-sm font-bold text-[#7E90A5] line-through">
-                    ₹{(premiumStatus.price.regular / 100).toFixed(0)}
+                    ₹{(premiumStatus.price.regular / 100).toFixed(0)}{language === 'hi' ? '/महीना' : '/month'}
                   </span>
                 )}
-                <span className="text-xs font-bold text-[#7E90A5]">
-                  {language === 'hi' ? '6 महीने' : '6 months'}
+                <span className="text-xs font-bold text-[#147A50] dark:text-[#52D49C]">
+                  {language === 'hi' ? '६ महीने के लिए' : 'for 6 months'}
                 </span>
               </div>
             </div>

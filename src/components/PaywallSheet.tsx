@@ -83,12 +83,12 @@ export const PaywallSheet: React.FC<PaywallSheetProps> = ({
                 </span>
                 {price.offer && (
                   <span className="text-lg font-bold text-[#7E90A5] line-through">
-                    {formatPaise(price.regular)}
+                    {formatPaise(price.regular)}{language === 'hi' ? '/महीना' : '/month'}
                   </span>
                 )}
               </div>
-              <p className="text-xs font-semibold text-[#7E90A5] mt-1">
-                {language === 'hi' ? '6 महीने का प्रीमियम' : '6 months premium'}
+              <p className="text-xs font-bold text-[#147A50] dark:text-[#52D49C] mt-1">
+                {language === 'hi' ? '६ महीने के लिए' : 'for 6 months'}
               </p>
             </div>
             {price.offer && (

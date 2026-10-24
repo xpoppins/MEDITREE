@@ -445,7 +445,7 @@ async function startServer() {
         message: 'PAYWALL',
         used,
         freeLimit,
-        price: { amount: 1100, regular: 59900, offer: true },
+        price: { amount: 11100, regular: 59900, offer: true },
       });
     }
 
@@ -622,11 +622,11 @@ async function startServer() {
       used,
       freeLimit: 5,
       price: {
-        amount: 1100,
+        amount: 11100,
         regular: 59900,
         offer: true,
         currency: 'INR',
-        display: '₹599',
+        display: '₹599/month',
         period: '6 months',
         offerTitle: 'Special Family Discount',
       },
@@ -638,7 +638,7 @@ async function startServer() {
   app.post('/api/payments/create-order', authMiddleware, managerOnly, (_req, res) => {
     res.json({
       orderId: 'order_' + Date.now(),
-      amount: 1100,
+      amount: 11100,
       currency: 'INR',
       keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
       offer: 'Special Family Discount',
@@ -655,7 +655,7 @@ async function startServer() {
     if (fam) {
       fam.premiumUntil = premiumUntil;
       (fam as any).lastPayment = {
-        amount: 1100,
+        amount: 11100,
         paymentId: body.razorpay_payment_id || 'pay_' + Date.now(),
         paidAt,
         orderId: body.razorpay_order_id || 'order_' + Date.now(),

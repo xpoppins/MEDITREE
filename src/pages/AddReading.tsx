@@ -241,7 +241,7 @@ export const AddReading: React.FC = () => {
         navigate('/result', { state: { reading: created, memberName: currentMember?.name } });
       } catch (err: any) {
         if (err.message === 'PAYWALL' || err.message?.includes('Free readings finished')) {
-          setPaywall({ isOpen: true, price: err.price || { amount: 1100, offer: true, regular: 9900 }, used: err.used || 5, freeLimit: 5 });
+          setPaywall({ isOpen: true, price: err.price || { amount: 11100, offer: true, regular: 59900 }, used: err.used || 5, freeLimit: 5 });
         } else {
           setFormError(err.message || 'Failed to save reading');
         }
@@ -277,7 +277,7 @@ export const AddReading: React.FC = () => {
         navigate('/result', { state: { reading: created, memberName: currentMember?.name } });
       } catch (err: any) {
         if (err.message === 'PAYWALL' || err.message?.includes('Free readings finished')) {
-          setPaywall({ isOpen: true, price: err.price || { amount: 1100, offer: true, regular: 9900 }, used: err.used || 5, freeLimit: 5 });
+          setPaywall({ isOpen: true, price: err.price || { amount: 11100, offer: true, regular: 59900 }, used: err.used || 5, freeLimit: 5 });
         } else {
           setFormError(err.message || 'Failed to save reading');
         }
@@ -312,7 +312,7 @@ export const AddReading: React.FC = () => {
         navigate('/result', { state: { reading: created, memberName: currentMember?.name } });
       } catch (err: any) {
         if (err.message === 'PAYWALL' || err.message?.includes('Free readings finished')) {
-          setPaywall({ isOpen: true, price: err.price || { amount: 1100, offer: true, regular: 9900 }, used: err.used || 5, freeLimit: 5 });
+          setPaywall({ isOpen: true, price: err.price || { amount: 11100, offer: true, regular: 59900 }, used: err.used || 5, freeLimit: 5 });
         } else {
           setFormError(err.message || 'Failed to save reading');
         }

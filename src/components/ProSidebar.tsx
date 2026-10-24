@@ -281,13 +281,13 @@ export const ProSidebar: React.FC<ProSidebarProps> = ({
               </span>
               <div className="flex items-baseline gap-2 mt-0.5">
                 <span className="text-2xl font-black text-[#0E1B2C] dark:text-white font-heading">
-                  {formatPaise(price.amount || 49900)}
+                  {formatPaise(price.amount || 11100)}
                 </span>
                 <span className="text-xs font-bold text-[#7E90A5] line-through">
-                  {formatPaise(price.regular || 99900)}
+                  {formatPaise(price.regular || 59900)}{language === 'hi' ? '/महीना' : '/month'}
                 </span>
                 <span className="text-xs font-bold text-[#147A50] dark:text-[#52D49C]">
-                  {language === 'hi' ? '६ महीने' : 'for 6 months'}
+                  {language === 'hi' ? '६ महीने के लिए' : 'for 6 months'}
                 </span>
               </div>
             </div>
@@ -318,7 +318,7 @@ export const ProSidebar: React.FC<ProSidebarProps> = ({
               <span>
                 {paying
                   ? language === 'hi' ? 'प्रोसेसिंग...' : 'Connecting UPI...'
-                  : `${language === 'hi' ? 'UPI से पेमेंट करें' : 'Pay with UPI'} — ${formatPaise(price.amount || 49900)}`}
+                  : `${language === 'hi' ? 'UPI से पेमेंट करें' : 'Pay with UPI'} — ${formatPaise(price.amount || 11100)}`}
               </span>
             </button>
           ) : (
@@ -510,8 +510,8 @@ export const ProSidebar: React.FC<ProSidebarProps> = ({
                   <ShieldCheck className="w-5 h-5" />
                   <span>
                     {language === 'hi'
-                      ? `परिवार के लिए PRO अनलॉक करें — ${formatPaise(price.amount || 49900)}`
-                      : `Upgrade Family to PRO — ${formatPaise(price.amount || 49900)} / 6 Mos`}
+                      ? `परिवार के लिए PRO अनलॉक करें — ${formatPaise(price.amount || 11100)}`
+                      : `Upgrade Family to PRO — ${formatPaise(price.amount || 11100)} / 6 Mos`}
                   </span>
                 </button>
                 <p className="text-[11px] font-bold text-center text-[#7E90A5] dark:text-[#A0B2C6]">

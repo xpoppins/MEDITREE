@@ -64,7 +64,7 @@ export const Home: React.FC = () => {
     premiumUntil: null,
     used: 0,
     freeLimit: 5,
-    price: { amount: 1100, offer: true, regular: 59900 },
+    price: { amount: 11100, offer: true, regular: 59900 },
     lastPayment: null,
     memberSince: null,
   });
